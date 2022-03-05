@@ -1,0 +1,4 @@
+
+fn amortize() {
+    println!("Amortize!")
+}
