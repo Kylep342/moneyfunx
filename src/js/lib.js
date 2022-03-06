@@ -4,11 +4,11 @@
 *** MoneyFunx ***
 *****************
 
-This library contians funcitons used to in personal financial analysis
+This library contains functions used to in personal financial analysis
 
 */
 
-exports.amortize = function (principal, annualRate, periodsPerYear, years) {
+export function amortize (principal, annualRate, periodsPerYear, years) {
     return principal * (
         (
             (annualRate / periodsPerYear) * (1 + (annualRate / periodsPerYear)) ** (periodsPerYear * years)
