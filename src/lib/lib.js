@@ -38,16 +38,16 @@ class Loan {
         this.term = term;
         this.periodRate = this.annualRate  / this.periodsPerYear;
         this.periods = this.periodsPerYear * this.term;
-        this.minPmt = this.amortize(this.principal, this.periodRate, this.periods);
+        this.minPmt = this.amortize();
         this.totalInterest = (this.minPmt * (this.periodsPerYear * this.term)) - this.principal;
-        this.pmt = this.validatePayment(this.minPmt, pmt);
+        this.pmt = this.validatePayment(pmt);
     }
 
-    validatePayment(minPmt, pmt=null) {
+    validatePayment(pmt) {
         if (pmt === null) {
-            return minPmt
-        } else if (pmt < minPmt) {
-            throw `pmt cannot be less than ${minPmt}`
+            return this.minPmt
+        } else if (pmt < this.minPmt) {
+            throw `pmt cannot be less than ${this.minPmt}`
         } else {
             return pmt
         }
