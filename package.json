@@ -1,0 +1,12 @@
+{
+  "name": "moneyfunx",
+  "type": "module",
+  "version": "1.0.0",
+  "description": "MoneyFunx is a small library of functions for financial computations, with a focus on personal finance",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Kyle Pekosh",
+  "license": "MIT"
+}
