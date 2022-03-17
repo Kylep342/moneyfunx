@@ -9,63 +9,72 @@ This library contains functions used to in personal financial analysis
 */
 
 // export function amortize (principal, annualRate, periodsPerYear, years) {
-function amortize (principal, periodRate, periods) {
+function amortize (principal, periodicRate, periods) {
     return principal * (
         (
-            periodRate * (1 + periodRate) ** periods
+            periodicRate * (1 + periodicRate) ** periods
         ) / (
-            (1 + periodRate) ** periods - 1
+            (1 + periodicRate) ** periods - 1
         )
     );
 }
 
-// export function principalRemaining (principal, payment, periodRate, periods) {
-function principalRemaining (principal, payment, periodRate, periods) {
-    return (
-        (principal * (1 + periodRate) ** periods) - (
+// export function principalRemaining (principal, payment, periodicRate, periods) {
+function principalRemaining (principal, payment, periodicRate, periods) {
+    return Math.max(
+        (principal * (1 + periodicRate) ** periods) - (
             payment * (
-                ((1 + periodRate) ** periods - 1) / (periodRate)
+                ((1 + periodicRate) ** periods - 1) / (periodicRate)
             )
         )
-    );
+    , 0);
 }
 
 class Loan {
-    constructor (principal, annualRate, periodsPerYear, term, pmt=null) {
+    constructor (principal, annualRate, periodsPerYear, term) {
         this.principal = principal;
         this.annualRate = annualRate;
         this.periodsPerYear = periodsPerYear;
         this.term = term;
-        this.periodRate = this.annualRate  / this.periodsPerYear;
+        this.periodicRate = this.annualRate  / this.periodsPerYear;
         this.periods = this.periodsPerYear * this.term;
-        this.minPmt = this.amortize();
-        this.totalInterest = (this.minPmt * (this.periodsPerYear * this.term)) - this.principal;
-        this.pmt = this.validatePayment(pmt);
+        this.minPayment = this.amortize();
+        this.totalInterest = (this.minPayment * (this.periodsPerYear * this.term)) - this.principal;
     }
 
-    validatePayment(pmt) {
-        if (pmt === null) {
-            return this.minPmt
-        } else if (pmt < this.minPmt) {
-            throw `pmt cannot be less than ${this.minPmt}`
+    validatePayment(payment) {
+        if (payment === null) {
+            return this.minPayment;
+        } else if (payment < this.minPayment) {
+            throw `payment cannot be less than ${this.minPayment}`;
         } else {
-            return pmt
+            return payment
         }
     }
 
     amortize() {
-        return amortize(this.principal, this.periodRate, this.periods);
+        return amortize(this.principal, this.periodicRate, this.periods);
     }
 
-    principalRemaining(periods) {
+    principalRemaining(periods, payment=null) {
+        try {
+            payment = this.validatePayment(payment);
+        } catch(err) {
+            throw `payment cannot be less than ${this.minPayment}`;
+        }
         return periods < this.periods ?
-            principalRemaining(this.principal, this.pmt, this.periodRate, periods) :
-            0
+            principalRemaining(this.principal, payment, this.periodicRate, periods) :
+            0;
     }
 
-    interestPaid(periods) {
+    interestPaid(periods, payment=null) {
+        try {
+            payment = this.validatePayment(payment)
+        } catch(err) {
+            throw `payment cannot be less than ${this.minPayment}`
+        }
         return periods < this.periods ?
-            (this.pmt * periods) - (this.principal - principalRemaining(this.principal, this.pmt, this.periodRate, periods)) :
-            this.totalInterest
+            (payment * periods) - (this.principal - this.principalRemaining(periods, payment)) :
+            this.totalInterest;
     }
 }
