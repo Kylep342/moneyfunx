@@ -58,10 +58,14 @@ class Loan {
     }
 
     principalRemaining(periods) {
-        return principalRemaining(this.principal, this.pmt, this.periodRate, periods);
+        return periods < this.periods ?
+            principalRemaining(this.principal, this.pmt, this.periodRate, periods) :
+            0
     }
 
     interestPaid(periods) {
-        return (this.pmt * periods) - (this.principal - principalRemaining(this.principal, this.pmt, this.periodRate, periods))
+        return periods < this.periods ?
+            (this.pmt * periods) - (this.principal - principalRemaining(this.principal, this.pmt, this.periodRate, periods)) :
+            this.totalInterest
     }
 }
