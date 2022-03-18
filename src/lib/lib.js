@@ -88,6 +88,15 @@ class Loan {
         }
         return periods < numPaymentsToZero(this.principal, payment, this.periodicRate) ?
             (payment * periods) - (this.principal - this.principalRemaining(periods, payment)) :
-            this.totalInterest;
+            (
+                payment * (
+                    numPaymentsToZero(this.principal, payment, this.periodicRate) - 1
+                ) - (
+                    this.principal - this.principalRemaining(
+                        numPaymentsToZero(this.principal, payment, this.periodicRate) - 1
+                        , payment
+                    )
+                )
+            );
     }
 }
