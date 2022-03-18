@@ -30,6 +30,16 @@ function principalRemaining (principal, payment, periodicRate, periods) {
     , 0);
 }
 
+// export function numPaymentsToZero (principal, payment, periodicRate) {
+function numPaymentsToZero (principal, payment, periodicRate) {
+    return Math.ceil(
+        Math.log(
+            (payment / (payment - principal * periodicRate))
+        ) / Math.log(periodicRate + 1)
+    );
+}
+
+//
 class Loan {
     constructor (principal, annualRate, periodsPerYear, term) {
         this.principal = principal;
@@ -62,18 +72,19 @@ class Loan {
         } catch(err) {
             throw `payment cannot be less than ${this.minPayment}`;
         }
-        return periods < this.periods ?
+        return periods < numPaymentsToZero(this.principal, payment, this.periodicRate) ?
             principalRemaining(this.principal, payment, this.periodicRate, periods) :
             0;
     }
 
     interestPaid(periods, payment=null) {
+        //TODO: Fix this
         try {
             payment = this.validatePayment(payment)
         } catch(err) {
             throw `payment cannot be less than ${this.minPayment}`
         }
-        return periods < this.periods ?
+        return periods < numPaymentsToZero(this.principal, payment, this.periodicRate) ?
             (payment * periods) - (this.principal - this.principalRemaining(periods, payment)) :
             this.totalInterest;
     }
