@@ -10,13 +10,15 @@ This library contains functions used to in personal financial analysis
 
 // export function amortize (principal, annualRate, periodsPerYear, years) {
 function amortize (principal, periodicRate, periods) {
-    return principal * (
-        (
-            periodicRate * (1 + periodicRate) ** periods
-        ) / (
-            (1 + periodicRate) ** periods - 1
-        )
-    );
+    return periodicRate > 0 ?
+        principal * (
+            (
+                periodicRate * (1 + periodicRate) ** periods
+            ) / (
+                (1 + periodicRate) ** periods - 1
+            )
+        ) :
+        principal / periods;
 }
 
 // export function principalRemaining (principal, payment, periodicRate, periods) {
@@ -46,7 +48,7 @@ class Loan {
         this.annualRate = annualRate;
         this.periodsPerYear = periodsPerYear;
         this.term = term;
-        this.periodicRate = this.annualRate  / this.periodsPerYear;
+        this.periodicRate = this.annualRate / this.periodsPerYear;
         this.periods = this.periodsPerYear * this.term;
         this.minPayment = this.amortize();
         this.totalInterest = (this.minPayment * (this.periodsPerYear * this.term)) - this.principal;
