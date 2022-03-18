@@ -29,7 +29,8 @@ function principalRemaining (principal, payment, periodicRate, periods) {
                 ((1 + periodicRate) ** periods - 1) / (periodicRate)
             )
         )
-    , 0);
+        , 0
+    );
 }
 
 // export function numPaymentsToZero (principal, payment, periodicRate) {
@@ -60,7 +61,7 @@ class Loan {
         } else if (payment < this.minPayment) {
             throw `payment cannot be less than ${this.minPayment}`;
         } else {
-            return payment
+            return payment;
         }
     }
 
@@ -80,11 +81,12 @@ class Loan {
     }
 
     interestPaid(periods, payment=null) {
-        //TODO: Fix this
+        // TODO: Fix this
+        // 18-3-2022: Need to compute interest for the final payment and add it to the ternary
         try {
-            payment = this.validatePayment(payment)
+            payment = this.validatePayment(payment);
         } catch(err) {
-            throw `payment cannot be less than ${this.minPayment}`
+            throw `payment cannot be less than ${this.minPayment}`;
         }
         return periods < numPaymentsToZero(this.principal, payment, this.periodicRate) ?
             (payment * periods) - (this.principal - this.principalRemaining(periods, payment)) :
