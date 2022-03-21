@@ -28,8 +28,8 @@ function principalRemaining (principal, payment, periodicRate, periods) {
             payment * (
                 ((1 + periodicRate) ** periods - 1) / (periodicRate)
             )
-        )
-        , 0
+        ),
+        0
     );
 }
 
@@ -44,15 +44,16 @@ function numPaymentsToZero (principal, payment, periodicRate) {
 
 //
 class Loan {
-    constructor (principal, annualRate, periodsPerYear, term) {
+    constructor (principal, annualRate, periodsPerYear, term, periods=null, minPayment=null, id=null) {
+        this.id = id ? id : String(Math.floor(Math.random() * Date.now()));
         this.principal = principal;
         this.annualRate = annualRate;
         this.periodsPerYear = periodsPerYear;
         this.term = term;
         this.periodicRate = this.annualRate / this.periodsPerYear;
-        this.periods = this.periodsPerYear * this.term;
-        this.minPayment = this.amortize();
-        this.totalInterest = (this.minPayment * (this.periodsPerYear * this.term)) - this.principal;
+        this.periods = periods ? periods : this.periodsPerYear * this.term;
+        this.minPayment = minPayment ? minPayment : this.amortize();
+        this.totalInterest = (this.minPayment * (this.periods)) - this.principal;
     }
 
     validatePayment(payment) {
