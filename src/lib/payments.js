@@ -4,12 +4,10 @@
 
 //
 function determineExtraPayment (loans, payment) {
-    const totalMinPayment = loans.length ?
-        loans.reduce(
+    const totalMinPayment = loans.reduce(
             (previousValue, currentValue) => previousValue + currentValue.minPayment,
             0
-        ) :
-        0;
+        );
     if (totalMinPayment > payment) {
         throw `Payment amount must be greater than ${totalMinPayment}`;
     }
