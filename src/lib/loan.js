@@ -44,14 +44,14 @@ function numPaymentsToZero (principal, payment, periodicRate) {
 
 //
 class Loan {
-    constructor (principal, annualRate, periodsPerYear, term, periods=null, minPayment=null, id=null) {
+    constructor (principal, annualRate, periodsPerYear, termInYears, periods=null, minPayment=null, id=null) {
         this.id = id ? id : String(Math.floor(Math.random() * Date.now()));
         this.principal = principal;
         this.annualRate = annualRate;
         this.periodsPerYear = periodsPerYear;
-        this.term = term;
+        this.termInYears = termInYears;
         this.periodicRate = this.annualRate / this.periodsPerYear;
-        this.periods = periods ? periods : this.periodsPerYear * this.term;
+        this.periods = periods ? periods : this.periodsPerYear * this.termInYears;
         this.minPayment = minPayment ? minPayment : this.amortize();
         this.totalInterest = (this.minPayment * (this.periods)) - this.principal;
     }
@@ -81,6 +81,8 @@ class Loan {
             0;
     }
 
+    //TODO: incorporate a period offset to compute interest paid from any given period
+    //as opposed to just from the beginning of the loan
     interestPaid(periods, payment=null) {
         // TODO: Fix this
         // 18-3-2022: Need to compute interest for the final payment and add it to the ternary
