@@ -8,8 +8,8 @@ This library contains functions used to in personal financial analysis
 
 */
 
-// export function amortize (principal, annualRate, periodsPerYear, years) {
-function amortize (principal, periodicRate, periods) {
+// export function calculateMinPayment (principal, annualRate, periodsPerYear, years) {
+function calculateMinPayment (principal, periodicRate, periods) {
     return periodicRate > 0 ?
         principal * (
             (
@@ -52,7 +52,7 @@ class Loan {
         this.termInYears = termInYears;
         this.periodicRate = this.annualRate / this.periodsPerYear;
         this.periods = periods ? periods : this.periodsPerYear * this.termInYears;
-        this.minPayment = minPayment ? minPayment : this.amortize();
+        this.minPayment = minPayment ? minPayment : this.calculateMinPayment();
         this.totalInterest = (this.minPayment * (this.periods)) - this.principal;
     }
 
@@ -66,8 +66,8 @@ class Loan {
         }
     }
 
-    amortize() {
-        return amortize(this.principal, this.periodicRate, this.periods);
+    calculateMinPayment() {
+        return calculateMinPayment(this.principal, this.periodicRate, this.periods);
     }
 
     principalRemaining(periods, payment=null) {

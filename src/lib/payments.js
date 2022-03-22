@@ -19,7 +19,7 @@ function payLoans (loans, payment) {
     let loanInterestTotals = {};
     loans.map(
         (loan) => {
-            loanInterestTotals[loan.id] = {lifetimeInterest: 0}
+            loanInterestTotals[loan.id] = {lifetimeInterest: 0, amortizationSchedule: []}
         }
     );
 
@@ -42,7 +42,6 @@ function payLoans (loans, payment) {
         let firstLoanInterestPaid = firstLoan.interestPaid(periodsToPay, firstLoanPayment);
         loanInterestTotals[firstLoan.id].lifetimeInterest += firstLoanInterestPaid;
         periodsElapsed += periodsToPay;
-        console.log(`${periodsElapsed} periods elapsed`)
         paidLoans += 1;
         loans.slice(paidLoans).map((loan) => {
             loanInterestTotals[loan.id].lifetimeInterest += loan.interestPaid(periodsToPay, loan.minPayment);
