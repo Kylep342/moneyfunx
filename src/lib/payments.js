@@ -15,6 +15,42 @@ function determineExtraPayment (loans, payment) {
 }
 
 //
+function amortizePayments (loan, payment=null, startPeriod=0) {
+    //TODO: clean up
+    let amortizationSchedule = [];
+    for (
+        period=0;
+        period<loan.numPaymentsToZero(
+            payment=payment,
+            balance=loan.principalRemaining(startPeriod)
+        );
+        period++
+    ) {
+        interestThisPeriod = loan.interestPaid(
+            periods=(startPeriod + period + 1),
+            payment=payment
+        ) - loan.interestPaid(
+            periods=startPeriod + period,
+            payment=payment
+        );
+        principalThisPeriod = (payment ? payment : loan.minPayment) - interestThisPeriod;
+        amortizationSchedule.push(
+            {
+                "period": startPeriod + period + 1,
+                "principal": principalThisPeriod,
+                "interest": interestThisPeriod,
+                "principalRemaining": loan.principalRemaining(
+                    periods=startPeriod + period + 1,
+                    payment=payment,
+                    balance=loan.principalRemaining(startPeriod)
+                )
+            }
+        );
+    }
+    return amortizationSchedule;
+}
+
+//
 function payLoans (loans, payment) {
     let loanInterestTotals = {};
     loans.map(
@@ -41,10 +77,18 @@ function payLoans (loans, payment) {
         );
         let firstLoanInterestPaid = firstLoan.interestPaid(periodsToPay, firstLoanPayment);
         loanInterestTotals[firstLoan.id].lifetimeInterest += firstLoanInterestPaid;
+        loanInterestTotals[firstLoan.id].amortizationSchedule = [
+            ...loanInterestTotals[firstLoan.id].amortizationSchedule,
+            ...amortizePayments(firstLoan, firstLoanPayment)
+        ];
         periodsElapsed += periodsToPay;
         paidLoans += 1;
         loans.slice(paidLoans).map((loan) => {
             loanInterestTotals[loan.id].lifetimeInterest += loan.interestPaid(periodsToPay, loan.minPayment);
+            loanInterestTotals[loan.id].amortizationSchedule = [
+                ...loanInterestTotals[loan.id].amortizationSchedule,
+                ...amortizePayments(loan)
+            ]
         });
     }
     return loanInterestTotals;

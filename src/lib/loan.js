@@ -4,6 +4,8 @@
 *** MoneyFunx ***
 *****************
 
+mek it funx up
+
 This library contains functions used to in personal financial analysis
 
 */
@@ -70,36 +72,41 @@ class Loan {
         return calculateMinPayment(this.principal, this.periodicRate, this.periods);
     }
 
-    principalRemaining(periods, payment=null) {
-        try {
-            payment = this.validatePayment(payment);
-        } catch(err) {
-            throw `payment cannot be less than ${this.minPayment}`;
-        }
-        return periods < numPaymentsToZero(this.principal, payment, this.periodicRate) ?
-            principalRemaining(this.principal, payment, this.periodicRate, periods) :
+    numPaymentsToZero(payment=null, balance=null) {
+        payment = this.validatePayment(payment);
+        return numPaymentsToZero(
+            balance ? balance : this.principal,
+            payment ? payment : this.minPayment,
+            this.periodicRate
+        );
+    }
+
+    principalRemaining(periods, payment=null, balance=null) {
+        payment = this.validatePayment(payment);
+        return periods < this.numPaymentsToZero(payment, balance) ?
+            principalRemaining(
+                balance ? balance : this.principal,
+                payment,
+                this.periodicRate,
+                periods
+            ) :
             0;
     }
 
     //TODO: incorporate a period offset to compute interest paid from any given period
     //as opposed to just from the beginning of the loan
-    interestPaid(periods, payment=null) {
+    interestPaid(periods, payment=null, balance=null) {
         // TODO: Fix this
         // 18-3-2022: Need to compute interest for the final payment and add it to the ternary
-        try {
-            payment = this.validatePayment(payment);
-        } catch(err) {
-            throw `payment cannot be less than ${this.minPayment}`;
-        }
-        return periods < numPaymentsToZero(this.principal, payment, this.periodicRate) ?
-            (payment * periods) - (this.principal - this.principalRemaining(periods, payment)) :
+        payment = this.validatePayment(payment);
+        return periods < this.numPaymentsToZero(payment, balance) ?
+            (payment * periods) - (balance ? balance : this.principal - this.principalRemaining(periods, payment, balance)) :
             (
-                payment * (
-                    numPaymentsToZero(this.principal, payment, this.periodicRate) - 1
-                ) - (
-                    this.principal - this.principalRemaining(
-                        numPaymentsToZero(this.principal, payment, this.periodicRate) - 1
-                        , payment
+                payment * (this.numPaymentsToZero(payment, balance) - 1) - (
+                    balance ? balance : this.principal - this.principalRemaining(
+                        this.numPaymentsToZero(payment) - 1,
+                        payment,
+                        balance
                     )
                 )
             );
