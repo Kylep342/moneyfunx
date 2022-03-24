@@ -27,16 +27,27 @@ function amortizePayments (loan, payment, numPayments, startPeriod) {
         let interestThisPeriod = loan.interestPaid(
             1,
             payment,
-            loan.principalRemaining(startPeriod + period)
+            loan.principalRemaining(
+                period,
+                payment,
+                loan.principalRemaining(startPeriod)
+            )
         );
-        let principalThisPeriod = payment - interestThisPeriod;
+        let principalThisPeriod = Math.min(
+            payment,
+            loan.principalRemaining(
+                period,
+                payment,
+                loan.principalRemaining(startPeriod)
+            )
+        ) - interestThisPeriod;
         amortizationSchedule.push(
             {
                 "period": startPeriod + period + 1,
                 "principal": principalThisPeriod,
                 "interest": interestThisPeriod,
                 "principalRemaining": loan.principalRemaining(
-                    period,
+                    period + 1,
                     payment,
                     loan.principalRemaining(startPeriod)
                 )
@@ -82,7 +93,7 @@ function payLoans (loans, payment) {
             loanInterestTotals[loan.id].lifetimeInterest += loan.interestPaid(
                 periodsToPay,
                 loan.minPayment,
-                // loan.principalRemaining(periodsElapsed, loan.minPayment)
+                loan.principalRemaining(periodsElapsed)
             );
             loanInterestTotals[loan.id].amortizationSchedule = [
                 ...loanInterestTotals[loan.id].amortizationSchedule,

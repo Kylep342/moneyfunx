@@ -103,7 +103,7 @@ class Loan {
             (payment * periods) - (balance - this.principalRemaining(periods, payment, balance)) :
             (
                 payment * (this.numPaymentsToZero(payment, balance) - 1) - (
-                    balance ? balance : this.principal - this.principalRemaining(
+                    balance - this.principalRemaining(
                         this.numPaymentsToZero(payment) - 1,
                         payment,
                         balance
