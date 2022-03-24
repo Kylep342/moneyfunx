@@ -5,44 +5,40 @@
 //
 function determineExtraPayment (loans, payment) {
     const totalMinPayment = loans.reduce(
-            (previousValue, currentValue) => previousValue + currentValue.minPayment,
-            0
-        );
+        (previousValue, currentValue) => previousValue + currentValue.minPayment,
+        0
+    );
     if (totalMinPayment > payment) {
-        throw `Payment amount must be greater than ${totalMinPayment}`;
+        throw `Payment amount of ${payment} must be greater than ${totalMinPayment}`;
     }
     return payment - totalMinPayment;
 }
 
 //
-function amortizePayments (loan, payment=null, startPeriod=0) {
+function amortizePayments (loan, payment, numPayments, startPeriod) {
+    payment = loan.validatePayment(payment);
     //TODO: clean up
     let amortizationSchedule = [];
     for (
-        period=0;
-        period<loan.numPaymentsToZero(
-            payment=payment,
-            balance=loan.principalRemaining(startPeriod)
-        );
+        let period=0;
+        period<numPayments;
         period++
     ) {
-        interestThisPeriod = loan.interestPaid(
-            periods=(startPeriod + period + 1),
-            payment=payment
-        ) - loan.interestPaid(
-            periods=startPeriod + period,
-            payment=payment
+        let interestThisPeriod = loan.interestPaid(
+            1,
+            payment,
+            loan.principalRemaining(startPeriod + period)
         );
-        principalThisPeriod = (payment ? payment : loan.minPayment) - interestThisPeriod;
+        let principalThisPeriod = payment - interestThisPeriod;
         amortizationSchedule.push(
             {
                 "period": startPeriod + period + 1,
                 "principal": principalThisPeriod,
                 "interest": interestThisPeriod,
                 "principalRemaining": loan.principalRemaining(
-                    periods=startPeriod + period + 1,
-                    payment=payment,
-                    balance=loan.principalRemaining(startPeriod)
+                    period,
+                    payment,
+                    loan.principalRemaining(startPeriod)
                 )
             }
         );
@@ -55,7 +51,7 @@ function payLoans (loans, payment) {
     let loanInterestTotals = {};
     loans.map(
         (loan) => {
-            loanInterestTotals[loan.id] = {lifetimeInterest: 0, amortizationSchedule: []}
+            loanInterestTotals[loan.id] = {lifetimeInterest: 0, amortizationSchedule: []};
         }
     );
 
@@ -75,21 +71,25 @@ function payLoans (loans, payment) {
             firstLoanPayment,
             firstLoan.periodicRate
         );
-        let firstLoanInterestPaid = firstLoan.interestPaid(periodsToPay, firstLoanPayment);
+        let firstLoanInterestPaid = firstLoan.interestPaid(periodsToPay, firstLoanPayment, firstLoan.principalRemaining(periodsElapsed));
         loanInterestTotals[firstLoan.id].lifetimeInterest += firstLoanInterestPaid;
         loanInterestTotals[firstLoan.id].amortizationSchedule = [
             ...loanInterestTotals[firstLoan.id].amortizationSchedule,
-            ...amortizePayments(firstLoan, firstLoanPayment)
+            ...amortizePayments(firstLoan, firstLoanPayment, periodsToPay, periodsElapsed)
         ];
-        periodsElapsed += periodsToPay;
         paidLoans += 1;
         loans.slice(paidLoans).map((loan) => {
-            loanInterestTotals[loan.id].lifetimeInterest += loan.interestPaid(periodsToPay, loan.minPayment);
+            loanInterestTotals[loan.id].lifetimeInterest += loan.interestPaid(
+                periodsToPay,
+                loan.minPayment,
+                // loan.principalRemaining(periodsElapsed, loan.minPayment)
+            );
             loanInterestTotals[loan.id].amortizationSchedule = [
                 ...loanInterestTotals[loan.id].amortizationSchedule,
-                ...amortizePayments(loan)
-            ]
+                ...amortizePayments(loan, loan.minPayment, periodsToPay, periodsElapsed)
+            ];
         });
+        periodsElapsed += periodsToPay;
     }
     return loanInterestTotals;
 }

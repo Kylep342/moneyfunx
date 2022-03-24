@@ -62,7 +62,7 @@ class Loan {
         if (payment === null) {
             return this.minPayment;
         } else if (payment < this.minPayment) {
-            throw `payment cannot be less than ${this.minPayment}`;
+            throw `payment of ${payment} cannot be less than ${this.minPayment}`;
         } else {
             return payment;
         }
@@ -81,11 +81,11 @@ class Loan {
         );
     }
 
-    principalRemaining(periods, payment=null, balance=null) {
+    principalRemaining(periods, payment=null, balance=this.principal) {
         payment = this.validatePayment(payment);
         return periods < this.numPaymentsToZero(payment, balance) ?
             principalRemaining(
-                balance ? balance : this.principal,
+                balance,
                 payment,
                 this.periodicRate,
                 periods
@@ -95,12 +95,12 @@ class Loan {
 
     //TODO: incorporate a period offset to compute interest paid from any given period
     //as opposed to just from the beginning of the loan
-    interestPaid(periods, payment=null, balance=null) {
+    interestPaid(periods, payment=null, balance=this.principal) {
         // TODO: Fix this
         // 18-3-2022: Need to compute interest for the final payment and add it to the ternary
         payment = this.validatePayment(payment);
         return periods < this.numPaymentsToZero(payment, balance) ?
-            (payment * periods) - (balance ? balance : this.principal - this.principalRemaining(periods, payment, balance)) :
+            (payment * periods) - (balance - this.principalRemaining(periods, payment, balance)) :
             (
                 payment * (this.numPaymentsToZero(payment, balance) - 1) - (
                     balance ? balance : this.principal - this.principalRemaining(
