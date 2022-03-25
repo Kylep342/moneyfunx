@@ -16,22 +16,7 @@ export function determineExtraPayment (loans, payment) {
 
 //
 export function amortizePayments (loan, payment, numPayments, startPeriod) {
-    /*
-        Simplify design
-        Take:
-            - balance
-            - periodic rate
-            - number of periods
-            - starting period
-        Return:
-            Arry of Objects with:
-                - period number
-                - portion of payment as interest
-                - portion of payment as principal
-                - principal remaining after payment
-    */
     payment = loan.validatePayment(payment);
-    //TODO: clean up
     let amortizationSchedule = [];
     for (
         let period=0;
@@ -55,10 +40,10 @@ export function amortizePayments (loan, payment, numPayments, startPeriod) {
         );
         amortizationSchedule.push(
             {
-                "period": startPeriod + period + 1,
-                "principal": principalThisPeriod,
-                "interest": interestThisPeriod,
-                "principalRemaining": loan.principalRemaining(
+                period: startPeriod + period + 1,
+                principal: principalThisPeriod,
+                interest: interestThisPeriod,
+                principalRemaining: loan.principalRemaining(
                     period + 1,
                     payment,
                     loan.principalRemaining(startPeriod)
@@ -81,7 +66,6 @@ export function payLoans (loans, payment) {
     let periodsElapsed = 0;
     let paidLoans = 0;
 
-    // TODO, fix the payment of the loan in the slice block
     while (paidLoans < loans.length) {
         let extraPaymentAmount = determineExtraPayment(loans.slice(paidLoans), payment);
         let firstLoan = loans.slice(paidLoans)[0];
@@ -94,7 +78,11 @@ export function payLoans (loans, payment) {
             firstLoanPayment,
             firstLoan.periodicRate
         );
-        let firstLoanInterestPaid = firstLoan.interestPaid(periodsToPay, firstLoanPayment, firstLoan.principalRemaining(periodsElapsed));
+        let firstLoanInterestPaid = firstLoan.interestPaid(
+            periodsToPay,
+            firstLoanPayment,
+            firstLoan.principalRemaining(periodsElapsed)
+        );
         loanInterestTotals[firstLoan.id].lifetimeInterest += firstLoanInterestPaid;
         loanInterestTotals[firstLoan.id].amortizationSchedule = [
             ...loanInterestTotals[firstLoan.id].amortizationSchedule,

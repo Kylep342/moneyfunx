@@ -72,6 +72,12 @@ export class Loan {
         return calculateMinPayment(this.principal, this.periodicRate, this.periods);
     }
 
+    accrueInterest(balance=this.principal) {
+        // TODO: figure out if this is valid
+        // UPDATE: 24-3-2022 this is valid AF
+        return balance * this.periodicRate;
+    }
+
     numPaymentsToZero(payment=this.minPayment, balance=this.principal) {
         payment = this.validatePayment(payment);
         return numPaymentsToZero(
@@ -79,12 +85,6 @@ export class Loan {
             payment,
             this.periodicRate
         );
-    }
-
-    accrueInterest(balance=this.principal) {
-        // TODO: figure out if this is valid
-        // UPDATE: 24-3-2022 this is valid AF
-        return balance * this.periodicRate
     }
 
     principalRemaining(periods, payment=this.minPayment, balance=this.principal) {
