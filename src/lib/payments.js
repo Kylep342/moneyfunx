@@ -38,24 +38,21 @@ export function amortizePayments (loan, payment, numPayments, startPeriod) {
         period<numPayments;
         period++
     ) {
-        let interestThisPeriod = loan.interestPaid(
-            1,
-            payment,
+        let interestThisPeriod = loan.accrueInterest(
             loan.principalRemaining(
                 period,
                 payment,
                 loan.principalRemaining(startPeriod)
             )
         );
-        // console.log(`Interest for loan ${loan.id} for period ${period + startPeriod + 1} is ${interestThisPeriod}`);
         let principalThisPeriod = Math.min(
-            payment,
+            payment - interestThisPeriod,
             loan.principalRemaining(
                 period,
                 payment,
                 loan.principalRemaining(startPeriod)
             )
-        ) - interestThisPeriod;
+        );
         amortizationSchedule.push(
             {
                 "period": startPeriod + period + 1,
