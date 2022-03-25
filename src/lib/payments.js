@@ -3,7 +3,7 @@
 */
 
 //
-function determineExtraPayment (loans, payment) {
+export function determineExtraPayment (loans, payment) {
     const totalMinPayment = loans.reduce(
         (previousValue, currentValue) => previousValue + currentValue.minPayment,
         0
@@ -15,7 +15,21 @@ function determineExtraPayment (loans, payment) {
 }
 
 //
-function amortizePayments (loan, payment, numPayments, startPeriod) {
+export function amortizePayments (loan, payment, numPayments, startPeriod) {
+    /*
+        Simplify design
+        Take:
+            - balance
+            - periodic rate
+            - number of periods
+            - starting period
+        Return:
+            Arry of Objects with:
+                - period number
+                - portion of payment as interest
+                - portion of payment as principal
+                - principal remaining after payment
+    */
     payment = loan.validatePayment(payment);
     //TODO: clean up
     let amortizationSchedule = [];
@@ -33,6 +47,7 @@ function amortizePayments (loan, payment, numPayments, startPeriod) {
                 loan.principalRemaining(startPeriod)
             )
         );
+        // console.log(`Interest for loan ${loan.id} for period ${period + startPeriod + 1} is ${interestThisPeriod}`);
         let principalThisPeriod = Math.min(
             payment,
             loan.principalRemaining(
@@ -58,7 +73,7 @@ function amortizePayments (loan, payment, numPayments, startPeriod) {
 }
 
 //
-function payLoans (loans, payment) {
+export function payLoans (loans, payment) {
     let loanInterestTotals = {};
     loans.map(
         (loan) => {

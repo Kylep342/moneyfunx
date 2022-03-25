@@ -45,7 +45,7 @@ function numPaymentsToZero (principal, payment, periodicRate) {
 }
 
 //
-class Loan {
+export class Loan {
     constructor (principal, annualRate, periodsPerYear, termInYears, periods=null, minPayment=null, id=null) {
         this.id = id ? id : String(Math.floor(Math.random() * Date.now()));
         this.principal = principal;
@@ -54,7 +54,7 @@ class Loan {
         this.termInYears = termInYears;
         this.periodicRate = this.annualRate / this.periodsPerYear;
         this.periods = periods ? periods : this.periodsPerYear * this.termInYears;
-        this.minPayment = minPayment ? minPayment : this.calculateMinPayment();
+        this.minPayment = minPayment ? this.validatePayment(minPayment) : this.calculateMinPayment();
         this.totalInterest = (this.minPayment * (this.periods)) - this.principal;
     }
 
@@ -72,16 +72,16 @@ class Loan {
         return calculateMinPayment(this.principal, this.periodicRate, this.periods);
     }
 
-    numPaymentsToZero(payment=null, balance=null) {
+    numPaymentsToZero(payment=this.minPayment, balance=this.principal) {
         payment = this.validatePayment(payment);
         return numPaymentsToZero(
-            balance ? balance : this.principal,
-            payment ? payment : this.minPayment,
+            balance,
+            payment,
             this.periodicRate
         );
     }
 
-    principalRemaining(periods, payment=null, balance=this.principal) {
+    principalRemaining(periods, payment=this.minPayment, balance=this.principal) {
         payment = this.validatePayment(payment);
         return periods < this.numPaymentsToZero(payment, balance) ?
             principalRemaining(
@@ -93,22 +93,22 @@ class Loan {
             0;
     }
 
-    //TODO: incorporate a period offset to compute interest paid from any given period
-    //as opposed to just from the beginning of the loan
-    interestPaid(periods, payment=null, balance=this.principal) {
+    interestPaid(periods, payment=this.minPayment, balance=this.principal) {
         // TODO: Fix this
         // 18-3-2022: Need to compute interest for the final payment and add it to the ternary
         payment = this.validatePayment(payment);
+        // return periods <= this.numPaymentsToZero(payment, balance) ?
         return periods < this.numPaymentsToZero(payment, balance) ?
             (payment * periods) - (balance - this.principalRemaining(periods, payment, balance)) :
-            (
+            Math.max(
                 payment * (this.numPaymentsToZero(payment, balance) - 1) - (
                     balance - this.principalRemaining(
                         this.numPaymentsToZero(payment) - 1,
                         payment,
                         balance
                     )
-                )
+                ),
+                0
             );
     }
 }
