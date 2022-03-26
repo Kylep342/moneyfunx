@@ -10,7 +10,7 @@ This library contains functions used to in personal financial analysis
 
 */
 
-// export function calculateMinPayment (principal, annualRate, periodsPerYear, years) {
+// export function calculateMinPayment (principal, annualRate, periods) {
 function calculateMinPayment (principal, periodicRate, periods) {
     return periodicRate > 0 ?
         principal * (
@@ -46,22 +46,20 @@ function numPaymentsToZero (principal, payment, periodicRate) {
 
 //
 export class Loan {
-    constructor (principal, annualRate, periodsPerYear, termInYears, periods=null, minPayment=null, id=null) {
-        this.id = id ? id : String(Math.floor(Math.random() * Date.now()));
+    constructor (principal, annualRate, periodsPerYear, termInYears) {
+        this.id = String(Math.floor(Math.random() * Date.now()));
         this.principal = principal;
         this.annualRate = annualRate;
         this.periodsPerYear = periodsPerYear;
         this.termInYears = termInYears;
         this.periodicRate = this.annualRate / this.periodsPerYear;
-        this.periods = periods ? periods : this.periodsPerYear * this.termInYears;
-        this.minPayment = minPayment ? this.validatePayment(minPayment) : this.calculateMinPayment();
+        this.periods = this.periodsPerYear * this.termInYears;
+        this.minPayment = this.calculateMinPayment();
         this.totalInterest = (this.minPayment * (this.periods)) - this.principal;
     }
 
-    validatePayment(payment) {
-        if (payment === null) {
-            return this.minPayment;
-        } else if (payment < this.minPayment) {
+    validatePayment(payment=this.minPayment) {
+        if (payment < this.minPayment) {
             throw `payment of ${payment} cannot be less than ${this.minPayment}`;
         } else {
             return payment;
@@ -103,7 +101,6 @@ export class Loan {
         // TODO: Fix this
         // 18-3-2022: Need to compute interest for the final payment and add it to the ternary
         payment = this.validatePayment(payment);
-        // return periods <= this.numPaymentsToZero(payment, balance) ?
         return periods < this.numPaymentsToZero(payment, balance) ?
             (payment * periods) - (balance - this.principalRemaining(periods, payment, balance)) :
             Math.max(
