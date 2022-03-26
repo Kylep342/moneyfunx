@@ -5,12 +5,13 @@
   "description": "MoneyFunx is a small library of functions for financial computations, with a focus on personal finance",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest"
   },
   "author": "Kyle Pekosh",
   "license": "MIT",
   "devDependencies": {
     "eslint": "^8.11.0",
-    "eslint-plugin-vue": "^8.5.0"
+    "eslint-plugin-vue": "^8.5.0",
+    "jest": "^27.5.1"
   }
 }
