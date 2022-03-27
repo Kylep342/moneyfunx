@@ -10,8 +10,7 @@ This library contains functions used to in personal financial analysis
 
 */
 
-// export function calculateMinPayment (principal, annualRate, periods) {
-function calculateMinPayment (principal, periodicRate, periods) {
+export function calculateMinPayment (principal, periodicRate, periods) {
     return periodicRate > 0 ?
         principal * (
             (
@@ -23,8 +22,7 @@ function calculateMinPayment (principal, periodicRate, periods) {
         principal / periods;
 }
 
-// export function principalRemaining (principal, payment, periodicRate, periods) {
-function principalRemaining (principal, payment, periodicRate, periods) {
+export function principalRemaining (principal, payment, periodicRate, periods) {
     return Math.max(
         (principal * (1 + periodicRate) ** periods) - (
             payment * (
@@ -35,8 +33,7 @@ function principalRemaining (principal, payment, periodicRate, periods) {
     );
 }
 
-// export function numPaymentsToZero (principal, payment, periodicRate) {
-function numPaymentsToZero (principal, payment, periodicRate) {
+export function numPaymentsToZero (principal, payment, periodicRate) {
     return Math.ceil(
         Math.log(
             (payment / (payment - principal * periodicRate))
