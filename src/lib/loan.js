@@ -107,6 +107,14 @@ export class Loan {
                         payment,
                         balance
                     )
+                ) + (
+                    this.accrueInterest(
+                        this.principalRemaining(
+                            this.numPaymentsToZero(payment) - 1,
+                            payment,
+                            balance
+                        )
+                    )
                 ),
                 0
             );
