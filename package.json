@@ -5,7 +5,8 @@
   "description": "MoneyFunx is a small library of functions for financial computations, with a focus on personal finance",
   "main": "index.js",
   "scripts": {
-    "test": "NODE_OPTIONS=--experimental-vm-modules jest"
+    "test": "NODE_OPTIONS=--experimental-vm-modules jest",
+    "lint": "eslint"
   },
   "author": "Kyle Pekosh",
   "license": "MIT",

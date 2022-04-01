@@ -18,7 +18,7 @@ test(
 
         const loan2AmortizationSchedule = payments.amortizePayments(loan2, loan2.minPayment, 120, 0);
 
-        expect(loan2AmortizationSchedule.length).toStrictEqual(120);
+        expect(loan2AmortizationSchedule.length).toBe(120);
         expect(loan2AmortizationSchedule[3].period).toBe(4);
         expect(loan2AmortizationSchedule[3].principal).toBe(52.27646756701894);
         expect(loan2AmortizationSchedule[3].interest).toBe(22.5219912775614);
