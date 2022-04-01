@@ -1,7 +1,7 @@
 /*
 
 */
-import * as loan from './loan.js';
+import * as loanLib from "./loan.js";
 
 //
 export function determineExtraPayment (loans, payment) {
@@ -71,7 +71,7 @@ export function payLoans (loans, payment) {
         let extraPaymentAmount = determineExtraPayment(loans.slice(paidLoans), payment);
         let firstLoan = loans.slice(paidLoans)[0];
         let firstLoanPayment = firstLoan.minPayment + extraPaymentAmount;
-        let periodsToPay = loan.numPaymentsToZero(
+        let periodsToPay = loanLib.numPaymentsToZero(
             firstLoan.principalRemaining(
                 periodsElapsed,
                 firstLoan.minPayment

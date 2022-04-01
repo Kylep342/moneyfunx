@@ -24,12 +24,14 @@ test(
         expect(loan2AmortizationSchedule[3].interest).toBe(22.5219912775614);
         expect(loan2AmortizationSchedule[3].principalRemaining).toBe(7291.851122942134);
 
-
         expect(payments.determineExtraPayment(loans, 400)).toBe(192.70819668183697);
         expect(() => {payments.determineExtraPayment(loans, 0);}).toThrow("Payment amount of 0 must be greater than 207.29180331816303");
 
-        const loanPaymentTotals = payments.payLoans(loans, 400);
+        const loanPaymentTotals1 = payments.payLoans(loans, 400);
 
-        expect(Object.keys(loanPaymentTotals).length).toBe(3);
+        expect(Object.keys(loanPaymentTotals1).length).toBe(3);
+        expect(loanPaymentTotals1[loan1.id].lifetimeInterest).toBe(659.9318259100721);
+        expect(loanPaymentTotals1[loan2.id].lifetimeInterest).toBe(841.5352714723776);
+        expect(loanPaymentTotals1[loan3.id].lifetimeInterest).toBe(462.70985781957734);
     }
 );
