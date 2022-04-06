@@ -14,5 +14,8 @@
     "eslint": "^8.11.0",
     "eslint-plugin-vue": "^8.5.0",
     "jest": "^27.5.1"
-  }
+  },
+  "publishConfig": {
+   "@Kylep342:registry": "https://npm.pkg.github.com"
+ }
 }
