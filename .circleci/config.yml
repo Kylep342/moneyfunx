@@ -21,4 +21,4 @@ workflows:
           pkg-manager: npm
           filters:
             tags:
-              only: /%^v.*/
+              only: /^v.*/
