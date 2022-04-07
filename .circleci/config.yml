@@ -19,3 +19,6 @@ workflows:
           version: "17.5"
           # If you are using yarn, change the line below from "npm" to "yarn"
           pkg-manager: npm
+          filters:
+            tags:
+              only: /%^v.*/
