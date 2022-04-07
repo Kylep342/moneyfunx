@@ -2,5 +2,4 @@
 .github
 .eslintignore
 .eslintrc.json
-README.md
 tests
