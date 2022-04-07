@@ -1,14 +1,18 @@
 {
   "name": "moneyfunx",
   "type": "module",
-  "version": "0.0.6",
+  "version": "0.0.8",
   "description": "MoneyFunx is a small library of functions for financial computations, with a focus on personal finance",
-  "main": "index.js",
+  "main": "src/index.js",
   "scripts": {
     "test": "NODE_OPTIONS=--experimental-vm-modules jest",
     "lint": "eslint"
   },
   "author": "Kyle Pekosh",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Kylep342/moneyfunx.git"
+  },
   "license": "MIT",
   "devDependencies": {
     "eslint": "^8.11.0",

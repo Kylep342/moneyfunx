@@ -1,7 +1,7 @@
 /*
 
 */
-import * as loanLib from "./loan.js";
+import * as loanLib from "./loan";
 
 //
 export function determineExtraPayment (loans, payment) {
