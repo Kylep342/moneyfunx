@@ -3,7 +3,6 @@
 */
 import * as loanLib from "./loan";
 
-//
 export function determineExtraPayment (loans, payment) {
     const totalMinPayment = loans.reduce(
         (previousValue, currentValue) => previousValue + currentValue.minPayment,
@@ -15,7 +14,6 @@ export function determineExtraPayment (loans, payment) {
     return payment - totalMinPayment;
 }
 
-//
 export function amortizePayments (loan, payment, numPayments, startPeriod) {
     payment = loan.validatePayment(payment);
     let amortizationSchedule = [];
@@ -55,7 +53,6 @@ export function amortizePayments (loan, payment, numPayments, startPeriod) {
     return amortizationSchedule;
 }
 
-//
 export function payLoans (loans, payment) {
     let loanInterestTotals = {};
     loans.map(

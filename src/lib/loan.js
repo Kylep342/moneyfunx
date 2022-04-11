@@ -41,7 +41,6 @@ export function numPaymentsToZero (principal, payment, periodicRate) {
     );
 }
 
-//
 export class Loan {
     constructor (principal, annualRate, periodsPerYear, termInYears) {
         this.id = String(Math.floor(Math.random() * Date.now()));
@@ -68,8 +67,6 @@ export class Loan {
     }
 
     accrueInterest(balance=this.principal) {
-        // TODO: figure out if this is valid
-        // UPDATE: 24-3-2022 this is valid AF
         return balance * this.periodicRate;
     }
 

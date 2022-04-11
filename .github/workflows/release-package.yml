@@ -6,7 +6,7 @@ on:
 
 jobs:
 
-  publish-gpr:
+  publish-npm:
     runs-on: ubuntu-latest
     permissions:
       packages: write
