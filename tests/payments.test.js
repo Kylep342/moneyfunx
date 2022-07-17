@@ -1,7 +1,7 @@
 import { expect, test } from "@jest/globals";
 import * as loan from "../src/lib/loan.js";
-import * as sorting from "../src/lib/sorting.js";
 import * as payments from "../src/lib/payments.js";
+import * as sorting from "../src/lib/sorting.js";
 
 
 test(
