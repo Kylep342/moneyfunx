@@ -2,4 +2,4 @@ target
 node_modules/**
 scratch.js
 .npmrc
-current_version.sh
+*.sh
