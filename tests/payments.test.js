@@ -34,5 +34,7 @@ test(
         expect(loanPaymentTotals1[loan1.id].lifetimeInterest).toBe(659.9318259100721);
         expect(loanPaymentTotals1[loan2.id].lifetimeInterest).toBe(841.5352714723776);
         expect(loanPaymentTotals1[loan3.id].lifetimeInterest).toBe(462.70985781957734);
+        expect(loanPaymentTotals1["totalInterest"]).toBe(1964.176955202027);
+        expect(loanPaymentTotals1["totalPayments"]).toBe(56);
     }
 );

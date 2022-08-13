@@ -3,3 +3,4 @@
 .eslintignore
 .eslintrc.json
 tests
+current_version.sh
