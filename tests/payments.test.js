@@ -29,7 +29,8 @@ test(
 
         const loanPaymentTotals1 = payments.payLoans(loans, 400);
 
-        expect(Object.keys(loanPaymentTotals1).length).toBe(3);
+        // 2 keys more than the 3 loans for totalInterest and totalPayments
+        expect(Object.keys(loanPaymentTotals1).length).toBe(5);
         expect(loanPaymentTotals1[loan1.id].lifetimeInterest).toBe(659.9318259100721);
         expect(loanPaymentTotals1[loan2.id].lifetimeInterest).toBe(841.5352714723776);
         expect(loanPaymentTotals1[loan3.id].lifetimeInterest).toBe(462.70985781957734);
