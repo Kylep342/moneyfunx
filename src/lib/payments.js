@@ -63,6 +63,7 @@ export function payLoans (loans, payment) {
 
     let periodsElapsed = 0;
     let paidLoans = 0;
+    let totalInterest = 0;
 
     while (paidLoans < loans.length) {
         let extraPaymentAmount = determineExtraPayment(loans.slice(paidLoans), payment);
@@ -87,6 +88,7 @@ export function payLoans (loans, payment) {
             ...amortizePayments(firstLoan, firstLoanPayment, periodsToPay, periodsElapsed)
         ];
         paidLoans += 1;
+        totalInterest += loanInterestTotals[firstLoan.id].lifetimeInterest;
         loans.slice(paidLoans).map((loan) => {
             loanInterestTotals[loan.id].lifetimeInterest += loan.interestPaid(
                 periodsToPay,
@@ -100,5 +102,7 @@ export function payLoans (loans, payment) {
         });
         periodsElapsed += periodsToPay;
     }
+    loanInterestTotals["totalInterest"] = totalInterest;
+    loanInterestTotals["totalPayments"] = periodsElapsed;
     return loanInterestTotals;
 }
