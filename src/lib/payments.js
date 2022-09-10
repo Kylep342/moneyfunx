@@ -54,10 +54,10 @@ export function amortizePayments (loan, payment, numPayments, startPeriod) {
 }
 
 export function payLoans (loans, payment) {
-    let loanInterestTotals = {};
+    let paymentData = {};
     loans.map(
         (loan) => {
-            loanInterestTotals[loan.id] = {lifetimeInterest: 0, amortizationSchedule: []};
+            paymentData[loan.id] = {lifetimeInterest: 0, amortizationSchedule: []};
         }
     );
 
@@ -82,27 +82,27 @@ export function payLoans (loans, payment) {
             firstLoanPayment,
             firstLoan.principalRemaining(periodsElapsed)
         );
-        loanInterestTotals[firstLoan.id].lifetimeInterest += firstLoanInterestPaid;
-        loanInterestTotals[firstLoan.id].amortizationSchedule = [
-            ...loanInterestTotals[firstLoan.id].amortizationSchedule,
+        paymentData[firstLoan.id].lifetimeInterest += firstLoanInterestPaid;
+        paymentData[firstLoan.id].amortizationSchedule = [
+            ...paymentData[firstLoan.id].amortizationSchedule,
             ...amortizePayments(firstLoan, firstLoanPayment, periodsToPay, periodsElapsed)
         ];
         paidLoans += 1;
-        totalInterest += loanInterestTotals[firstLoan.id].lifetimeInterest;
+        totalInterest += paymentData[firstLoan.id].lifetimeInterest;
         loans.slice(paidLoans).map((loan) => {
-            loanInterestTotals[loan.id].lifetimeInterest += loan.interestPaid(
+            paymentData[loan.id].lifetimeInterest += loan.interestPaid(
                 periodsToPay,
                 loan.minPayment,
                 loan.principalRemaining(periodsElapsed)
             );
-            loanInterestTotals[loan.id].amortizationSchedule = [
-                ...loanInterestTotals[loan.id].amortizationSchedule,
+            paymentData[loan.id].amortizationSchedule = [
+                ...paymentData[loan.id].amortizationSchedule,
                 ...amortizePayments(loan, loan.minPayment, periodsToPay, periodsElapsed)
             ];
         });
         periodsElapsed += periodsToPay;
     }
-    loanInterestTotals["totalInterest"] = totalInterest;
-    loanInterestTotals["totalPayments"] = periodsElapsed;
-    return loanInterestTotals;
+    paymentData["totalInterest"] = totalInterest;
+    paymentData["totalPayments"] = periodsElapsed;
+    return paymentData;
 }
