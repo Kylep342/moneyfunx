@@ -27,9 +27,6 @@ export function amortizePayments (loan, payment, numPayments, startPeriod) {
             payment,
             loan.principalRemaining(startPeriod)
         );
-        if (principalRemaining === 0) {
-            break;
-        }
         let interestThisPeriod = loan.accrueInterest(
             loan.principalRemaining(
                 period,
