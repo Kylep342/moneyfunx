@@ -22,11 +22,6 @@ export function amortizePayments (loan, payment, numPayments, startPeriod) {
         period<numPayments;
         period++
     ) {
-        let principalRemaining = loan.principalRemaining(
-            period + 1,
-            payment,
-            loan.principalRemaining(startPeriod)
-        );
         let interestThisPeriod = loan.accrueInterest(
             loan.principalRemaining(
                 period,
@@ -41,6 +36,11 @@ export function amortizePayments (loan, payment, numPayments, startPeriod) {
                 payment,
                 loan.principalRemaining(startPeriod)
             )
+        );
+        let principalRemaining = loan.principalRemaining(
+            period + 1,
+            payment,
+            loan.principalRemaining(startPeriod)
         );
         amortizationSchedule.push(
             {
