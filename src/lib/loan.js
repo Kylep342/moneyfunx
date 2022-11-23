@@ -10,6 +10,16 @@ This library contains functions used to in personal financial analysis
 
 */
 
+/**
+ * Calculates the minimum payment to pay the principal back in the number of periods at the periodic rate
+ *
+ * balance = principal + interest
+ *
+ * @param {number} principal The amount borrowed
+ * @param {number} periodicRate The rate the balance accrues interest at per period
+ * @param {number [int]} periods The number of periods the principal is repaid over
+ * @returns {number} The minimum payment
+ */
 export function calculateMinPayment (principal, periodicRate, periods) {
     return periodicRate > 0 ?
         principal * (
@@ -22,6 +32,17 @@ export function calculateMinPayment (principal, periodicRate, periods) {
         principal / periods;
 }
 
+/**
+ * Calculates the principal remaining after a certain number of payments from a beginning principal at a periodic rate
+ *
+ * balance = principal + interest
+ *
+ * @param {number} principal The amount borrowed
+ * @param {number} payment The amount paid at each period
+ * @param {number} periodicRate The rate the balance accrues interest at per period
+ * @param {number [int]} periods The number of periods paid to compute the desired principal remaining
+ * @returns  {number} The remaining principal
+ */
 export function principalRemaining (principal, payment, periodicRate, periods) {
     return Math.max(
         (principal * (1 + periodicRate) ** periods) - (
@@ -33,6 +54,16 @@ export function principalRemaining (principal, payment, periodicRate, periods) {
     );
 }
 
+/**
+ * Calculates the number of payments required to pay off a principal
+ *
+ * balance = principal + interest
+ *
+ * @param {number} principal The amount borrowed
+ * @param {number} payment The amount paid at each period
+ * @param {number} periodicRate The rate the balance accrues interest at per period
+ * @returns The number of payments needed to pay off the principal
+ */
 export function numPaymentsToZero (principal, payment, periodicRate) {
     return Math.ceil(
         Math.log(
@@ -41,6 +72,9 @@ export function numPaymentsToZero (principal, payment, periodicRate) {
     );
 }
 
+/**
+ *
+ */
 export class Loan {
     constructor (principal, annualRate, periodsPerYear, termInYears) {
         this.id = String(Math.floor(Math.random() * Date.now()));

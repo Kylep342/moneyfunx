@@ -3,6 +3,15 @@
 */
 import * as loanLib from "./loan";
 
+/**
+ *
+ * Calculates the extra amount in a payment after all loans' minimum payments are met
+ * Throws an exception if the payment provided is less than the collective minimum payments for all loans
+ *
+ * @param {Array<Loan>} loans The loans to allocate minimum payments
+ * @param {number} payment The amount to pay across all loans
+ * @returns {number} The extra amount of payment
+ */
 export function determineExtraPayment (loans, payment) {
     const totalMinPayment = loans.reduce(
         (previousValue, currentValue) => previousValue + currentValue.minPayment,
@@ -14,6 +23,16 @@ export function determineExtraPayment (loans, payment) {
     return payment - totalMinPayment;
 }
 
+/**
+ *
+ * Calculates the amortization schedule for a loan paid with a payment
+ *
+ * @param {Loan} loan The loan to amortize payments for
+ * @param {number} payment The amount to pay to the loan's balance each period
+ * @param {number} numPayments The number of periods to make payments to the loan
+ * @param {number} startPeriod An initial offset of periods to "fast-forward" the state of the loan to prior to calculation of each period
+ * @returns {Array<JSON[number, number, number, number]>} The amortization schdule for the number of payments of payment made to the loan from the provided start period
+ */
 export function amortizePayments (loan, payment, numPayments, startPeriod) {
     payment = loan.validatePayment(payment);
     let amortizationSchedule = [];
@@ -54,6 +73,14 @@ export function amortizePayments (loan, payment, numPayments, startPeriod) {
     return amortizationSchedule;
 }
 
+/**
+ *
+ * Calculates a wealth of information about paying of a set of loans with a total payment amount
+ *
+ * @param {Array<Loans>} loans The loans to pay off
+ * @param {number} payment THe total amount of money budgeted to pay all loans each period
+ * @returns {LoansPaymentSummary} Various totals and series of data regarding paying off the loans at the payment amount
+ */
 export function payLoans (loans, payment) {
     let paymentData = {};
     loans.map(
