@@ -72,10 +72,17 @@ export function numPaymentsToZero (principal, payment, periodicRate) {
     );
 }
 
-/**
- *
- */
+/** 
+ * Represents a financial loan
+*/
 export class Loan {
+    /**
+     * @constructor
+     * @param {number} principal The amount borrowed
+     * @param {number} annualRate The yearly rate the loan accrues interest at
+     * @param {number} periodsPerYear The number of times the interest is accrued in a year
+     * @param {number} termInYears The number of years the loan is repaid over
+     */
     constructor (principal, annualRate, periodsPerYear, termInYears) {
         this.id = String(Math.floor(Math.random() * Date.now()));
         this.principal = principal;
@@ -88,6 +95,13 @@ export class Loan {
         this.totalInterest = (this.minPayment * (this.periods)) - this.principal;
     }
 
+    /**
+     * Verifies a payment amount is valid
+     * Throws an exception if the payment amount is less than the loan's minimum payment 
+     *
+     * @param {number} payment The amount to pay the loan with
+     * @returns {number} The validated payment amount
+     */
     validatePayment(payment=this.minPayment) {
         if (payment < this.minPayment) {
             throw `payment of ${payment} cannot be less than ${this.minPayment}`;
@@ -96,14 +110,29 @@ export class Loan {
         }
     }
 
+    /**
+     * Calculates the minimum payment to pay off the loan in the required number of periods
+     * @returns {number} The minimum amount to pay off the loan in the required number of periods
+     */
     calculateMinPayment() {
         return calculateMinPayment(this.principal, this.periodicRate, this.periods);
     }
 
+    /**
+     * Calculates the amount of interest accrued in a period on a provided balance
+     * @param {number} balance The amunt of money owed on a loan 
+     * @returns {number} The amount of interest accrued in one period
+     */
     accrueInterest(balance=this.principal) {
         return balance * this.periodicRate;
     }
 
+    /**
+     * Calculates the number of payments needed to pay off a balance at a provided payemnt amount
+     * @param {number} payment The amount to pay the loan with
+     * @param {number} balance The amout of money owed on a loan
+     * @returns {number} The number of payments neede to pay the loan off
+     */
     numPaymentsToZero(payment=this.minPayment, balance=this.principal) {
         payment = this.validatePayment(payment);
         return numPaymentsToZero(
@@ -113,6 +142,13 @@ export class Loan {
         );
     }
 
+    /**
+     * Calculates the amout of pricipal remaining after paying a starting balance with a payment for a number of periods
+     * @param {number} periods The number of payemnts to make
+     * @param {number} payment The amount to pay the loan with
+     * @param {number} balance The amount of money owed on a loan
+     * @returns {number} The share of the amount borrowed left to pay
+     */
     principalRemaining(periods, payment=this.minPayment, balance=this.principal) {
         payment = this.validatePayment(payment);
         return periods < this.numPaymentsToZero(payment, balance) ?
@@ -125,6 +161,13 @@ export class Loan {
             0;
     }
 
+    /**
+     * Calculates the amount of interest paid after paying a starting balance with a payment for a number of periods
+     * @param {number} periods The number of payments to make
+     * @param {number} payment The amount to pay the loan with
+     * @param {number} balance The amount of money owed on a loan
+     * @returns The total amount of interest paid
+     */
     interestPaid(periods, payment=this.minPayment, balance=this.principal) {
         // TODO: Fix this
         // 18-3-2022: Need to compute interest for the final payment and add it to the ternary
