@@ -1,7 +1,7 @@
 {
   "name": "moneyfunx",
   "type": "module",
-  "version": "0.0.22",
+  "version": "0.0.23",
   "description": "MoneyFunx is a small library of functions for financial computations, with a focus on personal finance",
   "main": "src/index.js",
   "scripts": {
