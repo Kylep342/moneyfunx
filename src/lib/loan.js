@@ -72,7 +72,7 @@ export function numPaymentsToZero (principal, payment, periodicRate) {
     );
 }
 
-/** 
+/**
  * Represents a financial loan
 */
 export class Loan {
@@ -97,7 +97,7 @@ export class Loan {
 
     /**
      * Verifies a payment amount is valid
-     * Throws an exception if the payment amount is less than the loan's minimum payment 
+     * Throws an exception if the payment amount is less than the loan's minimum payment
      *
      * @param {number} payment The amount to pay the loan with
      * @returns {number} The validated payment amount
@@ -120,7 +120,7 @@ export class Loan {
 
     /**
      * Calculates the amount of interest accrued in a period on a provided balance
-     * @param {number} balance The amunt of money owed on a loan 
+     * @param {number} balance The amunt of money owed on a loan
      * @returns {number} The amount of interest accrued in one period
      */
     accrueInterest(balance=this.principal) {
