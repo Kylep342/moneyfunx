@@ -1,8 +1,8 @@
-/*
-
-NOTE: When sorting by avalanche, sort by snowball first for optimal interest minimization
-
-*/
+/**
+ *
+ * This file contains functions for sorting Arrays of Loans on certain attributes
+ *
+ */
 
 /**
  * Sorts loans descending by interest rate

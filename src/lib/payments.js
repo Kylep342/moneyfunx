@@ -1,6 +1,9 @@
-/*
+/**
+ *
+ * This file contains functions for computing detailed information on paying loans
+ *
+ */
 
-*/
 import * as loanLib from "./loan";
 
 /**

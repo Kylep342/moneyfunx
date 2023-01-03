@@ -1,14 +1,14 @@
-/*
-
-*****************
-*** MoneyFunx ***
-*****************
-
-mek it funx up
-
-This library contains functions used to in personal financial analysis
-
-*/
+/**
+ *
+ * *****************
+ * *** MoneyFunx ***
+ * *****************
+ *
+ * mek it funx up
+ *
+ * This library contains functions used to in personal financial analysis
+ *
+ */
 
 /**
  * Calculates the minimum payment to pay the principal back in the number of periods at the periodic rate
