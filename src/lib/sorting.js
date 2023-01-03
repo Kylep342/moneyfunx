@@ -10,7 +10,7 @@
  * @param {Loan} loan2 A loan to be comapred
  * @returns {number} the order in which to sort the loans in descending interest rate
  */
-export function snowball(loan1, loan2) {
+export function avalanche(loan1, loan2) {
     return loan2.annualRate - loan1.annualRate;
 }
 
@@ -20,7 +20,7 @@ export function snowball(loan1, loan2) {
  * @param {Loan} loan2 A loan to be compared
  * @returns {number} the order in which to sort the loans in ascending princpal
  */
-export function avalanche(loan1, loan2) {
+export function snowball(loan1, loan2) {
     return loan1.principal - loan2.principal;
 }
 
