@@ -13,7 +13,7 @@ test(
 
         const loans = sorting.sortLoans(
             [loan2, loan3, loan1],
-            sorting.snowball
+            sorting.avalanche
         );
 
         const loan2AmortizationSchedule = payments.amortizePayments(loan2, loan2.minPayment, 120, 0);
