@@ -5,6 +5,7 @@
  */
 
 import * as loanLib from "./loan";
+import * as utils from "./utils";
 
 /**
  *
@@ -84,7 +85,7 @@ export function amortizePayments (loan, payment, numPayments, startPeriod) {
  * @param {number} payment THe total amount of money budgeted to pay all loans each period
  * @returns {LoansPaymentSummary} Various totals and series of data regarding paying off the loans at the payment amount
  */
-export function payLoans (loans, payment) {
+export function payLoans (loans, payment, totals=false) {
     let paymentData = {};
     loans.map(
         (loan) => {
@@ -133,7 +134,47 @@ export function payLoans (loans, payment) {
         });
         periodsElapsed += periodsToPay;
     }
+
+    //
+    if (totals) {
+        // let periods = Array(periodsElapsed).fill(0);
+        let totalPrincipal = Array(periodsElapsed).fill(0);
+        let totalInterest = Array(periodsElapsed).fill(0);
+        let totalPrincipalRemaining = Array(periodsElapsed).fill(0);
+
+        for (const loan of loans) {
+            totalPrincipal = utils.addVector(
+                totalPrincipal,
+                [...paymentData[loan.id].amortizationSchedule.principal]
+            );
+            totalInterest = utils.addVector(
+                totalInterest,
+                [...paymentData[loan.id].amortizationSchedule.interest]
+            );
+            totalPrincipalRemaining = utils.addVector(
+                totalPrincipalRemaining,
+                [...paymentData[loan.id].amortizationSchedule.principalRemaining]
+            );
+        }
+
+        paymentData["totals"] = {
+            lifetimeInterest: totalInterest,
+            amortizationSchedule: [],
+        };
+
+        for (let period of periodsElapsed) {
+            paymentData["totals"].amortizationSchedule.push(
+                {
+                    principal: totalPrincipal[period],
+                    interest: totalInterest[period],
+                    principalRemaining: totalPrincipalRemaining[period]
+                }
+            );
+        }
+    }
+
     paymentData["totalInterest"] = totalInterest;
     paymentData["totalPayments"] = periodsElapsed;
+    // TODO: construct a schedule for total values
     return paymentData;
 }
