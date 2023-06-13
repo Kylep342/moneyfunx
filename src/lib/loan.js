@@ -10,6 +10,8 @@
  *
  */
 
+import * as errors from "./errors";
+
 /**
  * Calculates the minimum payment to pay the principal back in the number of periods at the periodic rate
  *
@@ -20,7 +22,7 @@
  * @param {number [int]} periods The number of periods the principal is repaid over
  * @returns {number} The minimum payment
  */
-export function calculateMinPayment (principal, periodicRate, periods) {
+export function calculateMinPayment(principal, periodicRate, periods) {
     return periodicRate > 0 ?
         principal * (
             (
@@ -43,7 +45,7 @@ export function calculateMinPayment (principal, periodicRate, periods) {
  * @param {number [int]} periods The number of periods paid to compute the desired principal remaining
  * @returns  {number} The remaining principal
  */
-export function principalRemaining (principal, payment, periodicRate, periods) {
+export function principalRemaining(principal, payment, periodicRate, periods) {
     return Math.max(
         (principal * (1 + periodicRate) ** periods) - (
             payment * (
@@ -64,7 +66,7 @@ export function principalRemaining (principal, payment, periodicRate, periods) {
  * @param {number} periodicRate The rate the balance accrues interest at per period
  * @returns The number of payments needed to pay off the principal
  */
-export function numPaymentsToZero (principal, payment, periodicRate) {
+export function numPaymentsToZero(principal, payment, periodicRate) {
     return Math.ceil(
         Math.log(
             (payment / (payment - principal * periodicRate))
@@ -83,7 +85,7 @@ export class Loan {
      * @param {number} periodsPerYear The number of times the interest is accrued in a year
      * @param {number} termInYears The number of years the loan is repaid over
      */
-    constructor (principal, annualRate, periodsPerYear, termInYears) {
+    constructor(principal, annualRate, periodsPerYear, termInYears) {
         this.id = String(Math.floor(Math.random() * Date.now()));
         this.principal = principal;
         this.annualRate = annualRate;
@@ -97,14 +99,14 @@ export class Loan {
 
     /**
      * Verifies a payment amount is valid
-     * Throws an exception if the payment amount is less than the loan's minimum payment
+     * Throws a PaymentTooLowError if the payment amount is less than the loan's minimum payment
      *
      * @param {number} payment The amount to pay the loan with
      * @returns {number} The validated payment amount
      */
-    validatePayment(payment=this.minPayment) {
+    validatePayment(payment = this.minPayment) {
         if (payment < this.minPayment) {
-            throw `payment of ${payment} cannot be less than ${this.minPayment}`;
+            throw new errors.PaymentTooLowError(`payment of ${payment} cannot be less than ${this.minPayment}`);
         } else {
             return payment;
         }
@@ -123,7 +125,7 @@ export class Loan {
      * @param {number} balance The amunt of money owed on a loan
      * @returns {number} The amount of interest accrued in one period
      */
-    accrueInterest(balance=this.principal) {
+    accrueInterest(balance = this.principal) {
         return balance * this.periodicRate;
     }
 
@@ -133,7 +135,7 @@ export class Loan {
      * @param {number} balance The amout of money owed on a loan
      * @returns {number} The number of payments neede to pay the loan off
      */
-    numPaymentsToZero(payment=this.minPayment, balance=this.principal) {
+    numPaymentsToZero(payment = this.minPayment, balance = this.principal) {
         payment = this.validatePayment(payment);
         return numPaymentsToZero(
             balance,
@@ -149,7 +151,7 @@ export class Loan {
      * @param {number} balance The amount of money owed on a loan
      * @returns {number} The share of the amount borrowed left to pay
      */
-    principalRemaining(periods, payment=this.minPayment, balance=this.principal) {
+    principalRemaining(periods, payment = this.minPayment, balance = this.principal) {
         payment = this.validatePayment(payment);
         return periods < this.numPaymentsToZero(payment, balance) ?
             principalRemaining(
@@ -168,9 +170,7 @@ export class Loan {
      * @param {number} balance The amount of money owed on a loan
      * @returns The total amount of interest paid
      */
-    interestPaid(periods, payment=this.minPayment, balance=this.principal) {
-        // TODO: Fix this
-        // 18-3-2022: Need to compute interest for the final payment and add it to the ternary
+    interestPaid(periods, payment = this.minPayment, balance = this.principal) {
         payment = this.validatePayment(payment);
         return periods < this.numPaymentsToZero(payment, balance) ?
             (payment * periods) - (balance - this.principalRemaining(periods, payment, balance)) :

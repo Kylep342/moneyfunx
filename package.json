@@ -1,7 +1,7 @@
 {
   "name": "moneyfunx",
   "type": "module",
-  "version": "0.0.28",
+  "version": "0.0.29",
   "description": "MoneyFunx is a small library of functions for financial computations, with a focus on personal finance",
   "main": "src/index.js",
   "scripts": {
@@ -15,8 +15,7 @@
   },
   "license": "MIT",
   "devDependencies": {
-    "eslint": "^8.11.0",
-    "eslint-plugin-vue": "^8.5.0",
+    "eslint": "^8.42.0",
     "jest": "^27.5.1"
   }
 }

@@ -1,4 +1,7 @@
 export {
+    PaymentTooLowError
+} from "./lib/errors";
+export {
     calculateMinPayment,
     principalRemaining,
     numPaymentsToZero,
