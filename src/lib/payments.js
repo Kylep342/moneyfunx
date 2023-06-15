@@ -103,7 +103,6 @@ export function payLoans(loans, payment, reduceMinimum = false) {
         }
     );
 
-
     let periodsElapsed = 0;
     let paidLoans = 0;
     let lifetimeInterest = 0;
@@ -113,10 +112,7 @@ export function payLoans(loans, payment, reduceMinimum = false) {
         let firstLoan = loans.slice(paidLoans)[0];
         let firstLoanPayment = firstLoan.minPayment + determineExtraPayment(loans.slice(paidLoans), monthlyPayment);
         let periodsToPay = loanLib.numPaymentsToZero(
-            firstLoan.principalRemaining(
-                periodsElapsed,
-                firstLoan.minPayment
-            ),
+            firstLoan.principalRemaining(periodsElapsed),
             firstLoanPayment,
             firstLoan.periodicRate
         );
@@ -173,10 +169,12 @@ export function payLoans(loans, payment, reduceMinimum = false) {
         periodsElapsed += periodsToPay;
     }
 
-    paymentData["totals"] = {
-        lifetimeInterest: lifetimeInterest,
-        amortizationSchedule: totalAmortizationSchedule
-    };
+    if (loans.length) {
+        paymentData["totals"] = {
+            lifetimeInterest: lifetimeInterest,
+            amortizationSchedule: totalAmortizationSchedule
+        };
+    }
 
     return paymentData;
 }

@@ -5,4 +5,3 @@ MoneyFunx is a small library of functions for financial computations, with a foc
 
 ## Upcoming features
  - Typing/interfaces
- - A full "totalSchedule" key in the AmortizationSchedule object returned by payLoans
