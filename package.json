@@ -3,7 +3,8 @@
   "type": "module",
   "version": "0.0.30",
   "description": "MoneyFunx is a small library of functions for financial computations, with a focus on personal finance",
-  "main": "src/index.js",
+  "main": "build/index.ts",
+  "types": "build/index.d.ts",
   "scripts": {
     "test": "NODE_OPTIONS=--experimental-vm-modules jest",
     "lint": "eslint"
@@ -17,5 +18,8 @@
   "devDependencies": {
     "eslint": "^8.42.0",
     "jest": "^27.5.1"
+  },
+  "dependencies": {
+    "typescript": "^5.1.6"
   }
 }
