@@ -43,8 +43,8 @@ export function determineExtraPayment(loans: Array<ILoan>, payment: number): num
  */
 export function amortizePayments(
   loan: Loan,
-  payment: number = null,
-  numPayments: number = null,
+  payment: number,
+  numPayments: number,
   startPeriod: number = 0
 ): Array<AmortizationRecord> {
   if (payment === null) {
@@ -111,7 +111,7 @@ export function payLoans(
   let periodsElapsed = 0;
   let paidLoans = 0;
   let lifetimeInterest = 0;
-  let totalAmortizationSchedule = [];
+  let totalAmortizationSchedule: AmortizationRecord[] = [];
 
   while (paidLoans < loans.length) {
     let firstLoan = loans.slice(paidLoans)[0];

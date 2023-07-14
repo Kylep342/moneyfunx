@@ -2,9 +2,11 @@
   "compilerOptions": {
     "allowJs": true,
     "declaration": true,
-    "module": "ESNext",
-    "outDir": "./built",
-    "target": "es5"
+    "module": "es6",
+    "outDir": "./build",
+    "strict": true,
+    "target": "es2015",
+    "types": []
   },
-  "include": ["./src/**/*"]
+  "include": ["./src"],
 }
