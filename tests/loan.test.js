@@ -1,5 +1,5 @@
 import { test, expect } from "@jest/globals";
-import * as loan from "../src/lib/loan.js";
+import * as loan from "../src/lib/loan.ts";
 
 test(
     "Loan with principal=7500, interest=0.068, periods/year=12, years=10 has proper attributes",

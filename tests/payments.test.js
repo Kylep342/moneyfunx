@@ -1,8 +1,8 @@
 import { expect, test } from "@jest/globals";
 // import * as errors from "../src/lib/errors.js";
-import * as loan from "../src/lib/loan.js";
-import * as payments from "../src/lib/payments.js";
-import * as sorting from "../src/lib/sorting.js";
+import * as loan from "../src/lib/loan.ts";
+import * as payments from "../src/lib/payments.ts";
+import * as sorting from "../src/lib/sorting.ts";
 
 
 test(

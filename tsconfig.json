@@ -1,0 +1,12 @@
+{
+  "compilerOptions": {
+    "allowJs": true,
+    "declaration": true,
+    "module": "es6",
+    "outDir": "./build",
+    "strict": true,
+    "target": "es2015",
+    "types": []
+  },
+  "include": ["./src"],
+}

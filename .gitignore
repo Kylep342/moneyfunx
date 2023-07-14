@@ -1,4 +1,4 @@
-target
+build
 node_modules/**
 scratch.js
 .npmrc
