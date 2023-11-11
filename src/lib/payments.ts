@@ -72,7 +72,7 @@ export function amortizePayments(
   for (let period = 0; period < numPayments; period++) {
     let interestThisPeriod = loan.accrueInterest(principalRemaining);
     let principalThisPeriod = Math.min(
-      (period === 0 ? payment + carryover : payment) - interestThisPeriod,
+      (period === numPayments - 1 ? payment + carryover : payment) - interestThisPeriod,
       principalRemaining
     );
     principalRemaining -= principalThisPeriod;
