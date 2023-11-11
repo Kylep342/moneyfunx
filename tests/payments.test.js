@@ -49,10 +49,10 @@ test("Payments are good", () => {
   // 2 keys more than the 3 loans for totalInterest and totalPayments
   expect(Object.keys(loanPaymentTotals1).length).toBe(4);
   expect(loanPaymentTotals1[loan1.id].lifetimeInterest).toBe(413.9337386301653);
-  expect(loanPaymentTotals1[loan2.id].lifetimeInterest).toBe(606.7581770433911);
-  expect(loanPaymentTotals1[loan3.id].lifetimeInterest).toBe(958.1746251709815);
+  expect(loanPaymentTotals1[loan2.id].lifetimeInterest).toBe(606.8158977545503);
+  expect(loanPaymentTotals1[loan3.id].lifetimeInterest).toBe(958.2262943525681);
   expect(loanPaymentTotals1["totals"].lifetimeInterest).toBe(
-    1978.866540844538
+    1978.9759307372838
   );
   expect(loanPaymentTotals1["totals"].amortizationSchedule.length).toBe(54);
 
@@ -69,11 +69,11 @@ test("Payments are good", () => {
 
   expect(Object.keys(loanPaymentTotals2).length).toBe(4);
   expect(loanPaymentTotals2[loan1.id].lifetimeInterest).toBe(413.9337386301653);
-  expect(loanPaymentTotals2[loan2.id].lifetimeInterest).toBe(640.8678083094958);
+  expect(loanPaymentTotals2[loan2.id].lifetimeInterest).toBe(640.941466441999);
   expect(loanPaymentTotals2[loan3.id].lifetimeInterest).toBe(
-    1064.7237211414142
+    1064.803479437914
   );
-  expect(loanPaymentTotals2["totals"].lifetimeInterest).toBe(2119.5252680810754);
+  expect(loanPaymentTotals2["totals"].lifetimeInterest).toBe(2119.678684510078);
   expect(loanPaymentTotals2["totals"].amortizationSchedule.length).toBe(64);
   expect(loanPaymentTotals2["totals"].amortizationSchedule[5].principal).toBe(
     332.4292767442003
@@ -85,10 +85,10 @@ test("Payments are good", () => {
     loanPaymentTotals2["totals"].amortizationSchedule[5].principalRemaining
   ).toBe(17526.761885971362);
   expect(loanPaymentTotals2["totals"].amortizationSchedule[63].principal).toBe(
-    61.136612877728396
+    62.479692225841575
   );
   expect(loanPaymentTotals2["totals"].amortizationSchedule[63].interest).toBe(
-    0.196656104756693
+    0.20097634332645706
   );
   expect(
     loanPaymentTotals2["totals"].amortizationSchedule[63].principalRemaining

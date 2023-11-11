@@ -68,10 +68,10 @@ export function amortizePayments(
 
   let principalRemaining = principal;
 
-  let amortizationSchedule: AmortizationRecord[] = [];
+  const amortizationSchedule: AmortizationRecord[] = [];
   for (let period = 0; period < numPayments; period++) {
-    let interestThisPeriod = loan.accrueInterest(principalRemaining);
-    let principalThisPeriod = Math.min(
+    const interestThisPeriod = loan.accrueInterest(principalRemaining);
+    const principalThisPeriod = Math.min(
       (period === numPayments - 1 ? payment + carryover : payment) - interestThisPeriod,
       principalRemaining
     );
@@ -132,10 +132,18 @@ export function payLoans(
       periodsToPay,
       periodsElapsed
     );
-    const firstLoanCarryover = firstLoanPayment - firstLoan.principalRemaining(
-      periodsToPay - 1,
-      firstLoanPayment,
-      firstLoanPrincipalRemaining
+    const firstLoanCarryover = firstLoanPayment - (
+      firstLoan.principalRemaining(
+        periodsToPay - 1,
+        firstLoanPayment,
+        firstLoanPrincipalRemaining
+      ) + firstLoan.accrueInterest(
+        firstLoan.principalRemaining(
+          periodsToPay - 1,
+          firstLoanPayment,
+          firstLoanPrincipalRemaining
+        )
+      )
     );
     paymentData[firstLoan.id].amortizationSchedule = [
       ...paymentData[firstLoan.id].amortizationSchedule,
