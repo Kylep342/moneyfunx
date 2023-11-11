@@ -7,7 +7,11 @@
 import * as errors from "./errors";
 import * as helpers from "./helperFunctions";
 import { ILoan, Loan } from "./loan";
-import { AmortizationRecord, LoansPaymentSummary, PaymentSummary } from "./paymentTypes";
+import {
+  AmortizationRecord,
+  LoansPaymentSummary,
+  PaymentSummary,
+} from "./paymentTypes";
 
 /**
  *
@@ -18,7 +22,10 @@ import { AmortizationRecord, LoansPaymentSummary, PaymentSummary } from "./payme
  * @param {number} payment The amount to pay across all loans
  * @returns {number} The extra amount of payment
  */
-export function determineExtraPayment(loans: Array<ILoan>, payment: number): number {
+export function determineExtraPayment(
+  loans: Array<ILoan>,
+  payment: number
+): number {
   const totalMinPayment = loans.reduce(
     (previousValue, currentValue) => previousValue + currentValue.minPayment,
     0

@@ -93,78 +93,75 @@ export class Loan implements ILoan {
   }
 
   /**
-   * Calculates the amount of interest accrued in a period on a provided balance
-   * @param {number} balance The amunt of money owed on a loan
+   * Calculates the amount of interest accrued in a period on a provided principal
+   * @param {number} principal The amunt of money owed on a loan
    * @returns {number} The amount of interest accrued in one period
    */
-  accrueInterest(balance: number = this.principal): number {
-    return balance * this.periodicRate;
+  accrueInterest(principal: number = this.principal): number {
+    return principal * this.periodicRate;
   }
 
   /**
-   * Calculates the number of payments needed to pay off a balance at a provided payemnt amount
+   * Calculates the number of payments needed to pay off a principal at a provided payemnt amount
    * @param {number} payment The amount to pay the loan with
-   * @param {number} balance The amout of money owed on a loan
+   * @param {number} principal The amout of money owed on a loan
    * @returns {number} The number of payments neede to pay the loan off
    */
   numPaymentsToZero(
     payment: number = this.minPayment,
-    balance: number = this.principal
+    principal: number = this.principal
   ): number {
     this.validatePayment(payment);
-    return helpers.numPaymentsToZero(balance, payment, this.periodicRate);
+    return helpers.numPaymentsToZero(principal, payment, this.periodicRate);
   }
 
   /**
-   * Calculates the amout of pricipal remaining after paying a starting balance with a payment for a number of periods
+   * Calculates the amout of pricipal remaining after paying a starting principal with a payment for a number of periods
    * @param {number} periods The number of payemnts to make
    * @param {number} payment The amount to pay the loan with
-   * @param {number} balance The amount of money owed on a loan
+   * @param {number} principal The amount of money owed on a loan
    * @returns {number} The share of the amount borrowed left to pay
    */
   principalRemaining(
     periods: number,
     payment: number = this.minPayment,
-    balance: number = this.principal
+    principal: number = this.principal
   ): number {
     this.validatePayment(payment);
-    return periods < this.numPaymentsToZero(payment, balance)
-      ? helpers.principalRemaining(balance, payment, this.periodicRate, periods)
+    return periods < this.numPaymentsToZero(payment, principal)
+      ? helpers.principalRemaining(
+        principal,
+        payment,
+        this.periodicRate,
+        periods
+      )
       : 0;
   }
 
   /**
-   * Calculates the amount of interest paid after paying a starting balance with a payment for a number of periods
+   * Calculates the amount of interest paid after paying a starting principal with a payment for a number of periods
    * @param {number} periods The number of payments to make
    * @param {number} payment The amount to pay the loan with
-   * @param {number} balance The amount of money owed on a loan
+   * @param {number} principal The amount of money owed on a loan
    * @returns The total amount of interest paid
    */
   interestPaid(
     periods: number,
     payment: number = this.minPayment,
-    balance: number = this.principal
+    principal: number = this.principal
   ): number {
     this.validatePayment(payment);
-    return periods < this.numPaymentsToZero(payment, balance)
-      ? payment * periods -
-          (balance - this.principalRemaining(periods, payment, balance))
-      : Math.max(
-          payment * (this.numPaymentsToZero(payment, balance) - 1) -
-            (balance -
-              this.principalRemaining(
-                this.numPaymentsToZero(payment) - 1,
-                payment,
-                balance
-              )) +
-            this.accrueInterest(
-              this.principalRemaining(
-                this.numPaymentsToZero(payment) - 1,
-                payment,
-                balance
-              )
-            ),
-          0
-        );
+    const pmtsToZero = this.numPaymentsToZero(payment, principal);
+    return periods < pmtsToZero
+      ? helpers.interestPaid(principal, payment, this.periodicRate, periods)
+      : helpers.interestPaid(
+        principal,
+        payment,
+        this.periodicRate,
+        pmtsToZero - 1
+      ) +
+          this.accrueInterest(
+            this.principalRemaining(pmtsToZero - 1, payment, principal)
+          );
   }
 }

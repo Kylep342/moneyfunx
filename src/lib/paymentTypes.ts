@@ -11,5 +11,5 @@ export interface PaymentSummary {
 }
 
 export interface LoansPaymentSummary {
-  [id: string]: PaymentSummary 
+  [id: string]: PaymentSummary;
 }
