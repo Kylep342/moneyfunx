@@ -13,3 +13,7 @@ export interface PaymentSummary {
 export interface LoansPaymentSummary {
   [id: string]: PaymentSummary;
 }
+
+export interface LoanPrincipals {
+  [id: string]: number;
+}
