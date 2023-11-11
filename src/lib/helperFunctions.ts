@@ -51,6 +51,29 @@ export function principalRemaining(
 }
 
 /**
+ * Calculates the total interest paid after a certain number of payments from a beginning principal at a periodic rate
+ *
+ * balance = principal + interest
+ *
+ * @param {number} principal The amount borrowed
+ * @param {number} payment The amount paid at each period
+ * @param {number} periodicRate The rate the balance accrues interest at per period
+ * @param {number [int]} periods The number of periods paid to compute the desired principal remaining
+ * @returns  {number} The total interest paid
+ */
+export function interestPaid(
+  principal: number,
+  payment: number,
+  periodicRate: number,
+  periods: number
+): number {
+  return (
+    payment * periods -
+    (principal - principalRemaining(principal, payment, periodicRate, periods))
+  );
+}
+
+/**
  * Calculates the number of payments required to pay off a principal
  *
  * balance = principal + interest

@@ -3,6 +3,7 @@ export {
   calculateMinPayment,
   numPaymentsToZero,
   principalRemaining,
+  interestPaid,
 } from "./lib/helperFunctions";
 export { ILoan, Loan } from "./lib/loan";
 export {
