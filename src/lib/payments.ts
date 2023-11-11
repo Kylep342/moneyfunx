@@ -162,7 +162,11 @@ export function payLoans(
         ...paidPeriods,
       ];
 
-      loanPrincipalsRemaining[loan.id] = paidPeriods[paidPeriods.length - 1].principalRemaining;
+      loanPrincipalsRemaining[loan.id] = paymentData[
+        loan.id
+      ].amortizationSchedule[
+        paymentData[loan.id].amortizationSchedule.length - 1
+      ].principalRemaining;
 
       totalAmortizationSchedule = totalAmortizationSchedule.map((element) => {
         const matchedInnerElement = paidPeriods.find(
