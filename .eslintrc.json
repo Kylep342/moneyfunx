@@ -9,5 +9,21 @@
         "sourceType": "module"
     },
     "rules": {
+        "array-bracket-spacing": ["error", "never"],
+        "arrow-spacing": ["error", { "before": true, "after": true }],
+        "brace-style": ["error", "1tbs", { "allowSingleLine": true }],
+        "consistent-return": "error",
+        "indent": ["error", 2],
+        "max-len": ["error", { "code": 80, "ignoreUrls": true }],
+        "no-console": "warn",
+        "no-multi-spaces": "error",
+        "no-trailing-spaces": "error",
+        "no-unused-vars": "error",
+        "no-var": "error",
+        "object-shorthand": ["error", "always"],
+        "quotes": ["error", "single"],
+        "semi": ["error", "always"],
+        "space-before-function-paren": ["error", "never"],
+        "strict": ["error", "global"]
     }
 }

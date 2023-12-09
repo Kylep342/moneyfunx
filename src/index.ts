@@ -5,15 +5,15 @@ export {
   principalRemaining,
   interestPaid,
 } from "./lib/helperFunctions";
-export { ILoan, Loan } from "./lib/loan";
+export { type ILoan, Loan } from "./lib/loan";
 export {
   determineExtraPayment,
   amortizePayments,
   payLoans,
 } from "./lib/payments";
 export {
-  AmortizationRecord,
-  LoansPaymentSummary,
-  PaymentSummary,
+  type AmortizationRecord,
+  type LoansPaymentSummary,
+  type PaymentSummary,
 } from "./lib/paymentTypes";
 export { snowball, avalanche, sortLoans } from "./lib/sorting";

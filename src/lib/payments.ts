@@ -6,12 +6,11 @@
 
 import * as errors from "./errors";
 import * as helpers from "./helperFunctions";
-import { ILoan, Loan } from "./loan";
-import {
+import type { ILoan, Loan } from "./loan";
+import type {
   AmortizationRecord,
   LoanPrincipals,
   LoansPaymentSummary,
-  PaymentSummary,
 } from "./paymentTypes";
 
 /**
@@ -24,7 +23,7 @@ import {
  * @returns {number} The extra amount of payment
  */
 export function determineExtraPayment(
-  loans: Array<ILoan>,
+  loans: ILoan[],
   payment: number
 ): number {
   const totalMinPayment = loans.reduce(
@@ -56,7 +55,7 @@ export function amortizePayments(
   numPayments: number,
   startPeriod: number = 0,
   carryover: number = 0
-): Array<AmortizationRecord> {
+): AmortizationRecord[] {
   if (payment === null) {
     payment = loan.minPayment;
   }
@@ -72,7 +71,9 @@ export function amortizePayments(
   for (let period = 0; period < numPayments; period++) {
     const interestThisPeriod = loan.accrueInterest(principalRemaining);
     const principalThisPeriod = Math.min(
-      (period === numPayments - 1 ? payment + carryover : payment) - interestThisPeriod,
+      (period === numPayments - 1
+        ? payment + carryover
+        : payment) - interestThisPeriod,
       principalRemaining
     );
     principalRemaining -= principalThisPeriod;
@@ -80,7 +81,7 @@ export function amortizePayments(
       period: startPeriod + period + 1,
       principal: principalThisPeriod,
       interest: interestThisPeriod,
-      principalRemaining: principalRemaining,
+      principalRemaining,
     });
   }
   return amortizationSchedule;
@@ -180,7 +181,7 @@ export function payLoans(
         const matchedInnerElement = paidPeriods.find(
           (innerElement) => innerElement.period === element.period
         );
-        return matchedInnerElement
+        return (matchedInnerElement != null)
           ? {
               period: element.period,
               principal: element.principal + matchedInnerElement.principal,
@@ -200,12 +201,17 @@ export function payLoans(
   }
 
   for (const loan of loans) {
-    const loanLifetimeInterest = paymentData[loan.id].amortizationSchedule.reduce((acc, curval) => acc + curval.interest, 0);
+    const loanLifetimeInterest = (
+      paymentData[loan.id].amortizationSchedule.reduce(
+        (acc, curval) => acc + curval.interest,
+        0
+      )
+    );
     paymentData[loan.id].lifetimeInterest = loanLifetimeInterest;
     totalLifetimeInterest += loanLifetimeInterest;
   }
 
-  paymentData["totals"] = {
+  paymentData.totals = {
     lifetimeInterest: totalLifetimeInterest,
     amortizationSchedule: totalAmortizationSchedule
   };

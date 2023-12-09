@@ -4,7 +4,7 @@
  *
  */
 
-import { ILoan } from "./loan";
+import { type ILoan } from "./loan";
 
 type avalanche = (loan1: ILoan, loan2: ILoan) => number;
 type snowball = (loan1: ILoan, loan2: ILoan) => number;
@@ -36,6 +36,6 @@ export function snowball(loan1: ILoan, loan2: ILoan) {
  * @param {function} sortFunc The algorithm to sort the loans with
  * @returns The sorted array loans
  */
-export function sortLoans(loans: Array<ILoan>, sortFunction: sortFunction) {
+export function sortLoans(loans: ILoan[], sortFunction: sortFunction) {
   return loans.sort(sortFunction);
 }

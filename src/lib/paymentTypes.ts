@@ -7,13 +7,9 @@ export interface AmortizationRecord {
 
 export interface PaymentSummary {
   lifetimeInterest: number;
-  amortizationSchedule: Array<AmortizationRecord>;
+  amortizationSchedule: AmortizationRecord[];
 }
 
-export interface LoansPaymentSummary {
-  [id: string]: PaymentSummary;
-}
+export type LoansPaymentSummary = Record<string, PaymentSummary>;
 
-export interface LoanPrincipals {
-  [id: string]: number;
-}
+export type LoanPrincipals = Record<string, number>;
