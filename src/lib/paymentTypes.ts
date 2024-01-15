@@ -7,6 +7,7 @@ export interface AmortizationRecord {
 
 export interface PaymentSummary {
   lifetimeInterest: number;
+  lifetimePrincipal: number;
   amortizationSchedule: AmortizationRecord[];
 }
 

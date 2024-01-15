@@ -105,14 +105,19 @@ export function payLoans(
   let monthlyPayment = payment;
   const paymentData: LoansPaymentSummary = {};
   const loanPrincipalsRemaining: LoanPrincipals = {};
-  loans.map((loan) => {
-    paymentData[loan.id] = { lifetimeInterest: 0, amortizationSchedule: [] };
+  loans.forEach((loan) => {
+    paymentData[loan.id] = {
+      lifetimeInterest: 0,
+      lifetimePrincipal: loan.principal,
+      amortizationSchedule: []
+    };
     loanPrincipalsRemaining[loan.id] = loan.principal;
   });
 
   let periodsElapsed = 0;
   let paidLoans = 0;
   let totalLifetimeInterest = 0;
+  let totalLifetimePrincipal = 0;
   let totalAmortizationSchedule: AmortizationRecord[] = [];
 
   while (paidLoans < loans.length) {
@@ -183,13 +188,13 @@ export function payLoans(
         );
         return (matchedInnerElement != null)
           ? {
-              period: element.period,
-              principal: element.principal + matchedInnerElement.principal,
-              interest: element.interest + matchedInnerElement.interest,
-              principalRemaining:
-                element.principalRemaining +
-                matchedInnerElement.principalRemaining
-            }
+            period: element.period,
+            principal: element.principal + matchedInnerElement.principal,
+            interest: element.interest + matchedInnerElement.interest,
+            principalRemaining:
+              element.principalRemaining +
+              matchedInnerElement.principalRemaining
+          }
           : element;
       });
     });
@@ -208,11 +213,14 @@ export function payLoans(
       )
     );
     paymentData[loan.id].lifetimeInterest = loanLifetimeInterest;
+    paymentData[loan.id].lifetimePrincipal = loan.principal;
     totalLifetimeInterest += loanLifetimeInterest;
+    totalLifetimePrincipal += loan.principal;
   }
 
   paymentData.totals = {
     lifetimeInterest: totalLifetimeInterest,
+    lifetimePrincipal: totalLifetimePrincipal,
     amortizationSchedule: totalAmortizationSchedule
   };
 
