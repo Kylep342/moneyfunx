@@ -162,7 +162,7 @@ export function payLoans(
     ];
     paidLoans += 1;
     // handle calculating information for the rest of the loans
-    loans.slice(paidLoans).map((loan, index) => {
+    loans.slice(paidLoans).forEach((loan, index) => {
       const loanPrincipalRemaining = loanPrincipalsRemaining[loan.id];
       const paidPeriods = amortizePayments(
         loan,
