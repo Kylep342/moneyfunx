@@ -105,7 +105,7 @@ export class Loan implements ILoan {
    * Calculates the number of payments needed to pay off a principal at a provided payemnt amount
    * @param {number} payment The amount to pay the loan with
    * @param {number} principal The amout of money owed on a loan
-   * @returns {number} The number of payments neede to pay the loan off
+   * @returns {number} The number of payments needed to pay the loan off
    */
   numPaymentsToZero(
     payment: number = this.minPayment,
