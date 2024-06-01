@@ -2,12 +2,13 @@ import { test, expect } from "@jest/globals";
 import * as loan from "../src/lib/loan.ts";
 
 test("Loan with principal=7500, interest=0.068, periods/year=12, years=10 has proper attributes", () => {
-  const loan1 = new loan.Loan(7500, 0.068, 12, 10);
+  const loan1 = new loan.Loan(7500, 0.068, 12, 10, "Student Loan");
 
   expect(loan1.periodicRate).toBe(0.005666666666666667);
   expect(loan1.periods).toBe(120);
   expect(loan1.minPayment).toBe(86.31024763658397);
   expect(loan1.totalInterest).toBe(2857.2297163900766);
+  expect(loan1.name).toBe("Student Loan");
 
   expect(loan1.numPaymentsToZero()).toBe(120);
   expect(loan1.numPaymentsToZero(300)).toBe(28);
