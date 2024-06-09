@@ -4,7 +4,7 @@
  *
  */
 
-import { type ILoan } from "./loan";
+import { type ILoan } from './loan';
 
 type avalanche = (loan1: ILoan, loan2: ILoan) => number;
 type snowball = (loan1: ILoan, loan2: ILoan) => number;

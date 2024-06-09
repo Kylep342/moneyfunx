@@ -1,8 +1,8 @@
-import { expect, test } from "@jest/globals";
-import * as loan from "../src/lib/loan.ts";
-import * as sorting from "../src/lib/sorting.ts";
+import { expect, test } from '@jest/globals';
+import * as loan from '../src/lib/loan.ts';
+import * as sorting from '../src/lib/sorting.ts';
 
-test("Loans sort well", () => {
+test('Loans sort well', () => {
   const loan1 = new loan.Loan(7500, 0.068, 12, 10);
   const loan2 = new loan.Loan(7500, 0.0368, 12, 10);
   const loan3 = new loan.Loan(4500, 0.0429, 12, 10);

@@ -21,8 +21,8 @@ export function calculateMinPayment(
 ): number {
   return periodicRate > 0
     ? principal *
-        ((periodicRate * (1 + periodicRate) ** periods) /
-          ((1 + periodicRate) ** periods - 1))
+    ((periodicRate * (1 + periodicRate) ** periods) /
+      ((1 + periodicRate) ** periods - 1))
     : principal / periods;
 }
 
@@ -45,7 +45,7 @@ export function principalRemaining(
 ): number {
   return Math.max(
     principal * (1 + periodicRate) ** periods -
-      payment * (((1 + periodicRate) ** periods - 1) / periodicRate),
+    payment * (((1 + periodicRate) ** periods - 1) / periodicRate),
     0
   );
 }
@@ -90,6 +90,6 @@ export function numPaymentsToZero(
 ): number {
   return Math.ceil(
     Math.log(payment / (payment - principal * periodicRate)) /
-      Math.log(periodicRate + 1)
+    Math.log(periodicRate + 1)
   );
 }

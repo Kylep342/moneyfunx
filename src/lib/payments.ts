@@ -4,14 +4,14 @@
  *
  */
 
-import * as errors from "./errors";
-import * as helpers from "./helperFunctions";
-import type { ILoan, Loan } from "./loan";
+import * as errors from './errors';
+import * as helpers from './helperFunctions';
+import type { ILoan, Loan } from './loan';
 import type {
   AmortizationRecord,
   LoanPrincipals,
   LoansPaymentSummary,
-} from "./paymentTypes";
+} from './paymentTypes';
 
 /**
  *
@@ -46,7 +46,7 @@ export function determineExtraPayment(
  * @param {Loan} loan The loan to amortize payments for
  * @param {number} payment The amount to pay to the loan's balance each period
  * @param {number} numPayments The number of periods to make payments to the loan
- * @param {number} startPeriod An initial offset of periods to "fast-forward" the state of the loan to prior to calculation of each period
+ * @param {number} startPeriod An initial offset of periods to 'fast-forward' the state of the loan to prior to calculation of each period
  * @returns {Array<AmortizationRecord>} The amortization schdule for the number of payments of payment made to the loan from the provided start period
  */
 export function amortizePayments(

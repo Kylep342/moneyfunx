@@ -10,8 +10,8 @@
  *
  */
 
-import * as errors from "./errors";
-import * as helpers from "./helperFunctions";
+import * as errors from './errors';
+import * as helpers from './helperFunctions';
 
 /**
  * Represents a financial loan
@@ -164,8 +164,8 @@ export class Loan implements ILoan {
         this.periodicRate,
         pmtsToZero - 1
       ) +
-          this.accrueInterest(
-            this.principalRemaining(pmtsToZero - 1, payment, principal)
-          );
+      this.accrueInterest(
+        this.principalRemaining(pmtsToZero - 1, payment, principal)
+      );
   }
 }

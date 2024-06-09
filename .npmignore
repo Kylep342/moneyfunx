@@ -4,3 +4,5 @@
 .eslintrc.json
 tests
 *.sh
+scratch
+build
