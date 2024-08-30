@@ -47,6 +47,7 @@ export function determineExtraPayment(
  * @param {number} payment The amount to pay to the loan's balance each period
  * @param {number} numPayments The number of periods to make payments to the loan
  * @param {number} startPeriod An initial offset of periods to 'fast-forward' the state of the loan to prior to calculation of each period
+ * @param {number} carryover An additional amount to pay towards a loan, used when a residual amount is available from paying off the previous loan this period
  * @returns {Array<AmortizationRecord>} The amortization schdule for the number of payments of payment made to the loan from the provided start period
  */
 export function amortizePayments(

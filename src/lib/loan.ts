@@ -79,9 +79,8 @@ export class Loan implements ILoan {
       throw new errors.PaymentTooLowError(
         `payment of ${payment} cannot be less than ${this.minPayment}`
       );
-    } else {
-      return payment;
     }
+    return payment;
   }
 
   /**
@@ -155,17 +154,17 @@ export class Loan implements ILoan {
     principal: number = this.principal
   ): number {
     this.validatePayment(payment);
-    const pmtsToZero = this.numPaymentsToZero(payment, principal);
-    return periods < pmtsToZero
+    const paymentsToZero = this.numPaymentsToZero(payment, principal);
+    return periods < paymentsToZero
       ? helpers.interestPaid(principal, payment, this.periodicRate, periods)
       : helpers.interestPaid(
         principal,
         payment,
         this.periodicRate,
-        pmtsToZero - 1
+        paymentsToZero - 1
       ) +
       this.accrueInterest(
-        this.principalRemaining(pmtsToZero - 1, payment, principal)
+        this.principalRemaining(paymentsToZero - 1, payment, principal)
       );
   }
 }
