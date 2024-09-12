@@ -17,3 +17,4 @@ export {
   type PaymentSummary,
 } from './lib/paymentTypes';
 export { snowball, avalanche, sortLoans } from './lib/sorting';
+export { TOTALS } from './lib/constants';
