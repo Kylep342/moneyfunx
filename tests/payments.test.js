@@ -1,4 +1,6 @@
 import { expect, test } from '@jest/globals';
+
+import constants from '../src/lib/constants.ts';
 import * as loan from '../src/lib/loan.ts';
 import * as payments from '../src/lib/payments.ts';
 import * as sorting from '../src/lib/sorting.ts';
@@ -50,10 +52,10 @@ test('Payments are good', () => {
   expect(loanPaymentTotals1[loan1.id].lifetimeInterest).toBe(413.9337386301653);
   expect(loanPaymentTotals1[loan2.id].lifetimeInterest).toBe(606.8158977545503);
   expect(loanPaymentTotals1[loan3.id].lifetimeInterest).toBe(958.2262943525681);
-  expect(loanPaymentTotals1['totals'].lifetimeInterest).toBe(
+  expect(loanPaymentTotals1[constants.TOTALS].lifetimeInterest).toBe(
     1978.9759307372838
   );
-  expect(loanPaymentTotals1['totals'].amortizationSchedule.length).toBe(54);
+  expect(loanPaymentTotals1[constants.TOTALS].amortizationSchedule.length).toBe(54);
 
   // check construction of totals and reduction of minimum payments
   const loanPaymentTotals2 = payments.payLoans(loansAV, 400, true);
@@ -72,24 +74,24 @@ test('Payments are good', () => {
   expect(loanPaymentTotals2[loan3.id].lifetimeInterest).toBe(
     1064.803479437914
   );
-  expect(loanPaymentTotals2['totals'].lifetimeInterest).toBe(2119.678684510078);
-  expect(loanPaymentTotals2['totals'].amortizationSchedule.length).toBe(64);
-  expect(loanPaymentTotals2['totals'].amortizationSchedule[5].principal).toBe(
+  expect(loanPaymentTotals2[constants.TOTALS].lifetimeInterest).toBe(2119.678684510078);
+  expect(loanPaymentTotals2[constants.TOTALS].amortizationSchedule.length).toBe(64);
+  expect(loanPaymentTotals2[constants.TOTALS].amortizationSchedule[5].principal).toBe(
     332.4292767442003
   );
-  expect(loanPaymentTotals2['totals'].amortizationSchedule[5].interest).toBe(
+  expect(loanPaymentTotals2[constants.TOTALS].amortizationSchedule[5].interest).toBe(
     67.57072325579972
   );
   expect(
-    loanPaymentTotals2['totals'].amortizationSchedule[5].principalRemaining
+    loanPaymentTotals2[constants.TOTALS].amortizationSchedule[5].principalRemaining
   ).toBe(17526.761885971362);
-  expect(loanPaymentTotals2['totals'].amortizationSchedule[63].principal).toBe(
+  expect(loanPaymentTotals2[constants.TOTALS].amortizationSchedule[63].principal).toBe(
     62.479692225841575
   );
-  expect(loanPaymentTotals2['totals'].amortizationSchedule[63].interest).toBe(
+  expect(loanPaymentTotals2[constants.TOTALS].amortizationSchedule[63].interest).toBe(
     0.20097634332645706
   );
   expect(
-    loanPaymentTotals2['totals'].amortizationSchedule[63].principalRemaining
+    loanPaymentTotals2[constants.TOTALS].amortizationSchedule[63].principalRemaining
   ).toBe(0);
 });

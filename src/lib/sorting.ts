@@ -27,7 +27,7 @@ export function avalanche(loan1: ILoan, loan2: ILoan) {
  * @returns {number} the order in which to sort the loans in ascending princpal
  */
 export function snowball(loan1: ILoan, loan2: ILoan) {
-  return loan1.principal - loan2.principal;
+  return loan1.currentBalance - loan2.currentBalance;
 }
 
 /**
