@@ -6,7 +6,8 @@
     "outDir": "./build",
     "strict": true,
     "target": "es2015",
-    "types": []
+    "types": [],
+    "esModuleInterop": true,
   },
   "include": ["./src"],
 }

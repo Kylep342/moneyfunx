@@ -110,10 +110,10 @@ export function payLoans(
   loans.forEach((loan) => {
     paymentData[loan.id] = {
       lifetimeInterest: 0,
-      lifetimePrincipal: loan.principal,
+      lifetimePrincipal: loan.currentBalance,
       amortizationSchedule: []
     };
-    loanPrincipalsRemaining[loan.id] = loan.principal;
+    loanPrincipalsRemaining[loan.id] = loan.currentBalance;
   });
 
   let periodsElapsed = 0;

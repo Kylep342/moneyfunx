@@ -25,8 +25,8 @@ export interface ILoan {
   periodicRate: number;
   periods: number;
   minPayment: number;
-  totalInterest: number;
   name?: string;
+  currentBalance: number;
 }
 
 export class Loan implements ILoan {
@@ -38,8 +38,8 @@ export class Loan implements ILoan {
   periodicRate: number;
   periods: number;
   minPayment: number;
-  totalInterest: number;
   name?: string;
+  currentBalance: number;
 
   /**
    * @constructor
@@ -54,6 +54,7 @@ export class Loan implements ILoan {
     periodsPerYear: number,
     termInYears: number,
     name?: string,
+    currentBalance?: number,
   ) {
     this.id = String(Math.floor(Math.random() * Date.now()));
     this.principal = principal;
@@ -63,8 +64,8 @@ export class Loan implements ILoan {
     this.periodicRate = this.annualRate / this.periodsPerYear;
     this.periods = this.periodsPerYear * this.termInYears;
     this.minPayment = this.calculateMinPayment();
-    this.totalInterest = this.minPayment * this.periods - this.principal;
     this.name = name;
+    this.currentBalance = currentBalance || principal;
   }
 
   /**
@@ -100,7 +101,7 @@ export class Loan implements ILoan {
    * @param {number} principal The amunt of money owed on a loan
    * @returns {number} The amount of interest accrued in one period
    */
-  accrueInterest(principal: number = this.principal): number {
+  accrueInterest(principal: number = this.currentBalance): number {
     return principal * this.periodicRate;
   }
 
@@ -112,7 +113,7 @@ export class Loan implements ILoan {
    */
   numPaymentsToZero(
     payment: number = this.minPayment,
-    principal: number = this.principal
+    principal: number = this.currentBalance
   ): number {
     this.validatePayment(payment);
     return helpers.numPaymentsToZero(principal, payment, this.periodicRate);
@@ -128,7 +129,7 @@ export class Loan implements ILoan {
   principalRemaining(
     periods: number,
     payment: number = this.minPayment,
-    principal: number = this.principal
+    principal: number = this.currentBalance
   ): number {
     this.validatePayment(payment);
     return periods < this.numPaymentsToZero(payment, principal)
@@ -151,7 +152,7 @@ export class Loan implements ILoan {
   interestPaid(
     periods: number,
     payment: number = this.minPayment,
-    principal: number = this.principal
+    principal: number = this.currentBalance
   ): number {
     this.validatePayment(payment);
     const paymentsToZero = this.numPaymentsToZero(payment, principal);
