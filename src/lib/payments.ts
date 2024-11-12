@@ -44,6 +44,7 @@ export function determineExtraPayment(
  * Calculates the amortization schedule for a loan paid with a payment
  *
  * @param {Loan} loan The loan to amortize payments for
+ * @param {number} principal The amount borrowed
  * @param {number} payment The amount to pay to the loan's balance each period
  * @param {number} numPayments The number of periods to make payments to the loan
  * @param {number} startPeriod An initial offset of periods to 'fast-forward' the state of the loan to prior to calculation of each period
@@ -210,7 +211,7 @@ export function payLoans(
   for (const loan of loans) {
     const loanLifetimeInterest = (
       paymentData[loan.id].amortizationSchedule.reduce(
-        (acc, curval) => acc + curval.interest,
+        (lifetimeInterest, curval) => lifetimeInterest + curval.interest,
         0
       )
     );
