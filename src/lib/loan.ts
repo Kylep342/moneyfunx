@@ -47,6 +47,8 @@ export class Loan implements ILoan {
    * @param {number} annualRate The yearly rate the loan accrues interest at
    * @param {number} periodsPerYear The number of times the interest is accrued in a year
    * @param {number} termInYears The number of years the loan is repaid over
+   * @param {number} name (Optional) The name for the loan
+   * @param {number} currentBalance (Optional) The current balance of the loan, if different from the principal
    */
   constructor(
     principal: number,
