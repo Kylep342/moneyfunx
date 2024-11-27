@@ -172,7 +172,7 @@ export function payLoans(
         loan.minPayment,
         periodsToPay,
         periodsElapsed,
-        index === 0 ? firstLoanCarryover : 0
+        (index === 0 && !reduceMinimum) ? firstLoanCarryover : 0
       );
       paymentData[loan.id].amortizationSchedule = [
         ...paymentData[loan.id].amortizationSchedule,
