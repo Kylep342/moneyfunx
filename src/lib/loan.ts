@@ -55,8 +55,8 @@ export class Loan implements ILoan {
     annualRate: number,
     periodsPerYear: number,
     termInYears: number,
-    currentBalance?: number,
     name?: string,
+    currentBalance?: number,
   ) {
     this.id = String(Math.floor(Math.random() * Date.now()));
     this.principal = principal;
@@ -78,7 +78,7 @@ export class Loan implements ILoan {
    * @returns {number} The validated payment amount
    */
   validatePayment(payment: number = this.minPayment): number {
-    if (payment.toFixed(2) < this.minPayment.toFixed(2)) {
+    if (parseInt((100 * this.minPayment).toFixed()) > parseInt((100 * payment).toFixed())) {
       throw new errors.PaymentTooLowError(
         `payment of ${payment} cannot be less than ${this.minPayment}`
       );

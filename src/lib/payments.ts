@@ -31,7 +31,7 @@ export function determineExtraPayment(
     0
   );
   // hack to get around floating precision adjustments
-  if (parseFloat(totalMinPayment.toFixed(2)) > parseFloat(payment.toFixed(2))) {
+  if (parseInt((100 * totalMinPayment).toFixed()) > parseInt((100 * payment).toFixed())) {
     throw new errors.PaymentTooLowError(
       `Payment amount of ${payment} must be greater than ${totalMinPayment}`
     );
