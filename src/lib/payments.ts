@@ -31,7 +31,7 @@ export function determineExtraPayment(
     0
   );
   // hack to get around floating precision adjustments
-  if (parseFloat(totalMinPayment.toFixed(2)) > parseFloat(payment.toFixed(2))) {
+  if (parseInt((100 * totalMinPayment).toFixed()) > parseInt((100 * payment).toFixed())) {
     throw new errors.PaymentTooLowError(
       `Payment amount of ${payment} must be greater than ${totalMinPayment}`
     );
@@ -172,7 +172,7 @@ export function payLoans(
         loan.minPayment,
         periodsToPay,
         periodsElapsed,
-        index === 0 ? firstLoanCarryover : 0
+        (index === 0 && !reduceMinimum) ? firstLoanCarryover : 0
       );
       paymentData[loan.id].amortizationSchedule = [
         ...paymentData[loan.id].amortizationSchedule,

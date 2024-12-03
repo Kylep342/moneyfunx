@@ -70,12 +70,12 @@ test('Payments are good', () => {
 
   expect(Object.keys(loanPaymentTotals2).length).toBe(4);
   expect(loanPaymentTotals2[loan1.id].lifetimeInterest).toBe(413.9337386301653);
-  expect(loanPaymentTotals2[loan2.id].lifetimeInterest).toBe(640.941466441999);
+  expect(loanPaymentTotals2[loan2.id].lifetimeInterest).toBe(644.4298504575622);
   expect(loanPaymentTotals2[loan3.id].lifetimeInterest).toBe(
-    1064.803479437914
+    1077.708190826788
   );
-  expect(loanPaymentTotals2[constants.TOTALS].lifetimeInterest).toBe(2119.678684510078);
-  expect(loanPaymentTotals2[constants.TOTALS].amortizationSchedule.length).toBe(64);
+  expect(loanPaymentTotals2[constants.TOTALS].lifetimeInterest).toBe(2136.071779914516);
+  expect(loanPaymentTotals2[constants.TOTALS].amortizationSchedule.length).toBe(65);
   expect(loanPaymentTotals2[constants.TOTALS].amortizationSchedule[5].principal).toBe(
     332.4292767442003
   );
@@ -85,13 +85,13 @@ test('Payments are good', () => {
   expect(
     loanPaymentTotals2[constants.TOTALS].amortizationSchedule[5].principalRemaining
   ).toBe(17526.761885971362);
-  expect(loanPaymentTotals2[constants.TOTALS].amortizationSchedule[63].principal).toBe(
-    62.479692225841575
+  expect(loanPaymentTotals2[constants.TOTALS].amortizationSchedule[64].principal).toBe(
+    7.880214080322219
   );
-  expect(loanPaymentTotals2[constants.TOTALS].amortizationSchedule[63].interest).toBe(
-    0.20097634332645706
+  expect(loanPaymentTotals2[constants.TOTALS].amortizationSchedule[64].interest).toBe(
+    0.025348021958369805
   );
   expect(
-    loanPaymentTotals2[constants.TOTALS].amortizationSchedule[63].principalRemaining
+    loanPaymentTotals2[constants.TOTALS].amortizationSchedule[64].principalRemaining
   ).toBe(0);
 });
