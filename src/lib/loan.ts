@@ -25,8 +25,8 @@ export interface ILoan {
   periodicRate: number;
   periods: number;
   minPayment: number;
-  name?: string;
   currentBalance: number;
+  name?: string;
 }
 
 export class Loan implements ILoan {
@@ -38,8 +38,8 @@ export class Loan implements ILoan {
   periodicRate: number;
   periods: number;
   minPayment: number;
-  name?: string;
   currentBalance: number;
+  name?: string;
 
   /**
    * @constructor
@@ -55,8 +55,8 @@ export class Loan implements ILoan {
     annualRate: number,
     periodsPerYear: number,
     termInYears: number,
-    name?: string,
     currentBalance?: number,
+    name?: string,
   ) {
     this.id = String(Math.floor(Math.random() * Date.now()));
     this.principal = principal;
@@ -78,7 +78,7 @@ export class Loan implements ILoan {
    * @returns {number} The validated payment amount
    */
   validatePayment(payment: number = this.minPayment): number {
-    if (payment < this.minPayment) {
+    if (payment.toFixed(2) < this.minPayment.toFixed(2)) {
       throw new errors.PaymentTooLowError(
         `payment of ${payment} cannot be less than ${this.minPayment}`
       );
