@@ -26,6 +26,7 @@ export interface ILoan {
   periods: number;
   minPayment: number;
   currentBalance: number;
+  fees: number;
   name?: string;
 }
 
@@ -39,6 +40,7 @@ export class Loan implements ILoan {
   periods: number;
   minPayment: number;
   currentBalance: number;
+  fees: number;
   name?: string;
 
   /**
@@ -57,6 +59,7 @@ export class Loan implements ILoan {
     termInYears: number,
     name?: string,
     currentBalance?: number,
+    fees?: number,
   ) {
     this.id = String(Math.floor(Math.random() * Date.now()));
     this.principal = principal;
@@ -68,6 +71,7 @@ export class Loan implements ILoan {
     this.minPayment = this.calculateMinPayment();
     this.name = name;
     this.currentBalance = currentBalance || principal;
+    this.fees = fees || 0;
   }
 
   /**
