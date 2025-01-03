@@ -3,7 +3,7 @@ import * as loan from '../src/lib/loan.ts';
 
 test('Loan has proper attributes', () => {
   const loan1 = new loan.Loan(7500, 0.068, 12, 10, 'Student Loan');
-  const mortgage = new loan.Loan(150000, 0.0622, 12, 15, 'Mortgage', 75000);
+  const mortgage = new loan.Loan(150000, 0.0622, 12, 15, 'Mortgage', 75000, 1000);
 
   expect(loan1.periodicRate).toBe(0.005666666666666667);
   expect(loan1.periods).toBe(120);
@@ -46,6 +46,7 @@ test('Loan has proper attributes', () => {
   expect(mortgage.periods).toBe(180);
   expect(mortgage.minPayment).toBe(1283.6830056654117);
   expect(mortgage.name).toBe('Mortgage');
+  expect(mortgage.fees).toBe(1000);
 
   expect(mortgage.numPaymentsToZero()).toBe(70);
   expect(mortgage.numPaymentsToZero(1500)).toBe(59);
