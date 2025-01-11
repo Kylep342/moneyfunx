@@ -18,6 +18,7 @@ import * as helpers from './helperFunctions';
  */
 export interface ILoan {
   id: string;
+  name: string;
   principal: number;
   annualRate: number;
   periodsPerYear: number;
@@ -27,11 +28,11 @@ export interface ILoan {
   minPayment: number;
   currentBalance: number;
   fees: number;
-  name?: string;
 }
 
 export class Loan implements ILoan {
   id: string;
+  name: string;
   principal: number;
   annualRate: number;
   periodsPerYear: number;
@@ -41,7 +42,6 @@ export class Loan implements ILoan {
   minPayment: number;
   currentBalance: number;
   fees: number;
-  name?: string;
 
   /**
    * @constructor
@@ -49,19 +49,21 @@ export class Loan implements ILoan {
    * @param {number} annualRate The yearly rate the loan accrues interest at
    * @param {number} periodsPerYear The number of times the interest is accrued in a year
    * @param {number} termInYears The number of years the loan is repaid over
-   * @param {number} name (Optional) The name for the loan
+   * @param {number} name The name for the loan
    * @param {number} currentBalance (Optional) The current balance of the loan, if different from the principal
+   * @param {number} fees (Optional) The fees on the loan
    */
   constructor(
     principal: number,
     annualRate: number,
     periodsPerYear: number,
     termInYears: number,
-    name?: string,
+    name: string,
     currentBalance?: number,
     fees?: number,
   ) {
     this.id = String(Math.floor(Math.random() * Date.now()));
+    this.name = name;
     this.principal = principal;
     this.annualRate = annualRate;
     this.periodsPerYear = periodsPerYear;
@@ -69,7 +71,6 @@ export class Loan implements ILoan {
     this.periodicRate = this.annualRate / this.periodsPerYear;
     this.periods = this.periodsPerYear * this.termInYears;
     this.minPayment = this.calculateMinPayment();
-    this.name = name;
     this.currentBalance = currentBalance || principal;
     this.fees = fees || 0;
   }
