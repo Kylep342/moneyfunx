@@ -9,6 +9,7 @@ test('Loan has proper attributes', () => {
   expect(loan1.periods).toBe(120);
   expect(loan1.minPayment).toBe(86.31024763658397);
   expect(loan1.name).toBe('Student Loan');
+  expect(loan1.fees).toBe(0);
 
   expect(loan1.numPaymentsToZero()).toBe(120);
   expect(loan1.numPaymentsToZero(300)).toBe(28);

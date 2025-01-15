@@ -170,7 +170,14 @@ export function payLoans(
         loan,
         loanPrincipalRemaining,
         loan.minPayment,
-        periodsToPay,
+        Math.min(
+          periodsToPay,
+          helpers.numPaymentsToZero(
+            loanPrincipalRemaining,
+            loan.minPayment,
+            loan.periodicRate
+          ),
+        ),
         periodsElapsed,
         (index === 0 && !reduceMinimum) ? firstLoanCarryover : 0
       );
