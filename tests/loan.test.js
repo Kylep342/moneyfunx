@@ -1,4 +1,5 @@
-import { test, expect } from '@jest/globals';
+import { test, expect } from 'vitest';
+
 import * as loan from '../src/lib/loan.ts';
 
 test('Loan has proper attributes', () => {

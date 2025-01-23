@@ -1,4 +1,5 @@
-import { expect, test } from '@jest/globals';
+import { expect, test } from 'vitest';
+
 import * as loan from '../src/lib/loan.ts';
 import * as sorting from '../src/lib/sorting.ts';
 

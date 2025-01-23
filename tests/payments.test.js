@@ -1,6 +1,6 @@
-import { expect, test } from '@jest/globals';
+import { expect, test } from 'vitest';
 
-import constants from '../src/lib/constants.ts';
+import * as constants from '../src/lib/constants.ts';
 import * as loan from '../src/lib/loan.ts';
 import * as payments from '../src/lib/payments.ts';
 import * as sorting from '../src/lib/sorting.ts';
