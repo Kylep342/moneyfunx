@@ -7,6 +7,7 @@
   "types": "build/index.d.ts",
   "scripts": {
     "build": "tsc",
+    "coverage": "vitest run --coverage",
     "lint": "eslint",
     "test": "vitest"
   },
