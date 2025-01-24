@@ -5,6 +5,7 @@ import * as loan from '../src/lib/loan.ts';
 describe('loan module', () => {
   const loan1 = new loan.Loan(7500, 0.068, 12, 10, 'Student Loan');
   const mortgage = new loan.Loan(150000, 0.0622, 12, 15, 'Mortgage', 75000, 1000);
+  const zeroRateLoan = new loan.Loan(18300, 0, 12, 4, 'Car');
 
   it('creates a Loan with proper attributes', async () => {
     expect(loan1.name).toBe('Student Loan');
@@ -95,4 +96,8 @@ describe('loan module', () => {
       mortgage.interestPaid(30, 10, 20000);
     }).toThrow(`payment of 10 cannot be less than ${mortgage.minPayment}`);
   });
+
+  it('calculates min payment for zero-interest loan correctly', async () => {
+    expect(zeroRateLoan.minPayment).toBe(381.25);
+  })
 });

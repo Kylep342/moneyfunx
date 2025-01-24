@@ -1,7 +1,9 @@
 build
+coverage
 node_modules/**
 scratch.js
 scratch
 .npmrc
+
 *.sh
 .tokeignore

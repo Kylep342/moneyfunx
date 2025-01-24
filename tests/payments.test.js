@@ -17,9 +17,8 @@ describe('payments module', () => {
     const homeLoanAmortizationSchedule = payments.amortizePayments(
       homeLoan,
       homeLoan.principal,
-      homeLoan.minPayment,
-      homeLoan.numPaymentsToZero(),
-      0
+      null,
+      null
     );
 
     expect(homeLoanAmortizationSchedule.length).toBe(181);
