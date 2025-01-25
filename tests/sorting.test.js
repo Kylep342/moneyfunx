@@ -15,7 +15,7 @@ describe('sorting module', () => {
     expect(sorting.avalanche(loan3, loan1)).toBe(-0.006100000000000001);
   });
 
-  it(' snowball compares loans correctly', async () => {
+  it('snowball compares loans correctly', async () => {
     expect(sorting.snowball(loan2, loan3)).toBe(3000);
     expect(sorting.snowball(loan2, loan1)).toBe(0);
   });

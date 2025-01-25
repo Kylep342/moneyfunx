@@ -18,7 +18,7 @@ describe('loan module', () => {
     expect(loan1.fees).toBe(0);
   });
 
-  it('creates a Loan with working methods', async() => {
+  it('creates a Loan with working methods', async () => {
     expect(loan1.numPaymentsToZero()).toBe(120);
     expect(loan1.numPaymentsToZero(300)).toBe(28);
     expect(() => {
@@ -62,7 +62,7 @@ describe('loan module', () => {
     expect(mortgage.fees).toBe(1000);
   });
 
-  it('creates a Loan with optional parameters and working methods', async() => {
+  it('creates a Loan with optional parameters and working methods', async () => {
     expect(mortgage.numPaymentsToZero()).toBe(70);
     expect(mortgage.numPaymentsToZero(1500)).toBe(59);
     expect(() => {

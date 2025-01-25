@@ -13,6 +13,10 @@ export default defineConfig({
     extensions: ['.js', '.ts', '.json'], // Ensure file extensions are resolved
   },
   test: {
+    coverage: {
+      provider: 'v8',
+      include: ['src'],
+    },
     exclue: ['build', 'node_modules'],
   },
 });
