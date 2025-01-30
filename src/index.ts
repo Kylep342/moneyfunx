@@ -13,6 +13,7 @@ import {
   payLoans,
 } from './lib/payments';
 import { snowball, avalanche, sortLoans } from './lib/sorting';
+import { TOTALS } from './lib/constants';
 
 export const moneyfunx = {
   amortizePayments,
@@ -27,9 +28,9 @@ export const moneyfunx = {
   principalRemaining,
   snowball,
   sortLoans,
+  TOTALS,
 };
 
 export { ILoan } from './lib/loan'
-export { TOTALS } from './lib/constants';
 
 export default moneyfunx;
