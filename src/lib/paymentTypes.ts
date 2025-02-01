@@ -1,11 +1,11 @@
-export interface AmortizationRecord {
+export type AmortizationRecord = {
   period: number;
   principal: number;
   interest: number;
   principalRemaining: number;
 }
 
-export interface PaymentSummary {
+export type PaymentSummary = {
   lifetimeInterest: number;
   lifetimePrincipal: number;
   amortizationSchedule: AmortizationRecord[];

@@ -1,34 +1,22 @@
-// src/index.js
-import { PaymentTooLowError } from './lib/errors.js';
-import {
+// src/index
+export { TOTALS } from './lib/constants';
+export { PaymentTooLowError } from './lib/errors';
+export {
   calculateMinPayment,
   numPaymentsToZero,
   principalRemaining,
   interestPaid,
-} from './lib/helperFunctions.js';
-import { Loan } from './lib/loan.js';
-import {
+} from './lib/helperFunctions';
+export { ILoan, Loan } from './lib/loan';
+export {
   determineExtraPayment,
   amortizePayments,
   payLoans,
-} from './lib/payments.js';
-import { snowball, avalanche, sortLoans } from './lib/sorting.js';
-import { TOTALS } from './lib/constants.js';
-
-export const moneyfunx = {
-  amortizePayments,
-  avalanche,
-  calculateMinPayment,
-  determineExtraPayment,
-  interestPaid,
-  Loan,
-  numPaymentsToZero,
-  payLoans,
-  PaymentTooLowError,
-  principalRemaining,
-  snowball,
-  sortLoans,
-  TOTALS,
-};
-
-export default moneyfunx;
+} from './lib/payments';
+export {
+  AmortizationRecord,
+  LoansPaymentSummary,
+  LoanPrincipals,
+  PaymentSummary,
+} from './lib/paymentTypes';
+export { snowball, avalanche, sortLoans } from './lib/sorting';
