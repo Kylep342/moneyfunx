@@ -10,7 +10,7 @@ import type { ILoan, Loan } from './loan';
 import type {
   AmortizationRecord,
   LoanPrincipals,
-  LoansPaymentSummary,
+  LoansPaymentSchedule,
 } from './paymentTypes';
 
 /**
@@ -97,16 +97,16 @@ export function amortizePayments(
  * @param {Array<Loans>} loans The loans to pay off
  * @param {number} payment The total amount of money budgeted to pay all loans each period
  * @param {boolean} reduceMinimum Flag to reduce the total payment amount by a loan's minimum when that loan is paid off
- * @returns {LoansPaymentSummary} Various totals and series of data regarding paying off the loans at the payment amount
+ * @returns {LoansPaymentSchedule} Various totals and series of data regarding paying off the loans at the payment amount
  *
  */
 export function payLoans(
   loans: Loan[],
   payment: number,
   reduceMinimum: boolean = false
-): LoansPaymentSummary {
+): LoansPaymentSchedule {
   let monthlyPayment = payment;
-  const paymentData: LoansPaymentSummary = {};
+  const paymentData: LoansPaymentSchedule = {};
   const loanPrincipalsRemaining: LoanPrincipals = {};
   loans.forEach((loan) => {
     paymentData[loan.id] = {
