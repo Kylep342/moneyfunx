@@ -4,10 +4,10 @@
  *
  */
 
-import { type ILoan } from './loan';
+import { Loan } from './loan';
 
-type avalanche = (loan1: ILoan, loan2: ILoan) => number;
-type snowball = (loan1: ILoan, loan2: ILoan) => number;
+type avalanche = (loan1: Loan, loan2: Loan) => number;
+type snowball = (loan1: Loan, loan2: Loan) => number;
 type sortFunction = avalanche | snowball;
 
 /**
@@ -16,7 +16,7 @@ type sortFunction = avalanche | snowball;
  * @param {Loan} loan2 A loan to be comapred
  * @returns {number} the order in which to sort the loans in descending interest rate
  */
-export function avalanche(loan1: ILoan, loan2: ILoan) {
+export function avalanche(loan1: Loan, loan2: Loan) {
   return loan2.annualRate - loan1.annualRate;
 }
 
@@ -26,7 +26,7 @@ export function avalanche(loan1: ILoan, loan2: ILoan) {
  * @param {Loan} loan2 A loan to be compared
  * @returns {number} the order in which to sort the loans in ascending princpal
  */
-export function snowball(loan1: ILoan, loan2: ILoan) {
+export function snowball(loan1: Loan, loan2: Loan) {
   return loan1.currentBalance - loan2.currentBalance;
 }
 
@@ -36,6 +36,6 @@ export function snowball(loan1: ILoan, loan2: ILoan) {
  * @param {function} sortFunc The algorithm to sort the loans with
  * @returns The sorted array loans
  */
-export function sortLoans(loans: ILoan[], sortFunction: sortFunction) {
+export function sortLoans(loans: Loan[], sortFunction: sortFunction) {
   return loans.sort(sortFunction);
 }
