@@ -15,8 +15,8 @@ export {
 } from './lib/payments';
 export {
   AmortizationRecord,
-  LoansPaymentSummary,
+  LoansPaymentSchedule,
   LoanPrincipals,
-  PaymentSummary,
+  PaymentSchedule,
 } from './lib/paymentTypes';
 export { snowball, avalanche, sortLoans } from './lib/sorting';

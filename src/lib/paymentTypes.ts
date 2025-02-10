@@ -5,12 +5,12 @@ export type AmortizationRecord = {
   principalRemaining: number;
 }
 
-export type PaymentSummary = {
+export type PaymentSchedule = {
   lifetimeInterest: number;
   lifetimePrincipal: number;
   amortizationSchedule: AmortizationRecord[];
 }
 
-export type LoansPaymentSummary = Record<string, PaymentSummary>;
+export type LoansPaymentSchedule = Record<string, PaymentSchedule>;
 
 export type LoanPrincipals = Record<string, number>;
