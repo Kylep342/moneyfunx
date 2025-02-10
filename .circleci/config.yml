@@ -1,10 +1,10 @@
 version: 2.1
 
 orbs:
-  node: circleci/node@5.2
+  node: circleci/node@7.1
 
 workflows:
-  test_lib: # This is the name of the workflow, feel free to change it to better match your workflow.
+  test_lib:
     jobs:
       - node/test:
           version: "21.6"
