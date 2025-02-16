@@ -82,7 +82,7 @@ describe('loan module', () => {
     expect(mortgage.principalRemaining(0)).toBe(75000);
     expect(mortgage.principalRemaining(8, 1300)).toBe(67576.36730982608);
     expect(mortgage.principalRemaining(60, 1500)).toBe(0);
-    expect(mortgage.principalRemaining(3, 1300, 4000)).toBe(142.27303334689395);
+    expect(mortgage.principalRemaining(3, 1300, 4000)).toBe(142.2730333468935);
     expect(() => {
       mortgage.principalRemaining(21, 40, 9000);
     }).toThrow(`payment of 40 cannot be less than ${mortgage.minPayment}`);

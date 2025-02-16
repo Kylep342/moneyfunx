@@ -18,7 +18,7 @@ import type {
  * Calculates the extra amount in a payment after all loans' minimum payments are met
  * Throws an exception if the payment provided is less than the collective minimum payments for all loans
  *
- * @param {Array<Loan>} loans The loans to allocate minimum payments
+ * @param {ILoan[]} loans The loans to allocate minimum payments
  * @param {number} payment The amount to pay across all loans
  * @returns {number} The extra amount of payment
  */
@@ -49,7 +49,7 @@ export function determineExtraPayment(
  * @param {number} numPayments The number of periods to make payments to the loan
  * @param {number} startPeriod An initial offset of periods to 'fast-forward' the state of the loan to prior to calculation of each period
  * @param {number} carryover An additional amount to pay towards a loan, used when a residual amount is available from paying off the previous loan this period
- * @returns {Array<AmortizationRecord>} The amortization schdule for the number of payments of payment made to the loan from the provided start period
+ * @returns {AmortizationRecord[]} The amortization schdule for the number of payments of payment made to the loan from the provided start period
  */
 export function amortizePayments(
   loan: Loan,
@@ -94,7 +94,7 @@ export function amortizePayments(
  *
  * Calculates a wealth of information about paying of a set of loans with a total payment amount
  *
- * @param {Array<Loans>} loans The loans to pay off
+ * @param {Loan[]} loans The loans to pay off
  * @param {number} payment The total amount of money budgeted to pay all loans each period
  * @param {boolean} reduceMinimum Flag to reduce the total payment amount by a loan's minimum when that loan is paid off
  * @returns {LoansPaymentSchedule} Various totals and series of data regarding paying off the loans at the payment amount
