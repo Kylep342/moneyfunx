@@ -5,7 +5,6 @@
  */
 
 import * as errors from './errors';
-import * as helpers from './helperFunctions';
 import type { ILoan, Loan } from './loan';
 import type {
   AmortizationRecord,
@@ -165,7 +164,7 @@ export function payLoans(
     // handle calculating information for the rest of the loans
     loans.slice(paidLoans).forEach((loan, index) => {
       const loanPrincipalRemaining = loanPrincipalsRemaining[loan.id];
-      const amortizedPayments = amortizePayments(
+      const loanAmortizedPayments = amortizePayments(
         loan,
         loanPrincipalRemaining,
         loan.minPayment,
@@ -185,17 +184,11 @@ export function payLoans(
       );
       paymentSchedule[loan.id].amortizationSchedule = [
         ...paymentSchedule[loan.id].amortizationSchedule,
-        ...amortizedPayments,
+        ...loanAmortizedPayments,
       ];
 
-      loanPrincipalsRemaining[loan.id] = paymentSchedule[
-        loan.id
-      ].amortizationSchedule[
-        paymentSchedule[loan.id].amortizationSchedule.length - 1
-      ].principalRemaining;
-
       totalAmortizationSchedule = totalAmortizationSchedule.map((element) => {
-        const matchedInnerElement = amortizedPayments.find(
+        const matchedInnerElement = loanAmortizedPayments.find(
           (innerElement) => innerElement.period === element.period
         );
         return (matchedInnerElement != null)
@@ -209,6 +202,12 @@ export function payLoans(
           }
           : element;
       });
+
+      loanPrincipalsRemaining[loan.id] = paymentSchedule[
+        loan.id
+      ].amortizationSchedule[
+        paymentSchedule[loan.id].amortizationSchedule.length - 1
+      ].principalRemaining;
     });
 
     if (reduceMinimum) {
@@ -227,7 +226,7 @@ export function payLoans(
     paymentSchedule[loan.id].lifetimeInterest = loanLifetimeInterest;
     paymentSchedule[loan.id].lifetimePrincipal = loan.principal;
     totalLifetimeInterest += loanLifetimeInterest;
-    totalLifetimePrincipal += loan.principal;
+    totalLifetimePrincipal += loan.currentBalance;
   }
 
   paymentSchedule.totals = {
