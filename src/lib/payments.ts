@@ -106,10 +106,10 @@ export function payLoans(
   reduceMinimum: boolean = false
 ): LoansPaymentSchedule {
   let monthlyPayment = payment;
-  const paymentData: LoansPaymentSchedule = {};
+  const paymentSchedule: LoansPaymentSchedule = {};
   const loanPrincipalsRemaining: LoanPrincipals = {};
   loans.forEach((loan) => {
-    paymentData[loan.id] = {
+    paymentSchedule[loan.id] = {
       lifetimeInterest: 0,
       lifetimePrincipal: loan.currentBalance,
       amortizationSchedule: []
@@ -129,12 +129,11 @@ export function payLoans(
       firstLoan.minPayment +
       determineExtraPayment(loans.slice(paidLoans), monthlyPayment);
     const firstLoanPrincipalRemaining = loanPrincipalsRemaining[firstLoan.id];
-    const periodsToPay = helpers.numPaymentsToZero(
-      firstLoanPrincipalRemaining,
+    const periodsToPay = firstLoan.numPaymentsToZero(
       firstLoanPayment,
-      firstLoan.periodicRate
+      firstLoanPrincipalRemaining,
     );
-    const firstLoanPaidPeriods = amortizePayments(
+    const firstLoanAmortizedPayments = amortizePayments(
       firstLoan,
       firstLoanPrincipalRemaining,
       firstLoanPayment,
@@ -154,46 +153,49 @@ export function payLoans(
         )
       )
     );
-    paymentData[firstLoan.id].amortizationSchedule = [
-      ...paymentData[firstLoan.id].amortizationSchedule,
-      ...firstLoanPaidPeriods
+    paymentSchedule[firstLoan.id].amortizationSchedule = [
+      ...paymentSchedule[firstLoan.id].amortizationSchedule,
+      ...firstLoanAmortizedPayments
     ];
     totalAmortizationSchedule = [
       ...totalAmortizationSchedule,
-      ...firstLoanPaidPeriods
+      ...firstLoanAmortizedPayments
     ];
     paidLoans += 1;
     // handle calculating information for the rest of the loans
     loans.slice(paidLoans).forEach((loan, index) => {
       const loanPrincipalRemaining = loanPrincipalsRemaining[loan.id];
-      const paidPeriods = amortizePayments(
+      const amortizedPayments = amortizePayments(
         loan,
         loanPrincipalRemaining,
         loan.minPayment,
         Math.min(
           periodsToPay,
-          helpers.numPaymentsToZero(
-            loanPrincipalRemaining,
+          loan.numPaymentsToZero(
             loan.minPayment,
-            loan.periodicRate
+            loanPrincipalRemaining,
           ),
         ),
         periodsElapsed,
+        // bug
+        // when loan 1 is paid off with overkill on the final payment,
+        // loan 2 is not getting the extra over the global minimum for that payment
+        // i.e. needs to trickle down to #2
         (index === 0 && !reduceMinimum) ? firstLoanCarryover : 0
       );
-      paymentData[loan.id].amortizationSchedule = [
-        ...paymentData[loan.id].amortizationSchedule,
-        ...paidPeriods,
+      paymentSchedule[loan.id].amortizationSchedule = [
+        ...paymentSchedule[loan.id].amortizationSchedule,
+        ...amortizedPayments,
       ];
 
-      loanPrincipalsRemaining[loan.id] = paymentData[
+      loanPrincipalsRemaining[loan.id] = paymentSchedule[
         loan.id
       ].amortizationSchedule[
-        paymentData[loan.id].amortizationSchedule.length - 1
+        paymentSchedule[loan.id].amortizationSchedule.length - 1
       ].principalRemaining;
 
       totalAmortizationSchedule = totalAmortizationSchedule.map((element) => {
-        const matchedInnerElement = paidPeriods.find(
+        const matchedInnerElement = amortizedPayments.find(
           (innerElement) => innerElement.period === element.period
         );
         return (matchedInnerElement != null)
@@ -217,22 +219,22 @@ export function payLoans(
 
   for (const loan of loans) {
     const loanLifetimeInterest = (
-      paymentData[loan.id].amortizationSchedule.reduce(
+      paymentSchedule[loan.id].amortizationSchedule.reduce(
         (lifetimeInterest, curval) => lifetimeInterest + curval.interest,
         0
       )
     );
-    paymentData[loan.id].lifetimeInterest = loanLifetimeInterest;
-    paymentData[loan.id].lifetimePrincipal = loan.principal;
+    paymentSchedule[loan.id].lifetimeInterest = loanLifetimeInterest;
+    paymentSchedule[loan.id].lifetimePrincipal = loan.principal;
     totalLifetimeInterest += loanLifetimeInterest;
     totalLifetimePrincipal += loan.principal;
   }
 
-  paymentData.totals = {
+  paymentSchedule.totals = {
     lifetimeInterest: totalLifetimeInterest,
     lifetimePrincipal: totalLifetimePrincipal,
     amortizationSchedule: totalAmortizationSchedule
   };
 
-  return paymentData;
+  return paymentSchedule;
 }

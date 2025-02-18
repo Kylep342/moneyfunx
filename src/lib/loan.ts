@@ -120,7 +120,7 @@ export class Loan implements ILoan {
    */
   numPaymentsToZero(
     payment: number = this.minPayment,
-    principal: number = this.currentBalance
+    principal: number = this.currentBalance,
   ): number {
     this.validatePayment(payment);
     return helpers.numPaymentsToZero(principal, payment, this.periodicRate);
