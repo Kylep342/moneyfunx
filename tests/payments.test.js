@@ -77,14 +77,15 @@ describe('payments module', () => {
     // 2 keys more than the 3 loans for totalInterest and totalPayments
     expect(Object.keys(loanPaymentTotals).length).toBe(4);
     expect(loanPaymentTotals[carLoan.id].lifetimeInterest).toBe(1906.7196253547775);
-    expect(loanPaymentTotals[homeLoan.id].lifetimeInterest).toBe(91919.6304872516);
-    expect(loanPaymentTotals[otherLoan.id].lifetimeInterest).toBe(893.2496166737074);
+    expect(loanPaymentTotals[homeLoan.id].lifetimeInterest).toBe(91584.95203058577);
+    expect(loanPaymentTotals[otherLoan.id].lifetimeInterest).toBe(876.4239742791409);
+
     expect(loanPaymentTotals[constants.TOTALS].lifetimeInterest).toBe(
-      94719.59972928009
+      94368.09563021969
     );
     expect(loanPaymentTotals[constants.TOTALS].amortizationSchedule.length).toBe(111);
-    expect(loanPaymentTotals[constants.TOTALS].amortizationSchedule[110].principal).toBe(3030.6319727681134);
-    expect(loanPaymentTotals[constants.TOTALS].amortizationSchedule[110].interest).toBe(13.511567545257838);
+    expect(loanPaymentTotals[constants.TOTALS].amortizationSchedule[110].principal).toBe(1975.328955294327);
+    expect(loanPaymentTotals[constants.TOTALS].amortizationSchedule[110].interest).toBe(8.806674925687208);
     expect(loanPaymentTotals[constants.TOTALS].amortizationSchedule[110].principalRemaining).toBe(0);
   });
 
@@ -101,28 +102,28 @@ describe('payments module', () => {
 
     expect(Object.keys(loanPaymentTotals).length).toBe(4);
     expect(loanPaymentTotals[carLoan.id].lifetimeInterest).toBe(1906.7196253547775);
-    expect(loanPaymentTotals[homeLoan.id].lifetimeInterest).toBe(118860.99535448849);
+    expect(loanPaymentTotals[homeLoan.id].lifetimeInterest).toBe(118982.16255675393);
     expect(loanPaymentTotals[otherLoan.id].lifetimeInterest).toBe(
-      915.5323081936905
+      902.9214932489889
     );
-    expect(loanPaymentTotals[constants.TOTALS].lifetimeInterest).toBe(121683.24728803696);
+    expect(loanPaymentTotals[constants.TOTALS].lifetimeInterest).toBe(121791.8036753577);
     expect(loanPaymentTotals[constants.TOTALS].amortizationSchedule.length).toBe(148);
 
     expect(loanPaymentTotals[constants.TOTALS].amortizationSchedule[110].principal).toBe(
-      2563.4795451064792
+      2562.3766649975837
     );
     expect(loanPaymentTotals[constants.TOTALS].amortizationSchedule[110].interest).toBe(
-      463.8404466755222
+      464.943326784418
     );
     expect(
       loanPaymentTotals[constants.TOTALS].amortizationSchedule[110].principalRemaining
-    ).toBe(101475.49914846859);
+    ).toBe(101723.97700627374);
 
     expect(loanPaymentTotals[constants.TOTALS].amortizationSchedule[147].principal).toBe(
-      1167.2588612499576
+      1458.8921103989624
     );
     expect(loanPaymentTotals[constants.TOTALS].amortizationSchedule[147].interest).toBe(
-      5.204029089739394
+      6.504227325528707
     );
     expect(
       loanPaymentTotals[constants.TOTALS].amortizationSchedule[147].principalRemaining

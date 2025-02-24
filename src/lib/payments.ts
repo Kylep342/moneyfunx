@@ -44,21 +44,21 @@ export function determineExtraPayment(
  *
  * @param {Loan} loan The loan serving as the base for carryover
  * @param {number} loanPayment The payment applied to the loan
- * @param {number} loanCarryover The amount of balance remaining on the loan after N-1 of N required payments of loanPayment to zero the balance of the Loan
+ * @param {number} loanFinalPayment The (partial) amount of the final payment to the loan
  * @param {boolean} reduceMinimum Flag to reduce the total payment amount by a loan's minimum when that loan is paid off
  * @returns {number} The carryover to apply to the last payment on loan N+1
  */
 export function determineCarryover(
   loan: Loan,
   loanPayment: number,
-  loanCarryover: number,
+  loanFinalPayment: number,
   reduceMinimum: boolean,
 ): number {
   switch (true) {
     case reduceMinimum:
-      return Math.max(loanPayment - loanCarryover - loan.minPayment, 0);
+      return Math.max(loanPayment - loan.minPayment - loanFinalPayment, 0);
     default:
-      return Math.max(loanPayment - loanCarryover, 0);
+      return Math.max(loanPayment - loanFinalPayment, 0);
   }
 }
 
@@ -163,7 +163,7 @@ export function payLoans(
       periodsToPay,
       periodsElapsed
     );
-    const naiveFirstLoanCarryover = firstLoanPayment - (
+    const firstLoanFinalPayment = 
       firstLoan.principalRemaining(
         periodsToPay - 1,
         firstLoanPayment,
@@ -174,7 +174,6 @@ export function payLoans(
           firstLoanPayment,
           firstLoanPrincipalRemaining
         )
-      )
     );
     paymentSchedule[firstLoan.id].amortizationSchedule = [
       ...paymentSchedule[firstLoan.id].amortizationSchedule,
@@ -206,7 +205,7 @@ export function payLoans(
         (index === 0 ? determineCarryover(
           firstLoan,
           firstLoanPayment,
-          naiveFirstLoanCarryover,
+          firstLoanFinalPayment,
           reduceMinimum,
         ) : 0)
       );
