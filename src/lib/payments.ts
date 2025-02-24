@@ -56,7 +56,7 @@ export function determineCarryover(
 ): number {
   switch (true) {
     case reduceMinimum:
-      return Math.max(loanPayment - loan.minPayment - loanFinalPayment, 0);
+      return Math.max(loanPayment - loanFinalPayment - loan.minPayment, 0);
     default:
       return Math.max(loanPayment - loanFinalPayment, 0);
   }
