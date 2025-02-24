@@ -1,14 +1,14 @@
 import { describe, expect, it } from 'vitest';
 
 import * as constants from '../src/lib/constants.ts';
-import * as loan from '../src/lib/loan.ts';
+import { Loan } from '../src/lib/loan.ts';
 import * as payments from '../src/lib/payments.ts';
 import * as sorting from '../src/lib/sorting.ts';
 
 describe('payments module', () => {
-  const homeLoan = new loan.Loan(314159.26, 0.0535, 12, 15, 'pi-house');
-  const carLoan = new loan.Loan(27182.81, 0.0828, 12, 4, 'e-car', 23456.78);
-  const otherLoan = new loan.Loan(10000, 0.0628 , 12, 3, 'tau', null, 300);
+  const homeLoan = new Loan(314159.26, 0.0535, 12, 15, 'pi-house');
+  const carLoan = new Loan(27182.81, 0.0828, 12, 4, 'e-car', 23456.78);
+  const otherLoan = new Loan(10000, 0.0628 , 12, 3, 'tau', null, 300);
 
   const loansAV = sorting.sortLoans([otherLoan, homeLoan, carLoan], sorting.avalanche);
   const loansMinPayment = loansAV.reduce((currentValue, loan) => currentValue += loan.minPayment, 0);
@@ -44,8 +44,23 @@ describe('payments module', () => {
 
   it('throws a paymentTooLowError when the total payment for loans is below their shared minimum', async () => {
     expect(() => {
-      payments.determineExtraPayment(loansAV, 0);
-    }).toThrow(`Payment amount of 0 must be greater than ${loansMinPayment}`);
+      payments.determineExtraPayment(loansAV, 28);
+    }).toThrow(`Payment amount of 28 must be greater than ${loansMinPayment}`);
+  });
+
+  it('determines carryover', async () => {
+    expect(payments.determineCarryover(
+        carLoan,
+        1867.19,
+        348.33,
+        false
+      )).toBe(1518.8600000000001);
+    expect(payments.determineCarryover(
+        carLoan,
+        1867.19,
+        348.33,
+        true
+      )).toBe(851.6696647586657);
   });
 
   it('amortizes payments for mutliple loans', async () => {
@@ -62,14 +77,14 @@ describe('payments module', () => {
     // 2 keys more than the 3 loans for totalInterest and totalPayments
     expect(Object.keys(loanPaymentTotals).length).toBe(4);
     expect(loanPaymentTotals[carLoan.id].lifetimeInterest).toBe(1906.7196253547775);
-    expect(loanPaymentTotals[homeLoan.id].lifetimeInterest).toBe(91584.95203058577);
-    expect(loanPaymentTotals[otherLoan.id].lifetimeInterest).toBe(876.4239742791409);
+    expect(loanPaymentTotals[homeLoan.id].lifetimeInterest).toBe(91919.6304872516);
+    expect(loanPaymentTotals[otherLoan.id].lifetimeInterest).toBe(893.2496166737074);
     expect(loanPaymentTotals[constants.TOTALS].lifetimeInterest).toBe(
-      94368.09563021969
+      94719.59972928009
     );
     expect(loanPaymentTotals[constants.TOTALS].amortizationSchedule.length).toBe(111);
-    expect(loanPaymentTotals[constants.TOTALS].amortizationSchedule[110].principal).toBe(1975.328955294327);
-    expect(loanPaymentTotals[constants.TOTALS].amortizationSchedule[110].interest).toBe(8.806674925687208);
+    expect(loanPaymentTotals[constants.TOTALS].amortizationSchedule[110].principal).toBe(3030.6319727681134);
+    expect(loanPaymentTotals[constants.TOTALS].amortizationSchedule[110].interest).toBe(13.511567545257838);
     expect(loanPaymentTotals[constants.TOTALS].amortizationSchedule[110].principalRemaining).toBe(0);
   });
 
@@ -86,28 +101,28 @@ describe('payments module', () => {
 
     expect(Object.keys(loanPaymentTotals).length).toBe(4);
     expect(loanPaymentTotals[carLoan.id].lifetimeInterest).toBe(1906.7196253547775);
-    expect(loanPaymentTotals[homeLoan.id].lifetimeInterest).toBe(119157.66855085491);
+    expect(loanPaymentTotals[homeLoan.id].lifetimeInterest).toBe(118860.99535448849);
     expect(loanPaymentTotals[otherLoan.id].lifetimeInterest).toBe(
       915.5323081936905
     );
-    expect(loanPaymentTotals[constants.TOTALS].lifetimeInterest).toBe(121979.92048440338);
+    expect(loanPaymentTotals[constants.TOTALS].lifetimeInterest).toBe(121683.24728803696);
     expect(loanPaymentTotals[constants.TOTALS].amortizationSchedule.length).toBe(148);
 
     expect(loanPaymentTotals[constants.TOTALS].amortizationSchedule[110].principal).toBe(
-      2560.7791859251356
+      2563.4795451064792
     );
     expect(loanPaymentTotals[constants.TOTALS].amortizationSchedule[110].interest).toBe(
-      466.54080585686575
+      463.8404466755222
     );
     expect(
       loanPaymentTotals[constants.TOTALS].amortizationSchedule[110].principalRemaining
-    ).toBe(102083.88754832513);
+    ).toBe(101475.49914846859);
 
     expect(loanPaymentTotals[constants.TOTALS].amortizationSchedule[147].principal).toBe(
-      1881.3115634182354
+      1167.2588612499576
     );
     expect(loanPaymentTotals[constants.TOTALS].amortizationSchedule[147].interest).toBe(
-      8.387514053572966
+      5.204029089739394
     );
     expect(
       loanPaymentTotals[constants.TOTALS].amortizationSchedule[147].principalRemaining
