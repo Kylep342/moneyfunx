@@ -60,7 +60,7 @@ describe('payments module', () => {
         1867.19,
         348.33,
         true
-      )).toBe(1548.3296647586656);
+      )).toBe(851.6696647586657);
   });
 
   it('amortizes payments for mutliple loans', async () => {
@@ -102,31 +102,31 @@ describe('payments module', () => {
 
     expect(Object.keys(loanPaymentTotals).length).toBe(4);
     expect(loanPaymentTotals[carLoan.id].lifetimeInterest).toBe(1906.7196253547775);
-    expect(loanPaymentTotals[homeLoan.id].lifetimeInterest).toBe(118252.75592054837);
+    expect(loanPaymentTotals[homeLoan.id].lifetimeInterest).toBe(118982.16255675393);
     expect(loanPaymentTotals[otherLoan.id].lifetimeInterest).toBe(
-      887.613622495874
+      902.9214932489889
     );
-    expect(loanPaymentTotals[constants.TOTALS].lifetimeInterest).toBe(121047.08916839902);
-    expect(loanPaymentTotals[constants.TOTALS].amortizationSchedule.length).toBe(147);
+    expect(loanPaymentTotals[constants.TOTALS].lifetimeInterest).toBe(121791.8036753577);
+    expect(loanPaymentTotals[constants.TOTALS].amortizationSchedule.length).toBe(148);
 
     expect(loanPaymentTotals[constants.TOTALS].amortizationSchedule[110].principal).toBe(
-      2568.9955531853057
+      2562.3766649975837
     );
     expect(loanPaymentTotals[constants.TOTALS].amortizationSchedule[110].interest).toBe(
-      458.3244385966961
+      464.943326784418
     );
     expect(
       loanPaymentTotals[constants.TOTALS].amortizationSchedule[110].principalRemaining
-    ).toBe(100232.74768345681);
+    ).toBe(101723.97700627374);
 
-    expect(loanPaymentTotals[constants.TOTALS].amortizationSchedule[146].principal).toBe(
-      2723.84372565284
+    expect(loanPaymentTotals[constants.TOTALS].amortizationSchedule[147].principal).toBe(
+      1458.8921103989624
     );
-    expect(loanPaymentTotals[constants.TOTALS].amortizationSchedule[146].interest).toBe(
-      12.143803276868912
+    expect(loanPaymentTotals[constants.TOTALS].amortizationSchedule[147].interest).toBe(
+      6.504227325528707
     );
     expect(
-      loanPaymentTotals[constants.TOTALS].amortizationSchedule[146].principalRemaining
+      loanPaymentTotals[constants.TOTALS].amortizationSchedule[147].principalRemaining
     ).toBe(0);
   });
 });
