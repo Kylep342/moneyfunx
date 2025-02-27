@@ -248,7 +248,7 @@ export function payLoans(
       )
     );
     paymentSchedule[loan.id].lifetimeInterest = loanLifetimeInterest;
-    paymentSchedule[loan.id].lifetimePrincipal = loan.principal;
+    paymentSchedule[loan.id].lifetimePrincipal = loan.currentBalance;
     totalLifetimeInterest += loanLifetimeInterest;
     totalLifetimePrincipal += loan.currentBalance;
   }
