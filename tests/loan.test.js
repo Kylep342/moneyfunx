@@ -1,11 +1,15 @@
 import { describe, expect, it } from 'vitest';
 
-import * as loan from '../src/lib/loan.ts';
+import { Loan } from '@/lib/loan.ts';
+
+const Loans = () => [
+  new Loan(7500, 0.068, 12, 10, 'Student Loan'),
+  new Loan(150000, 0.0622, 12, 15, 'Mortgage', 75000, 1000),
+  new Loan(18300, 0, 12, 4, 'Car'),
+];
 
 describe('loan module', () => {
-  const loan1 = new loan.Loan(7500, 0.068, 12, 10, 'Student Loan');
-  const mortgage = new loan.Loan(150000, 0.0622, 12, 15, 'Mortgage', 75000, 1000);
-  const zeroRateLoan = new loan.Loan(18300, 0, 12, 4, 'Car');
+  const [loan1, mortgage, zeroRateLoan] = Loans();
 
   it('creates a Loan with proper attributes', async () => {
     expect(loan1.name).toBe('Student Loan');

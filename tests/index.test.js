@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import * as moneyfunx from '../src/index.ts'
+import * as moneyfunx from '@/index.ts'
 
 describe('moneyfunx module', () => {
   it('exports expected members', async () => {
@@ -11,7 +11,9 @@ describe('moneyfunx module', () => {
       "calculateMinPayment",
       "determineExtraPayment",
       "interestPaid",
+      "IInstrument",
       "ILoan",
+      "Instrument",
       "Loan",
       "LoanPrincipals",
       "LoansPaymentSchedule",

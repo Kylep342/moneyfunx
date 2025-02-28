@@ -1,14 +1,17 @@
 import { describe, expect, it } from 'vitest';
 
-import * as loan from '../src/lib/loan.ts';
-import * as sorting from '../src/lib/sorting.ts';
+import { Loan } from '@/lib/loan.ts';
+import * as sorting from '@/lib/sorting.ts';
+
+const Loans = () => [
+  new Loan(7500, 0.068, 12, 10),
+  new Loan(4500, 0.0429, 12, 10),
+  new Loan(7500, 0.0368, 12, 10),
+];
 
 describe('sorting module', () => {
-  const loan1 = new loan.Loan(7500, 0.0368, 12, 10);
-  const loan2 = new loan.Loan(7500, 0.068, 12, 10);
-  const loan3 = new loan.Loan(4500, 0.0429, 12, 10);
-
-  const loans = [loan2, loan3, loan1];
+  const loans = Loans();
+  const [loan2, loan3, loan1] = loans;
 
   it('avalanche compares loans correctly', async () => {
     expect(sorting.avalanche(loan2, loan1)).toBe(-0.031200000000000006);

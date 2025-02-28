@@ -1,14 +1,18 @@
 import { describe, expect, it } from 'vitest';
 
-import * as constants from '../src/lib/constants.ts';
-import { Loan } from '../src/lib/loan.ts';
-import * as payments from '../src/lib/payments.ts';
-import * as sorting from '../src/lib/sorting.ts';
+import * as constants from '@/lib/constants.ts';
+import { Loan } from '@/lib/loan.ts';
+import * as payments from '@/lib/payments.ts';
+import * as sorting from '@/lib/sorting.ts';
+
+const Loans = () => [
+  new Loan(314159.26, 0.0535, 12, 15, 'pi-house'),
+  new Loan(27182.81, 0.0828, 12, 4, 'e-car', 23456.78),
+  new Loan(10000, 0.0628 , 12, 3, 'tau', null, 300),
+];
 
 describe('payments module', () => {
-  const homeLoan = new Loan(314159.26, 0.0535, 12, 15, 'pi-house');
-  const carLoan = new Loan(27182.81, 0.0828, 12, 4, 'e-car', 23456.78);
-  const otherLoan = new Loan(10000, 0.0628 , 12, 3, 'tau', null, 300);
+  const [homeLoan, carLoan, otherLoan] = Loans();
 
   const loansAV = sorting.sortLoans([otherLoan, homeLoan, carLoan], sorting.avalanche);
   const loansMinPayment = loansAV.reduce((currentValue, loan) => currentValue += loan.minPayment, 0);
