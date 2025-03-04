@@ -163,17 +163,16 @@ export function payLoans(
       periodsToPay,
       periodsElapsed
     );
-    const firstLoanFinalPayment = 
+    const firstLoanFinalPayment = firstLoan.principalRemaining(
+      periodsToPay - 1,
+      firstLoanPayment,
+      firstLoanPrincipalRemaining
+    ) + firstLoan.accrueInterest(
       firstLoan.principalRemaining(
         periodsToPay - 1,
         firstLoanPayment,
         firstLoanPrincipalRemaining
-      ) + firstLoan.accrueInterest(
-        firstLoan.principalRemaining(
-          periodsToPay - 1,
-          firstLoanPayment,
-          firstLoanPrincipalRemaining
-        )
+      )
     );
     paymentSchedule[firstLoan.id].amortizationSchedule = [
       ...paymentSchedule[firstLoan.id].amortizationSchedule,

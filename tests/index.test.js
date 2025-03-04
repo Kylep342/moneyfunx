@@ -18,6 +18,7 @@ describe('moneyfunx module', () => {
       "LoanPrincipals",
       "LoansPaymentSchedule",
       "numPaymentsToZero",
+      "NegativeContributionError",
       "payLoans",
       "PaymentSchedule",
       "PaymentTooLowError",

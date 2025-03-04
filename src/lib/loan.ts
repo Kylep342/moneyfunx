@@ -80,6 +80,7 @@ export class Loan implements ILoan {
    * Throws a PaymentTooLowError if the payment amount is less than the loan's minimum payment
    *
    * @param {number} payment The amount to pay the loan with
+   * @throws {errors.PaymentTooLowError} Throws an error when the payment to a Loan is less than the Loan's minimum payment
    * @returns {number} The validated payment amount
    */
   validatePayment(payment: number = this.minPayment): number {

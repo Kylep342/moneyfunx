@@ -1,6 +1,6 @@
 // src/index
 export { TOTALS } from './lib/constants';
-export { PaymentTooLowError } from './lib/errors';
+export { NegativeContributionError, PaymentTooLowError } from './lib/errors';
 export {
   calculateMinPayment,
   numPaymentsToZero,
