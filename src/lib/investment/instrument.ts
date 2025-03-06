@@ -1,4 +1,4 @@
-import * as errors from "./errors";
+import * as errors from "../errors";
 
 export interface IInstrument {
   id: string;
@@ -27,6 +27,7 @@ export class Instrument implements IInstrument {
    * @param {number} periodsPerYear The number of times the interest accrues in a year
    * @param {string} name The name for the instrument
    * @param {Function} annualLimit (Optional) The maximum amount of money contributable to the instrument in a single year (simplest case is a closure returning a constant)
+   * @returns {Instrument}
    */
   constructor(
     currentBalance: number,
@@ -46,12 +47,12 @@ export class Instrument implements IInstrument {
 
   /**
    *
-   * @param contribution The amount to contribute to the instrument
-   * @param ytd The total amount contributed Year-To-Date on the instrument
+   * @param {number} contribution The amount to contribute to the instrument
+   * @param {number} yearToDate The total amount contributed year-to-date on the instrument
    * @throws {errors.NegativeContributionError} Throws an error when the contribution is less than zero
-   * @returns The validated contribution amount
+   * @returns {number} The validated contribution amount
    */
-  validateContribution(contribution: number, ytd: number): number {
+  validateContribution(contribution: number, yearToDate: number): number {
     if (contribution < 0) {
       throw new errors.NegativeContributionError(
         `contribution of ${contribution} must be greater than/equal to zero`
@@ -59,7 +60,7 @@ export class Instrument implements IInstrument {
     }
     if (this.annualLimit()) {
       return Math.min(
-        Math.max(this.annualLimit() - ytd, 0),
+        Math.max(this.annualLimit() - yearToDate, 0),
         contribution,
       );
     }

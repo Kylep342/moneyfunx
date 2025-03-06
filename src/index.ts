@@ -7,7 +7,7 @@ export {
   principalRemaining,
   interestPaid,
 } from './lib/helperFunctions';
-export { IInstrument, Instrument } from './lib/instrument';
+export { IInstrument, Instrument } from './lib/investment/instrument';
 export { ILoan, Loan } from './lib/loan';
 export {
   determineExtraPayment,

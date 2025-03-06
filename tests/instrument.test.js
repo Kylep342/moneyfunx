@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 
-import { Instrument } from '@/lib/instrument.ts'
+import { Instrument } from '@/lib/investment/instrument.ts'
 
 const Instruments = () => [
   new Instrument(10000, () => 0.11, 12, 'IRA', () => 6500),

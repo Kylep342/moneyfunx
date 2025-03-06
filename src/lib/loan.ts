@@ -52,6 +52,7 @@ export class Loan implements ILoan {
    * @param {number} name The name for the loan
    * @param {number} currentBalance (Optional) The current balance of the loan, if different from the principal
    * @param {number} fees (Optional) The fees on the loan
+   * @returns {Loan}
    */
   constructor(
     principal: number,
