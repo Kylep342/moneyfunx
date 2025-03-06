@@ -26,7 +26,7 @@ export function determineExtraPayment(
   payment: number
 ): number {
   const totalMinPayment = loans.reduce(
-    (previousValue, currentValue) => previousValue + currentValue.minPayment,
+    (accumulator, loan) => accumulator + loan.minPayment,
     0
   );
   // hack to get around floating precision adjustments
@@ -72,7 +72,7 @@ export function determineCarryover(
  * @param {number} numPayments The number of periods to make payments to the loan
  * @param {number} startPeriod An initial offset of periods to 'fast-forward' the state of the loan to prior to calculation of each period
  * @param {number} carryover An additional amount to pay towards a loan, used when a residual amount is available from paying off the previous loan this period
- * @returns {AmortizationRecord[]} The amortization schdule for the number of payments of payment made to the loan from the provided start period
+ * @returns {AmortizationRecord[]} The amortization schedule for the number of payments of payment made to the loan from the provided start period
  */
 export function amortizePayments(
   loan: Loan,
