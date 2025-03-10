@@ -4,10 +4,10 @@
  *
  */
 
-import * as errors from './errors';
+import * as errors from '../errors';
 import type { ILoan, Loan } from './loan';
 import type {
-  AmortizationRecord,
+  PaymentRecord,
   LoanPrincipals,
   LoansPaymentSchedule,
 } from './paymentTypes';
@@ -72,7 +72,7 @@ export function determineCarryover(
  * @param {number} numPayments The number of periods to make payments to the loan
  * @param {number} startPeriod An initial offset of periods to 'fast-forward' the state of the loan to prior to calculation of each period
  * @param {number} carryover An additional amount to pay towards a loan, used when a residual amount is available from paying off the previous loan this period
- * @returns {AmortizationRecord[]} The amortization schedule for the number of payments of payment made to the loan from the provided start period
+ * @returns {PaymentRecord[]} The amortization schedule for the number of payments of payment made to the loan from the provided start period
  */
 export function amortizePayments(
   loan: Loan,
@@ -81,7 +81,7 @@ export function amortizePayments(
   numPayments: number,
   startPeriod: number = 0,
   carryover: number = 0
-): AmortizationRecord[] {
+): PaymentRecord[] {
   if (payment === null) {
     payment = loan.minPayment;
   }
@@ -91,9 +91,10 @@ export function amortizePayments(
     numPayments = loan.numPaymentsToZero(payment);
   }
 
+  const amortizationSchedule: PaymentRecord[] = [];
+
   let principalRemaining = principal;
 
-  const amortizationSchedule: AmortizationRecord[] = [];
   for (let period = 0; period < numPayments; period++) {
     const interestThisPeriod = loan.accrueInterest(principalRemaining);
     const principalThisPeriod = Math.min(
@@ -135,7 +136,7 @@ export function payLoans(
     paymentSchedule[loan.id] = {
       lifetimeInterest: 0,
       lifetimePrincipal: loan.currentBalance,
-      amortizationSchedule: []
+      amortizationSchedule: [],
     };
     loanPrincipalsRemaining[loan.id] = loan.currentBalance;
   });
@@ -144,7 +145,7 @@ export function payLoans(
   let paidLoans = 0;
   let totalLifetimeInterest = 0;
   let totalLifetimePrincipal = 0;
-  let totalAmortizationSchedule: AmortizationRecord[] = [];
+  let totalAmortizationSchedule: PaymentRecord[] = [];
 
   while (paidLoans < loans.length) {
     const firstLoan = loans.slice(paidLoans)[0];

@@ -8,7 +8,7 @@ import * as constants from '../constants';
 import * as errors from '../errors';
 import type { IInstrument, Instrument } from './instrument';
 import {
-  AmortizationRecord,
+  ContributionRecord,
   InstrumentsContributionSchedule,
   InstrumentBalances
 } from './contributionTypes';
@@ -19,7 +19,7 @@ import {
  * @param {number} contribution The amount to contribute across all instruments
  * @returns {number} The extra amount of contribution
  */
-export function determineExtraPayment(
+export function determineExtraContribution(
   instruments: IInstrument[],
   contribution: number
 ): number {
@@ -35,29 +35,29 @@ export function determineExtraPayment(
  * Calculates the amortization schedule for an instrument with a contribution
  *
  * @param {Instrument} instrument The instrument to amortize contributions for
- * @param {number} principal The amount invested
+ * @param {number} initialBalance The amount invested
  * @param {number} contribution The amount to contribute to the instrument's balance each period
  * @param {number} numContributions The number of periods to make contributions to the instrument
  * @param {boolean} accrueBeforeContribution A flag for ordering operations of accrual (A) and contribution (C)
  *         true: A -> C
  *         false: C -> A
- * @returns {AmortizationRecord[]} The amortization schedule for the number of contributions of contribution made to the instrument
+ * @returns {ContributionRecord[]} The amortization schedule for the number of contributions of contribution made to the instrument
  */
 export function amortizeContributions(
   instrument: Instrument,
-  principal: number,
+  initialBalance: number,
   contribution: number,
   numContributions: number,
   accrueBeforeContribution: boolean = true,
-): AmortizationRecord[] {
+): ContributionRecord[] {
   if (contribution === null) {
     contribution = instrument.annualLimit() / instrument.periodsPerYear;
   }
 
-  const amortizationSchedule: AmortizationRecord[] = [];
+  const amortizationSchedule: ContributionRecord[] = [];
 
   let ytd = 0;
-  let currentBalance = principal;
+  let currentBalance = initialBalance;
   numContributions = Math.min(numContributions, constants.MAX_DURATION_YEARS * instrument.periodsPerYear);
   for (let period = 0; period < numContributions; period++) {
     const contributionThisPeriod = instrument.validateContribution(contribution, ytd);
@@ -76,15 +76,21 @@ export function amortizeContributions(
       growth: interestThisPeriod,
       currentBalance,
     });
-    ytd = (period + 1) % instrument.periodsPerYear ? ytd + contributionThisPeriod: 0;
+    ytd = (period + 1) % instrument.periodsPerYear ? (ytd + contributionThisPeriod) : 0;
   }
   return amortizationSchedule;
 }
 
-
+/**
+ *
+ * @param instruments
+ * @param contribution
+ * @returns
+ */
 export function contributeInstruments(
   instruments: Instrument[],
   contribution: number,
+  yearsToContribute: number,
 ): InstrumentsContributionSchedule {
   let monthlyContribution = contribution;
   const contributionSchedule: InstrumentsContributionSchedule = {};
@@ -99,6 +105,9 @@ export function contributeInstruments(
   let periodsElapesd = 0;
   let totalLifetimeContribution = 0;
   let totalLifetimeGrowth = 0;
-  let totalAmortizationSchedule: AmortizationRecord[] = [];
+  let totalAmortizationSchedule: ContributionRecord[] = [];
+  for (const instrument of instruments) {
+    void(0);
+  }
   return contributionSchedule;
 }

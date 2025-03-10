@@ -5,12 +5,14 @@ import * as moneyfunx from '@/index.ts'
 describe('moneyfunx module', () => {
   it('exports expected members', async () => {
     expect(Object.keys(moneyfunx).sort()).toStrictEqual([
-      "AmortizationRecord",
+      "amortizeContributions",
       "amortizePayments",
       "avalanche",
-      "ContributionAmortizationRecord",
+      "ContributionRecord",
       "ContributionSchedule",
       "calculateMinPayment",
+      "contributeInstruments",
+      "determineExtraContribution",
       "determineExtraPayment",
       "interestPaid",
       "IInstrument",
@@ -25,6 +27,7 @@ describe('moneyfunx module', () => {
       "numPaymentsToZero",
       "NegativeContributionError",
       "payLoans",
+      "PaymentRecord",
       "PaymentSchedule",
       "PaymentTooLowError",
       "principalRemaining",

@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { Loan } from '@/lib/loan.ts';
+import { Loan } from '@/lib/debt/loan.ts';
 
 const Loans = () => [
   new Loan(7500, 0.068, 12, 10, 'Student Loan'),

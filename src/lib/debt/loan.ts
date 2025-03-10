@@ -10,7 +10,7 @@
  *
  */
 
-import * as errors from './errors';
+import * as errors from '../errors';
 import * as helpers from './helperFunctions';
 
 /**

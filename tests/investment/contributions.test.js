@@ -67,4 +67,14 @@ describe('contributions module', () => {
     expect(workAcctAmortizationSchedule[23].growth).toBe(723.6319979833261);
     expect(workAcctAmortizationSchedule[23].currentBalance).toBe(104383.44347798229);
   });
+
+  it('amortizes contributions for multiple instruments', async () => {
+    const instrumentsContributionSummary = contributions.contributeInstruments(
+      instruments,
+      2250,
+      25
+    );
+
+    expect(Object.keys(instrumentsContributionSummary).length).toBe(3);
+  });
 });

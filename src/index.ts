@@ -9,24 +9,29 @@ export {
   numPaymentsToZero,
   principalRemaining,
   interestPaid,
-} from './lib/helperFunctions';
-export { IInstrument, Instrument } from './lib/investment/instrument';
+} from './lib/debt/helperFunctions';
 export {
-  AmortizationRecord as ContributionAmortizationRecord,
+  amortizeContributions,
+  contributeInstruments,
+  determineExtraContribution,
+} from './lib/investment/contributions';
+export {
+  ContributionRecord,
   ContributionSchedule,
   InstrumentBalances,
   InstrumentsContributionSchedule,
 } from './lib/investment/contributionTypes';
-export { ILoan, Loan } from './lib/loan';
+export { IInstrument, Instrument } from './lib/investment/instrument';
+export { ILoan, Loan } from './lib/debt/loan';
 export {
   determineExtraPayment,
   amortizePayments,
   payLoans,
-} from './lib/payments';
+} from './lib/debt/payments';
 export {
-  AmortizationRecord,
+  PaymentRecord,
   LoansPaymentSchedule,
   LoanPrincipals,
   PaymentSchedule,
-} from './lib/paymentTypes';
-export { snowball, avalanche, sortLoans } from './lib/sorting';
+} from './lib/debt/paymentTypes';
+export { snowball, avalanche, sortLoans } from './lib/debt/sorting';

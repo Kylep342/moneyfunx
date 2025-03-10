@@ -18,7 +18,7 @@
  *  contributeInvestments [main a la payLoans]
  */
 
-export type AmortizationRecord = {
+export type ContributionRecord = {
   period: number;
   contribution: number;
   growth: number;
@@ -28,7 +28,7 @@ export type AmortizationRecord = {
 export type ContributionSchedule = {
   lifetimeGrowth: number;
   lifetimeContribution: number;
-  amortizationSchedule: AmortizationRecord[];
+  amortizationSchedule: ContributionRecord[];
 }
 
 export type InstrumentsContributionSchedule = Record<string, ContributionSchedule>
