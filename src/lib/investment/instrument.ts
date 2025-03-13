@@ -68,6 +68,19 @@ export class Instrument implements IInstrument {
   }
 
   /**
+   * Helper to calculate the periodic contribution for an instrument
+   * If the instrument does not have an annual limit, returns 0
+   *
+   * @returns {number} the amortized "max" contribution for a period
+   */
+  periodicContribution(): number {
+    if (this.annualLimit()) {
+      return this.annualLimit() / this.periodsPerYear;
+    }
+    return 0;
+  }
+
+  /**
    *
    * Calculates the amount of interest accrued in a period on a provided principal
    * @param {number} principal The amunt of money owed on an instrument

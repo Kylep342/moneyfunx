@@ -77,8 +77,8 @@ export function determineCarryover(
 export function amortizePayments(
   loan: Loan,
   principal: number,
-  payment: number,
-  numPayments: number,
+  payment: number|null,
+  numPayments: number|null,
   startPeriod: number = 0,
   carryover: number = 0
 ): PaymentRecord[] {
@@ -243,7 +243,7 @@ export function payLoans(
   for (const loan of loans) {
     const loanLifetimeInterest = (
       paymentSchedule[loan.id].amortizationSchedule.reduce(
-        (lifetimeInterest, curval) => lifetimeInterest + curval.interest,
+        (lifetimeInterest, record) => lifetimeInterest + record.interest,
         0
       )
     );
@@ -256,7 +256,7 @@ export function payLoans(
   paymentSchedule.totals = {
     lifetimeInterest: totalLifetimeInterest,
     lifetimePrincipal: totalLifetimePrincipal,
-    amortizationSchedule: totalAmortizationSchedule
+    amortizationSchedule: totalAmortizationSchedule,
   };
 
   return paymentSchedule;

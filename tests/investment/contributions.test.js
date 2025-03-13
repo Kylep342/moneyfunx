@@ -68,6 +68,11 @@ describe('contributions module', () => {
     expect(workAcctAmortizationSchedule[23].currentBalance).toBe(104383.44347798229);
   });
 
+  it('determines extra contributions', async () => {
+    expect(contributions.determineExtraContribution(instruments, 2250)).toBe(0);
+    expect(contributions.determineExtraContribution(instruments, 3000)).toBe(500);
+  });
+
   it('amortizes contributions for multiple instruments', async () => {
     const instrumentsContributionSummary = contributions.contributeInstruments(
       instruments,
@@ -75,6 +80,55 @@ describe('contributions module', () => {
       25
     );
 
-    expect(Object.keys(instrumentsContributionSummary).length).toBe(3);
+    expect(Object.keys(instrumentsContributionSummary).length).toBe(4);
+    expect(instrumentsContributionSummary[inst1.id].lifetimeContribution).toBe(172499.9999999999);
+    expect(instrumentsContributionSummary[inst1.id].lifetimeGrowth).toBe(835717.7570598022);
+    expect(instrumentsContributionSummary[inst1.id].amortizationSchedule.length).toBe(300);
+    // correct below given current code
+    // but need to write ways to default/spread a single contribution across instruments
+    expect(instrumentsContributionSummary[inst3.id].lifetimeContribution).toBe(0);
+    expect(instrumentsContributionSummary[inst3.id].lifetimeGrowth).toBe(0);
+    expect(instrumentsContributionSummary[inst3.id].amortizationSchedule.length).toBe(300);
+    expect(instrumentsContributionSummary[constants.TOTALS].lifetimeContribution).toBe(804999.9999999991);
+    expect(instrumentsContributionSummary[constants.TOTALS].lifetimeGrowth).toBe(2598300.5336129623);
+    expect(instrumentsContributionSummary[constants.TOTALS].amortizationSchedule.length).toBe(300);
+    // period 28
+    expect(instrumentsContributionSummary[inst1.id].amortizationSchedule[27].period).toBe(28);
+    expect(instrumentsContributionSummary[inst1.id].amortizationSchedule[27].contribution).toBe(541.6666666666666);
+    expect(instrumentsContributionSummary[inst1.id].amortizationSchedule[27].growth).toBe(268.60484125436335);
+    expect(instrumentsContributionSummary[inst1.id].amortizationSchedule[27].currentBalance).toBe(30112.617826578848);
+    expect(instrumentsContributionSummary[inst2.id].amortizationSchedule[27].period).toBe(28);
+    expect(instrumentsContributionSummary[inst2.id].amortizationSchedule[27].contribution).toBe(1958.3333333333333);
+    expect(instrumentsContributionSummary[inst2.id].amortizationSchedule[27].growth).toBe(796.8148334233672);
+    expect(instrumentsContributionSummary[inst2.id].amortizationSchedule[27].currentBalance).toBe(115246.6540618203);
+    // correct below given current code
+    // but need to write ways to default/spread a single contribution across instruments
+    expect(instrumentsContributionSummary[inst3.id].amortizationSchedule[27].period).toBe(28);
+    expect(instrumentsContributionSummary[inst3.id].amortizationSchedule[27].contribution).toBe(0);
+    expect(instrumentsContributionSummary[inst3.id].amortizationSchedule[27].growth).toBe(0);
+    expect(instrumentsContributionSummary[inst3.id].amortizationSchedule[27].currentBalance).toBe(0);
+    expect(instrumentsContributionSummary[constants.TOTALS].amortizationSchedule[27].period).toBe(28);
+    expect(instrumentsContributionSummary[constants.TOTALS].amortizationSchedule[27].contribution).toBe(2500);
+    expect(instrumentsContributionSummary[constants.TOTALS].amortizationSchedule[27].growth).toBe(1065.4196746777307);
+    expect(instrumentsContributionSummary[constants.TOTALS].amortizationSchedule[27].currentBalance).toBe(145359.27188839915);
+    // period 272
+    expect(instrumentsContributionSummary[inst1.id].amortizationSchedule[271].period).toBe(272);
+    expect(instrumentsContributionSummary[inst1.id].amortizationSchedule[271].contribution).toBe(541.6666666666666);
+    expect(instrumentsContributionSummary[inst1.id].amortizationSchedule[271].growth).toBe(6967.253017151146);
+    expect(instrumentsContributionSummary[inst1.id].amortizationSchedule[271].currentBalance).toBe(767572.8851912156);
+    expect(instrumentsContributionSummary[inst2.id].amortizationSchedule[271].period).toBe(272);
+    expect(instrumentsContributionSummary[inst2.id].amortizationSchedule[271].contribution).toBe(1958.3333333333333);
+    expect(instrumentsContributionSummary[inst2.id].amortizationSchedule[271].growth).toBe(13462.387718365255);
+    expect(instrumentsContributionSummary[inst2.id].amortizationSchedule[271].currentBalance).toBe(1915993.1048209108);
+    // correct below given current code
+    // but need to write ways to default/spread a single contribution across instruments
+    expect(instrumentsContributionSummary[inst3.id].amortizationSchedule[271].period).toBe(272);
+    expect(instrumentsContributionSummary[inst3.id].amortizationSchedule[271].contribution).toBe(0);
+    expect(instrumentsContributionSummary[inst3.id].amortizationSchedule[271].growth).toBe(0);
+    expect(instrumentsContributionSummary[inst3.id].amortizationSchedule[271].currentBalance).toBe(0);
+    expect(instrumentsContributionSummary[constants.TOTALS].amortizationSchedule[271].period).toBe(272);
+    expect(instrumentsContributionSummary[constants.TOTALS].amortizationSchedule[271].contribution).toBe(2500);
+    expect(instrumentsContributionSummary[constants.TOTALS].amortizationSchedule[271].growth).toBe(20429.6407355164);
+    expect(instrumentsContributionSummary[constants.TOTALS].amortizationSchedule[271].currentBalance).toBe(2683565.9900121265);
   });
 });

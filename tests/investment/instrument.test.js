@@ -15,11 +15,13 @@ describe('instrument module', () => {
     expect(inst1.currentBalance).toBe(10000);
     expect(inst1.annualRate()).toBe(0.11);
     expect(inst1.periodicRate()).toBe(0.009166666666666667);
+    expect(inst1.periodicContribution()).toBe(541.6666666666666);
     expect(inst1.annualLimit()).toBe(6500);
   });
 
   it('defaults attributes appropriately', async () => {
     expect(inst3.annualLimit()).toBe(0);
+    expect(inst3.periodicContribution()).toBe(0);
   });
 
   it('validates contributions', async () => {
