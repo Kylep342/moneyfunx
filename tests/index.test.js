@@ -18,7 +18,6 @@ describe('moneyfunx module', () => {
       "IInstrument",
       "ILoan",
       "Instrument",
-      "InstrumentBalances",
       "InstrumentsContributionSchedule",
       "Loan",
       "LoanPrincipals",

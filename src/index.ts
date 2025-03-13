@@ -18,7 +18,6 @@ export {
 export {
   ContributionRecord,
   ContributionSchedule,
-  InstrumentBalances,
   InstrumentsContributionSchedule,
 } from './lib/investment/contributionTypes';
 export { IInstrument, Instrument } from './lib/investment/instrument';
