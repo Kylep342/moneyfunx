@@ -3,9 +3,9 @@ import { describe, expect, it } from 'vitest'
 import { Instrument } from '@/lib/investment/instrument.ts'
 
 const Instruments = () => [
-  new Instrument(10000, () => 0.11, 12, 'IRA', () => 6500),
-  new Instrument(45000, () => 0.085, 12, '401(K)', () => 23500),
-  new Instrument(0, () => 0.042666667, 12, 'ABC'),
+  new Instrument(10000, 0.11, 12, 'IRA', 6500),
+  new Instrument(45000, 0.085, 12, '401(K)', 23500),
+  new Instrument(0, 0.042666667, 12, 'ABC'),
 ];
 
 describe('instrument module', () => {
@@ -13,14 +13,14 @@ describe('instrument module', () => {
   it('creates an Instrument with proper attributes', async () => {
     expect(inst1.name).toBe('IRA');
     expect(inst1.currentBalance).toBe(10000);
-    expect(inst1.annualRate()).toBe(0.11);
-    expect(inst1.periodicRate()).toBe(0.009166666666666667);
+    expect(inst1.annualRate).toBe(0.11);
+    expect(inst1.periodicRate).toBe(0.009166666666666667);
     expect(inst1.periodicContribution()).toBe(541.6666666666666);
-    expect(inst1.annualLimit()).toBe(6500);
+    expect(inst1.annualLimit).toBe(6500);
   });
 
   it('defaults attributes appropriately', async () => {
-    expect(inst3.annualLimit()).toBe(0);
+    expect(inst3.annualLimit).toBe(0);
     expect(inst3.periodicContribution()).toBe(0);
   });
 

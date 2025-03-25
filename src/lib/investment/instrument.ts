@@ -4,20 +4,20 @@ export interface IInstrument {
   id: string;
   name: string;
   currentBalance: number;
-  annualRate: Function;
+  annualRate: number;
   periodsPerYear: number;
-  periodicRate: Function;
-  annualLimit: Function;
+  periodicRate: number;
+  annualLimit: number;
 }
 
 export class Instrument implements IInstrument {
   id: string;
   name: string;
   currentBalance: number;
-  annualRate: Function;
+  annualRate: number;
   periodsPerYear: number;
-  periodicRate: Function;
-  annualLimit: Function;
+  periodicRate: number;
+  annualLimit: number;
 
   /**
    *
@@ -31,18 +31,18 @@ export class Instrument implements IInstrument {
    */
   constructor(
     currentBalance: number,
-    annualRate: Function,
+    annualRate: number,
     periodsPerYear: number,
     name: string,
-    annualLimit?: Function,
+    annualLimit: number = 0,
   ) {
     this.id = String(Math.floor(Math.random() * Date.now()));
     this.name = name;
     this.currentBalance = currentBalance;
     this.annualRate = annualRate;
     this.periodsPerYear = periodsPerYear;
-    this.periodicRate = (): number => annualRate() / this.periodsPerYear;
-    this.annualLimit = annualLimit || (() => 0);
+    this.periodicRate =  this.annualRate / this.periodsPerYear;
+    this.annualLimit = annualLimit;
   }
 
   /**
@@ -58,9 +58,9 @@ export class Instrument implements IInstrument {
         `contribution of ${contribution} must be greater than/equal to zero`
       );
     }
-    if (this.annualLimit()) {
+    if (this.annualLimit) {
       return Math.min(
-        Math.max(this.annualLimit() - yearToDate, 0),
+        Math.max(this.annualLimit - yearToDate, 0),
         contribution,
       );
     }
@@ -74,8 +74,8 @@ export class Instrument implements IInstrument {
    * @returns {number} the amortized "max" contribution for a period
    */
   periodicContribution(): number {
-    if (this.annualLimit()) {
-      return this.annualLimit() / this.periodsPerYear;
+    if (this.annualLimit) {
+      return this.annualLimit / this.periodsPerYear;
     }
     return 0;
   }
@@ -87,6 +87,6 @@ export class Instrument implements IInstrument {
    * @returns {number} The amount of interest accrued in one period
    */
   accrueInterest(principal: number = this.currentBalance): number {
-    return principal * this.periodicRate();
+    return principal * this.periodicRate;
   }
 }

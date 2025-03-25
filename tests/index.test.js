@@ -31,7 +31,7 @@ describe('moneyfunx module', () => {
       "PaymentTooLowError",
       "principalRemaining",
       "snowball",
-      "sortLoans",
+      "sortWith",
       "TOTALS",
     ].sort());
   });

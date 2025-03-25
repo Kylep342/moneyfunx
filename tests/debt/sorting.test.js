@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 
 import { Loan } from '@/lib/debt/loan.ts';
-import * as sorting from '@/lib/debt/sorting.ts';
+import * as sorting from '@/lib/shared/sorting.ts';
 
 const Loans = () => [
   new Loan(7500, 0.068, 12, 10),
@@ -24,7 +24,7 @@ describe('sorting module', () => {
   });
 
   it('orders loans correctly using avalanche sorting', async () => {
-    expect(sorting.sortLoans(loans, sorting.avalanche)).toStrictEqual([
+    expect(sorting.sortWith(loans, sorting.avalanche)).toStrictEqual([
       loan2,
       loan3,
       loan1,
@@ -32,7 +32,7 @@ describe('sorting module', () => {
   });
 
   it('orders loans correctly using snowball sorting', async () => {
-    expect(sorting.sortLoans(loans, sorting.snowball)).toStrictEqual([
+    expect(sorting.sortWith(loans, sorting.snowball)).toStrictEqual([
       loan3,
       loan2,
       loan1,

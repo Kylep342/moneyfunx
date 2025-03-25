@@ -33,4 +33,4 @@ export {
   LoanPrincipals,
   PaymentSchedule,
 } from './lib/debt/paymentTypes';
-export { snowball, avalanche, sortLoans } from './lib/debt/sorting';
+export { snowball, avalanche, sortWith } from './lib/shared/sorting';

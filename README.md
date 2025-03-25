@@ -5,3 +5,5 @@ MoneyFunx is a small library of functions for financial computations, with a foc
 
 ## Upcoming features
 - Investment library
+    - drawdown/retirement analysis across instruments
+        - "How long can I afford to live on $X (gross|net) per year?"

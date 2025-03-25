@@ -49,7 +49,7 @@ export function amortizeContributions(
   accrueBeforeContribution: boolean = true,
 ): ContributionRecord[] {
   if (contribution === null) {
-    contribution = instrument.annualLimit() / instrument.periodsPerYear;
+    contribution = instrument.annualLimit / instrument.periodsPerYear;
   }
 
   const amortizationSchedule: ContributionRecord[] = [];
