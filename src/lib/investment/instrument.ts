@@ -1,4 +1,5 @@
 import * as errors from "../errors";
+import { HasRateAndBalance } from '../shared/sorting';
 
 export interface IInstrument {
   id: string;
@@ -10,7 +11,10 @@ export interface IInstrument {
   annualLimit: number;
 }
 
-export class Instrument implements IInstrument {
+export class Instrument implements
+  IInstrument,
+  HasRateAndBalance
+{
   id: string;
   name: string;
   currentBalance: number;

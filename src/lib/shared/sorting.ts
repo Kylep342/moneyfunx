@@ -4,7 +4,7 @@
  *
  */
 
-type HasRateAndBalance = { annualRate: number; currentBalance: number; };
+export type HasRateAndBalance = { annualRate: number; currentBalance: number; };
 
 type avalanche = (obj1: HasRateAndBalance, obj2: HasRateAndBalance) => number;
 type snowball = (obj1: HasRateAndBalance, obj2: HasRateAndBalance) => number;

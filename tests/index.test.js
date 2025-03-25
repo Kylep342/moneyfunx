@@ -15,6 +15,7 @@ describe('moneyfunx module', () => {
       "determineExtraContribution",
       "determineExtraPayment",
       "interestPaid",
+      "HasRateAndBalance",
       "IInstrument",
       "ILoan",
       "Instrument",

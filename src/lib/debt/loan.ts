@@ -12,6 +12,7 @@
 
 import * as errors from '../errors';
 import * as helpers from './helperFunctions';
+import { HasRateAndBalance } from '../shared/sorting';
 
 /**
  * Represents a financial loan
@@ -30,7 +31,10 @@ export interface ILoan {
   fees: number;
 }
 
-export class Loan implements ILoan {
+export class Loan implements
+  ILoan,
+  HasRateAndBalance
+{
   id: string;
   name: string;
   principal: number;
