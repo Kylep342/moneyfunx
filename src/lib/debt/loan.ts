@@ -17,7 +17,7 @@ import { HasRateAndBalance } from '../shared/sorting';
 /**
  * Represents a financial loan
  */
-export interface ILoan {
+export interface ILoan extends HasRateAndBalance {
   id: string;
   name: string;
   principal: number;
@@ -31,10 +31,7 @@ export interface ILoan {
   fees: number;
 }
 
-export class Loan implements
-  ILoan,
-  HasRateAndBalance
-{
+export class Loan implements ILoan {
   id: string;
   name: string;
   principal: number;

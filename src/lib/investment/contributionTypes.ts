@@ -32,3 +32,7 @@ export type ContributionSchedule = {
 }
 
 export type InstrumentsContributionSchedule = Record<string, ContributionSchedule>
+
+export type InstrumentBalances = Record<string, number>;
+
+export type InstrumentYTDs = Record<string, number>;

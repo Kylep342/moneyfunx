@@ -1,7 +1,7 @@
 import * as errors from "../errors";
 import { HasRateAndBalance } from '../shared/sorting';
 
-export interface IInstrument {
+export interface IInstrument extends HasRateAndBalance {
   id: string;
   name: string;
   currentBalance: number;
@@ -11,10 +11,7 @@ export interface IInstrument {
   annualLimit: number;
 }
 
-export class Instrument implements
-  IInstrument,
-  HasRateAndBalance
-{
+export class Instrument implements IInstrument {
   id: string;
   name: string;
   currentBalance: number;

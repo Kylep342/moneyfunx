@@ -5,10 +5,12 @@
  */
 
 import * as constants from '../constants';
-import type { IInstrument, Instrument } from './instrument';
+import type { Instrument } from './instrument';
 import {
   ContributionRecord,
   InstrumentsContributionSchedule,
+  InstrumentBalances,
+  InstrumentYTDs,
 } from './contributionTypes';
 
 /**
@@ -87,57 +89,88 @@ export function amortizeContributions(
  */
 export function contributeInstruments(
   instruments: Instrument[],
-  contribution: number,
-  yearsToContribute: number,
+  budget: number,
+  numContributions: number,
   accrueBeforeContribution: boolean = true,
 ): InstrumentsContributionSchedule {
-  let monthlyContribution = contribution;
   const contributionSchedule: InstrumentsContributionSchedule = {};
-
+  const instrumentBalances: InstrumentBalances = {};
+  const instrumentYTDs: InstrumentYTDs = {};
   let totalLifetimeContribution = 0;
   let totalLifetimeGrowth = 0;
   let totalAmortizationSchedule: ContributionRecord[] = [];
-  for (const instrument of instruments) {
-    const instrumentContributions = amortizeContributions(
-      instrument,
-      instrument.currentBalance,
-      null,
-      yearsToContribute * instrument.periodsPerYear,
-      accrueBeforeContribution,
-    );
-    const instrumentLifetimeContribution = instrumentContributions.reduce(
-      (lifetimeContribution, record) => lifetimeContribution + record.contribution,
-      0
-    );
-    const instrumentLifetimeGrowth = instrumentContributions.reduce(
-      (lifetimeGrowth, record) => lifetimeGrowth + record.growth,
-      0
-    );
+
+  instruments.forEach((instrument) => {
     contributionSchedule[instrument.id] = {
-      lifetimeContribution: instrument.currentBalance + instrumentLifetimeContribution,
-      lifetimeGrowth: instrumentLifetimeGrowth,
-      amortizationSchedule: instrumentContributions,
-    }
-    totalLifetimeContribution += (instrument.currentBalance + instrumentLifetimeContribution);
-    totalLifetimeGrowth += instrumentLifetimeGrowth;
-    // ternary handles base case of an empty list
-    // naively stole this from payments.ts
-    // need to create a new algo to combine
-    totalAmortizationSchedule = totalAmortizationSchedule.length ? (totalAmortizationSchedule.map((element) => {
-      const matchedInnerElement = instrumentContributions.find(
-        (innerElement) => innerElement.period === element.period
+      lifetimeGrowth: 0,
+      lifetimeContribution: 0,
+      amortizationSchedule: [],
+    };
+
+    instrumentBalances[instrument.id] = instrument.currentBalance;
+
+    instrumentYTDs[instrument.id] = 0;
+  });
+
+  for (let contribution = 1; contribution <= numContributions; contribution++) {
+    let monthlyBudget = budget;
+
+    for (const instrument of instruments) {
+      if (contribution % 12 == 1) {
+        instrumentYTDs[instrument.id] = 0
+      }
+      const instrumentContribution = instrument.validateContribution(
+        Math.max(monthlyBudget, instrument.periodicContribution()),
+        instrumentYTDs[instrument.id]
+      )
+      const instrumentContributions = amortizeContributions(
+        instrument,
+      instrumentBalances[instrument.id],
+        instrumentContribution,
+        1,
+        accrueBeforeContribution,
       );
-      return (matchedInnerElement != null)
-        ? {
-          period: element.period,
-          contribution: element.contribution + matchedInnerElement.contribution,
-          growth: element.growth + matchedInnerElement.growth,
-          currentBalance:
-            element.currentBalance +
-            matchedInnerElement.currentBalance
-        }
-        : element 
-    })) : instrumentContributions;
+      // const instrumentLifetimeContribution = instrumentContributions.reduce(
+      //   (lifetimeContribution, record) => lifetimeContribution + record.contribution,
+      //   0
+      // );
+      // const instrumentLifetimeGrowth = instrumentContributions.reduce(
+      //   (lifetimeGrowth, record) => lifetimeGrowth + record.growth,
+      //   0
+      // );
+      contributionSchedule[instrument.id].amortizationSchedule = [
+        ...contributionSchedule[instrument.id].amortizationSchedule,
+        ...instrumentContributions
+      ];
+
+      instrumentYTDs[instrument.id] += instrumentContribution;
+      instrumentBalances[instrument.id] += instrumentContribution;
+      monthlyBudget -= instrumentContribution;
+      //   lifetimeContribution: instrument.currentBalance + instrumentLifetimeContribution,
+      //   lifetimeGrowth: instrumentLifetimeGrowth,
+      //   amortizationSchedule: instrumentContributions,
+      // }
+      // totalLifetimeContribution += (instrument.currentBalance + instrumentLifetimeContribution);
+      // totalLifetimeGrowth += instrumentLifetimeGrowth;
+      // ternary handles base case of an empty list
+      // naively stole this from payments.ts
+      // need to create a new algo to combine
+      totalAmortizationSchedule = totalAmortizationSchedule.length ? (totalAmortizationSchedule.map((element) => {
+        const matchedInnerElement = instrumentContributions.find(
+          (innerElement) => innerElement.period === element.period
+        );
+        return (matchedInnerElement != null)
+          ? {
+            period: element.period,
+            contribution: element.contribution + matchedInnerElement.contribution,
+            growth: element.growth + matchedInnerElement.growth,
+            currentBalance:
+              element.currentBalance +
+              matchedInnerElement.currentBalance
+          }
+          : element 
+      })) : instrumentContributions;
+    }
   }
 
   contributionSchedule.totals = {
