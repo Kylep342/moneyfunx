@@ -63,7 +63,7 @@ export class Instrument implements IInstrument {
       return Math.min(
         Math.max(this.annualLimit - yearToDate, 0),
         contribution,
-      );
+        this.periodicContribution());
     }
     return contribution;
   }

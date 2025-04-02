@@ -18,8 +18,9 @@ describe('contributions module', () => {
     const iraAmortizationSchedulePre = contributions.amortizeContributions(
       inst1,
       inst1.currentBalance,
-      null,
+      inst1.periodicContribution(),
       60,
+      0,
       true,
     );
     expect(iraAmortizationSchedulePre.length).toBe(60);
@@ -29,14 +30,15 @@ describe('contributions module', () => {
     expect(iraAmortizationSchedulePre[3].currentBalance).toBe(12568.380024864968);
     expect(iraAmortizationSchedulePre[44].period).toBe(45);
     expect(iraAmortizationSchedulePre[44].contribution).toBe(541.6666666666666);
-    expect(iraAmortizationSchedulePre[44].growth).toBe(404.5700991003198);
-    expect(iraAmortizationSchedulePre[44].currentBalance).toBe(45081.15666762006);
+    expect(iraAmortizationSchedulePre[44].growth).toBe(404.57009910031996);
+    expect(iraAmortizationSchedulePre[44].currentBalance).toBe(45081.156667620075);
 
     const iraAmortizationSchedulePost = contributions.amortizeContributions(
       inst1,
       inst1.currentBalance,
-      null,
+      inst1.periodicContribution(),
       60,
+      0,
       false,
     );
     expect(iraAmortizationSchedulePost.length).toBe(60);
@@ -59,13 +61,13 @@ describe('contributions module', () => {
     );
     expect(workAcctAmortizationSchedule.length).toBe(24);
     expect(workAcctAmortizationSchedule[3].period).toBe(4);
-    expect(workAcctAmortizationSchedule[3].contribution).toBe(2000);
-    expect(workAcctAmortizationSchedule[3].growth).toBe(368.3732817577221);
-    expect(workAcctAmortizationSchedule[3].currentBalance).toBe(54374.01305931849);
+    expect(workAcctAmortizationSchedule[3].contribution).toBe(23500/12);
+    expect(workAcctAmortizationSchedule[3].growth).toBe(367.4815785814827);
+    expect(workAcctAmortizationSchedule[3].currentBalance).toBe(54205.567182241786);
     expect(workAcctAmortizationSchedule[23].period).toBe(24);
-    expect(workAcctAmortizationSchedule[23].contribution).toBe(1500);
-    expect(workAcctAmortizationSchedule[23].growth).toBe(723.6319979833261);
-    expect(workAcctAmortizationSchedule[23].currentBalance).toBe(104383.44347798229);
+    expect(workAcctAmortizationSchedule[23].contribution).toBe(23500/12);
+    expect(workAcctAmortizationSchedule[23].growth).toBe(720.1153159934386);
+    expect(workAcctAmortizationSchedule[23].currentBalance).toBe(104341.78737781222);
   });
 
   it('determines extra contributions', async () => {
@@ -77,30 +79,30 @@ describe('contributions module', () => {
     const instrumentsContributionSummary = contributions.contributeInstruments(
       instruments,
       2250,
-      25
+      300
     );
 
     expect(Object.keys(instrumentsContributionSummary).length).toBe(4);
-    expect(instrumentsContributionSummary[inst1.id].lifetimeContribution).toBe(172499.9999999999);
-    expect(instrumentsContributionSummary[inst1.id].lifetimeGrowth).toBe(835717.7570598022);
+    expect(instrumentsContributionSummary[inst1.id].lifetimeContribution).toBe(162499.9999999999);
+    expect(instrumentsContributionSummary[inst1.id].lifetimeGrowth).toBe(835717.7570598032);
     expect(instrumentsContributionSummary[inst1.id].amortizationSchedule.length).toBe(300);
     // correct below given current code
     // but need to write ways to default/spread a single contribution across instruments
     expect(instrumentsContributionSummary[inst3.id].lifetimeContribution).toBe(0);
     expect(instrumentsContributionSummary[inst3.id].lifetimeGrowth).toBe(0);
     expect(instrumentsContributionSummary[inst3.id].amortizationSchedule.length).toBe(300);
-    expect(instrumentsContributionSummary[constants.TOTALS].lifetimeContribution).toBe(804999.9999999991);
-    expect(instrumentsContributionSummary[constants.TOTALS].lifetimeGrowth).toBe(2598300.5336129623);
+    expect(instrumentsContributionSummary[constants.TOTALS].lifetimeContribution).toBe(674999.9999999977);
+    expect(instrumentsContributionSummary[constants.TOTALS].lifetimeGrowth).toBe(2415285.956132287);
     expect(instrumentsContributionSummary[constants.TOTALS].amortizationSchedule.length).toBe(300);
     // period 28
     expect(instrumentsContributionSummary[inst1.id].amortizationSchedule[27].period).toBe(28);
     expect(instrumentsContributionSummary[inst1.id].amortizationSchedule[27].contribution).toBe(541.6666666666666);
     expect(instrumentsContributionSummary[inst1.id].amortizationSchedule[27].growth).toBe(268.60484125436335);
-    expect(instrumentsContributionSummary[inst1.id].amortizationSchedule[27].currentBalance).toBe(30112.617826578848);
+    expect(instrumentsContributionSummary[inst1.id].amortizationSchedule[27].currentBalance).toBe(30112.61782657885);
     expect(instrumentsContributionSummary[inst2.id].amortizationSchedule[27].period).toBe(28);
-    expect(instrumentsContributionSummary[inst2.id].amortizationSchedule[27].contribution).toBe(1958.3333333333333);
-    expect(instrumentsContributionSummary[inst2.id].amortizationSchedule[27].growth).toBe(796.8148334233672);
-    expect(instrumentsContributionSummary[inst2.id].amortizationSchedule[27].currentBalance).toBe(115246.6540618203);
+    expect(instrumentsContributionSummary[inst2.id].amortizationSchedule[27].contribution).toBe(1708.3333333333335);
+    expect(instrumentsContributionSummary[inst2.id].amortizationSchedule[27].growth).toBe(744.3283009340679);
+    expect(instrumentsContributionSummary[inst2.id].amortizationSchedule[27].currentBalance).toBe(107534.30411907697);
     // correct below given current code
     // but need to write ways to default/spread a single contribution across instruments
     expect(instrumentsContributionSummary[inst3.id].amortizationSchedule[27].period).toBe(28);
@@ -108,18 +110,18 @@ describe('contributions module', () => {
     expect(instrumentsContributionSummary[inst3.id].amortizationSchedule[27].growth).toBe(0);
     expect(instrumentsContributionSummary[inst3.id].amortizationSchedule[27].currentBalance).toBe(0);
     expect(instrumentsContributionSummary[constants.TOTALS].amortizationSchedule[27].period).toBe(28);
-    expect(instrumentsContributionSummary[constants.TOTALS].amortizationSchedule[27].contribution).toBe(2500);
-    expect(instrumentsContributionSummary[constants.TOTALS].amortizationSchedule[27].growth).toBe(1065.4196746777307);
-    expect(instrumentsContributionSummary[constants.TOTALS].amortizationSchedule[27].currentBalance).toBe(145359.27188839915);
+    expect(instrumentsContributionSummary[constants.TOTALS].amortizationSchedule[27].contribution).toBe(2250);
+    expect(instrumentsContributionSummary[constants.TOTALS].amortizationSchedule[27].growth).toBe(1012.9331421884312);
+    expect(instrumentsContributionSummary[constants.TOTALS].amortizationSchedule[27].currentBalance).toBe(137646.92194565583);
     // period 272
     expect(instrumentsContributionSummary[inst1.id].amortizationSchedule[271].period).toBe(272);
     expect(instrumentsContributionSummary[inst1.id].amortizationSchedule[271].contribution).toBe(541.6666666666666);
-    expect(instrumentsContributionSummary[inst1.id].amortizationSchedule[271].growth).toBe(6967.253017151146);
-    expect(instrumentsContributionSummary[inst1.id].amortizationSchedule[271].currentBalance).toBe(767572.8851912156);
+    expect(instrumentsContributionSummary[inst1.id].amortizationSchedule[271].growth).toBe(6967.253017151155);
+    expect(instrumentsContributionSummary[inst1.id].amortizationSchedule[271].currentBalance).toBe(767572.8851912165);
     expect(instrumentsContributionSummary[inst2.id].amortizationSchedule[271].period).toBe(272);
-    expect(instrumentsContributionSummary[inst2.id].amortizationSchedule[271].contribution).toBe(1958.3333333333333);
-    expect(instrumentsContributionSummary[inst2.id].amortizationSchedule[271].growth).toBe(13462.387718365255);
-    expect(instrumentsContributionSummary[inst2.id].amortizationSchedule[271].currentBalance).toBe(1915993.1048209108);
+    expect(instrumentsContributionSummary[inst2.id].amortizationSchedule[271].contribution).toBe(1708.3333333333335);
+    expect(instrumentsContributionSummary[inst2.id].amortizationSchedule[271].growth).toBe(12019.353385150405);
+    expect(instrumentsContributionSummary[inst2.id].amortizationSchedule[271].currentBalance).toBe(1710577.576386776);
     // correct below given current code
     // but need to write ways to default/spread a single contribution across instruments
     expect(instrumentsContributionSummary[inst3.id].amortizationSchedule[271].period).toBe(272);
@@ -127,8 +129,8 @@ describe('contributions module', () => {
     expect(instrumentsContributionSummary[inst3.id].amortizationSchedule[271].growth).toBe(0);
     expect(instrumentsContributionSummary[inst3.id].amortizationSchedule[271].currentBalance).toBe(0);
     expect(instrumentsContributionSummary[constants.TOTALS].amortizationSchedule[271].period).toBe(272);
-    expect(instrumentsContributionSummary[constants.TOTALS].amortizationSchedule[271].contribution).toBe(2500);
-    expect(instrumentsContributionSummary[constants.TOTALS].amortizationSchedule[271].growth).toBe(20429.6407355164);
-    expect(instrumentsContributionSummary[constants.TOTALS].amortizationSchedule[271].currentBalance).toBe(2683565.9900121265);
+    expect(instrumentsContributionSummary[constants.TOTALS].amortizationSchedule[271].contribution).toBe(2250);
+    expect(instrumentsContributionSummary[constants.TOTALS].amortizationSchedule[271].growth).toBe(18986.60640230156);
+    expect(instrumentsContributionSummary[constants.TOTALS].amortizationSchedule[271].currentBalance).toBe(2478150.4615779924);
   });
 });
