@@ -6,27 +6,27 @@
 
 export type HasRateAndBalance = { annualRate: number; currentBalance: number; };
 
+type sortFunction = (obj1: HasRateAndBalance, obj2: HasRateAndBalance) => number;
 type avalanche = (obj1: HasRateAndBalance, obj2: HasRateAndBalance) => number;
 type snowball = (obj1: HasRateAndBalance, obj2: HasRateAndBalance) => number;
-type sortFunction = avalanche | snowball;
 
 /**
  * Sorts descending by interest rate
- * @param {HasRateAndBalance} obj1
- * @param {HasRateAndBalance} obj2
+ * @param {T extends HasRateAndBalance} obj1
+ * @param {T extends HasRateAndBalance} obj2
  * @returns {number} the order in which to sort the objects in descending interestRate
  */
-export function avalanche(obj1: HasRateAndBalance, obj2: HasRateAndBalance): number {
+export function avalanche<T extends HasRateAndBalance>(obj1: T, obj2: T): number {
   return obj2.annualRate - obj1.annualRate;
 }
 
 /**
  * Sorts ascending by principal
- * @param {HasRateAndBalance} obj1
- * @param {HasRateAndBalanceILoan} obj2
+ * @param {T extends HasRateAndBalance} obj1
+ * @param {T extends HasRateAndBalanceILoan} obj2
  * @returns {number} the order in which to sort the objects in ascending currentBalance
  */
-export function snowball(obj1: HasRateAndBalance, obj2: HasRateAndBalance): number {
+export function snowball<T extends HasRateAndBalance>(obj1: T, obj2: T): number {
   return obj1.currentBalance - obj2.currentBalance;
 }
 
@@ -35,7 +35,12 @@ export function snowball(obj1: HasRateAndBalance, obj2: HasRateAndBalance): numb
  * @param {HasRateAndBalance[]} sortable The collection to sort
  * @param {function} sortFunction The algorithm to sort the collection with
  * @returns The sorted collection
+ *
  */
-export function sortWith(sortable: HasRateAndBalance[], sortFunction: sortFunction): HasRateAndBalance[] {
+export function sortWith<T extends HasRateAndBalance>(
+  sortable: T[],
+  sortFunction: sortFunction
+):
+T[] {
   return sortable.sort(sortFunction);
 }
