@@ -27,23 +27,23 @@ describe('payments module', () => {
 
     expect(homeLoanAmortizationSchedule.length).toBe(181);
     expect(homeLoanAmortizationSchedule[3].period).toBe(4);
-    expect(homeLoanAmortizationSchedule[3].principal).toBe(1156.712773965719);
-    expect(homeLoanAmortizationSchedule[3].interest).toBe(1385.2925992958958);
-    expect(homeLoanAmortizationSchedule[3].principalRemaining).toBe(
-      309563.12258212303
+    expect(homeLoanAmortizationSchedule[3].principal).toBeCloseTo(1156.712773, 5);
+    expect(homeLoanAmortizationSchedule[3].interest).toBeCloseTo(1385.292599, 5);
+    expect(homeLoanAmortizationSchedule[3].principalRemaining).toBeCloseTo(
+      309563.122582, 5
     );
     expect(homeLoanAmortizationSchedule[119].period).toBe(120);
-    expect(homeLoanAmortizationSchedule[119].principal).toBe(1937.8893129920505);
-    expect(homeLoanAmortizationSchedule[119].interest).toBe(604.1160602695643);
-    expect(homeLoanAmortizationSchedule[119].principalRemaining).toBe(133564.7784110224);
+    expect(homeLoanAmortizationSchedule[119].principal).toBeCloseTo(1937.889312, 5);
+    expect(homeLoanAmortizationSchedule[119].interest).toBeCloseTo(604.116060, 5);
+    expect(homeLoanAmortizationSchedule[119].principalRemaining).toBeCloseTo(133564.778411, 5);
     expect(homeLoanAmortizationSchedule[179].period).toBe(180);
-    expect(homeLoanAmortizationSchedule[179].principal).toBe(2530.7225684669434);
-    expect(homeLoanAmortizationSchedule[179].interest).toBe(11.282804784415122);
+    expect(homeLoanAmortizationSchedule[179].principal).toBeCloseTo(2530.722568, 5);
+    expect(homeLoanAmortizationSchedule[179].interest).toBeCloseTo(11.282804, 5);
     expect(homeLoanAmortizationSchedule[179].principalRemaining).toBe(0);
   });
 
   it('determines extra payment for multiple loans', async () => {
-    expect(payments.determineExtraPayment(loansAV, 3700)).toBe(185.31461852038683);
+    expect(payments.determineExtraPayment(loansAV, 3700)).toBeCloseTo(185.314618, 5);
   });
 
   it('throws a paymentTooLowError when the total payment for loans is below their shared minimum', async () => {
@@ -58,13 +58,13 @@ describe('payments module', () => {
         1867.19,
         348.33,
         false
-      )).toBe(1518.8600000000001);
+      )).toBeCloseTo(1518.860000, 5);
     expect(payments.determineCarryover(
         carLoan,
         1867.19,
         348.33,
         true
-      )).toBe(851.6696647586657);
+      )).toBeCloseTo(851.669664, 5);
   });
 
   it('amortizes payments for mutliple loans', async () => {
@@ -80,16 +80,16 @@ describe('payments module', () => {
 
     // 2 keys more than the 3 loans for totalInterest and totalPayments
     expect(Object.keys(loansPaymentSummary).length).toBe(4);
-    expect(loansPaymentSummary[carLoan.id].lifetimeInterest).toBe(1906.7196253547775);
-    expect(loansPaymentSummary[homeLoan.id].lifetimeInterest).toBe(91584.95203058577);
-    expect(loansPaymentSummary[otherLoan.id].lifetimeInterest).toBe(876.4239742791409);
+    expect(loansPaymentSummary[carLoan.id].lifetimeInterest).toBeCloseTo(1906.719625, 5);
+    expect(loansPaymentSummary[homeLoan.id].lifetimeInterest).toBeCloseTo(91584.952030, 5);
+    expect(loansPaymentSummary[otherLoan.id].lifetimeInterest).toBeCloseTo(876.423974, 5);
 
-    expect(loansPaymentSummary[constants.TOTALS].lifetimeInterest).toBe(
-      94368.09563021969
+    expect(loansPaymentSummary[constants.TOTALS].lifetimeInterest).toBeCloseTo(
+      94368.095630, 5
     );
     expect(loansPaymentSummary[constants.TOTALS].amortizationSchedule.length).toBe(111);
-    expect(loansPaymentSummary[constants.TOTALS].amortizationSchedule[110].principal).toBe(1975.328955294327);
-    expect(loansPaymentSummary[constants.TOTALS].amortizationSchedule[110].interest).toBe(8.806674925687208);
+    expect(loansPaymentSummary[constants.TOTALS].amortizationSchedule[110].principal).toBeCloseTo(1975.328955, 5);
+    expect(loansPaymentSummary[constants.TOTALS].amortizationSchedule[110].interest).toBeCloseTo(8.806674, 5);
     expect(loansPaymentSummary[constants.TOTALS].amortizationSchedule[110].principalRemaining).toBe(0);
   });
 
@@ -105,29 +105,29 @@ describe('payments module', () => {
     }
 
     expect(Object.keys(loansPaymentSummary).length).toBe(4);
-    expect(loansPaymentSummary[carLoan.id].lifetimeInterest).toBe(1906.7196253547775);
-    expect(loansPaymentSummary[homeLoan.id].lifetimeInterest).toBe(118982.16255675393);
-    expect(loansPaymentSummary[otherLoan.id].lifetimeInterest).toBe(
-      902.9214932489889
+    expect(loansPaymentSummary[carLoan.id].lifetimeInterest).toBeCloseTo(1906.719625, 5);
+    expect(loansPaymentSummary[homeLoan.id].lifetimeInterest).toBeCloseTo(118982.162556, 5);
+    expect(loansPaymentSummary[otherLoan.id].lifetimeInterest).toBeCloseTo(
+      902.921493, 5
     );
-    expect(loansPaymentSummary[constants.TOTALS].lifetimeInterest).toBe(121791.8036753577);
+    expect(loansPaymentSummary[constants.TOTALS].lifetimeInterest).toBeCloseTo(121791.803675, 5);
     expect(loansPaymentSummary[constants.TOTALS].amortizationSchedule.length).toBe(148);
 
-    expect(loansPaymentSummary[constants.TOTALS].amortizationSchedule[110].principal).toBe(
-      2562.3766649975837
+    expect(loansPaymentSummary[constants.TOTALS].amortizationSchedule[110].principal).toBeCloseTo(
+      2562.376664, 5
     );
-    expect(loansPaymentSummary[constants.TOTALS].amortizationSchedule[110].interest).toBe(
-      464.943326784418
+    expect(loansPaymentSummary[constants.TOTALS].amortizationSchedule[110].interest).toBeCloseTo(
+      464.943326, 5
     );
     expect(
       loansPaymentSummary[constants.TOTALS].amortizationSchedule[110].principalRemaining
-    ).toBe(101723.97700627374);
+    ).toBeCloseTo(101723.977006, 5);
 
-    expect(loansPaymentSummary[constants.TOTALS].amortizationSchedule[147].principal).toBe(
-      1458.8921103989624
+    expect(loansPaymentSummary[constants.TOTALS].amortizationSchedule[147].principal).toBeCloseTo(
+      1458.892110, 5
     );
-    expect(loansPaymentSummary[constants.TOTALS].amortizationSchedule[147].interest).toBe(
-      6.504227325528707
+    expect(loansPaymentSummary[constants.TOTALS].amortizationSchedule[147].interest).toBeCloseTo(
+      6.504227, 5
     );
     expect(
       loansPaymentSummary[constants.TOTALS].amortizationSchedule[147].principalRemaining

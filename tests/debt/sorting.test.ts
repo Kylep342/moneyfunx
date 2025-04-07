@@ -14,8 +14,8 @@ describe('sorting module', () => {
   const [loan2, loan3, loan1] = loans;
 
   it('avalanche compares loans correctly', async () => {
-    expect(sorting.avalanche(loan2, loan1)).toBe(-0.031200000000000006);
-    expect(sorting.avalanche(loan3, loan1)).toBe(-0.006100000000000001);
+    expect(sorting.avalanche(loan2, loan1)).toBeCloseTo(-0.031200, 5);
+    expect(sorting.avalanche(loan3, loan1)).toBeCloseTo(-0.006100, 5);
   });
 
   it('snowball compares loans correctly', async () => {

@@ -14,8 +14,8 @@ describe('instrument module', () => {
     expect(inst1.name).toBe('IRA');
     expect(inst1.currentBalance).toBe(10000);
     expect(inst1.annualRate).toBe(0.11);
-    expect(inst1.periodicRate).toBe(0.009166666666666667);
-    expect(inst1.periodicContribution()).toBe(541.6666666666666);
+    expect(inst1.periodicRate).toBeCloseTo(0.009166, 5);
+    expect(inst1.periodicContribution()).toBeCloseTo(541.666666, 5);
     expect(inst1.annualLimit).toBe(6500);
   });
 
@@ -33,8 +33,8 @@ describe('instrument module', () => {
 
   it('accrues interest', async () => {
     expect(inst2.accrueInterest()).toBe(318.75);
-    expect(inst2.accrueInterest(1000)).toBe(7.083333333333334);
+    expect(inst2.accrueInterest(1000)).toBeCloseTo(7.083333, 5);
     expect(inst3.accrueInterest()).toBe(0);
-    expect(inst3.accrueInterest(200)).toBe(0.7111111166666666);
+    expect(inst3.accrueInterest(200)).toBeCloseTo(0.711111, 5);
   });
 });

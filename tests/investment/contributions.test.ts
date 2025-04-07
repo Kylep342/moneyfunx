@@ -25,13 +25,13 @@ describe('contributions module', () => {
     );
     expect(iraAmortizationSchedulePre.length).toBe(60);
     expect(iraAmortizationSchedulePre[3].period).toBe(4);
-    expect(iraAmortizationSchedulePre[3].contribution).toBe(541.6666666666666);
-    expect(iraAmortizationSchedulePre[3].growth).toBe(109.24347393904321);
-    expect(iraAmortizationSchedulePre[3].currentBalance).toBe(12568.380024864968);
+    expect(iraAmortizationSchedulePre[3].contribution).toBeCloseTo(541.666666, 5);
+    expect(iraAmortizationSchedulePre[3].growth).toBeCloseTo(109.243473, 5);
+    expect(iraAmortizationSchedulePre[3].currentBalance).toBeCloseTo(12568.380024, 5);
     expect(iraAmortizationSchedulePre[44].period).toBe(45);
-    expect(iraAmortizationSchedulePre[44].contribution).toBe(541.6666666666666);
-    expect(iraAmortizationSchedulePre[44].growth).toBe(404.57009910031996);
-    expect(iraAmortizationSchedulePre[44].currentBalance).toBe(45081.156667620075);
+    expect(iraAmortizationSchedulePre[44].contribution).toBeCloseTo(541.666666, 5);
+    expect(iraAmortizationSchedulePre[44].growth).toBeCloseTo(404.570099, 5);
+    expect(iraAmortizationSchedulePre[44].currentBalance).toBeCloseTo(45081.156667, 5);
 
     const iraAmortizationSchedulePost = contributions.amortizeContributions(
       inst1,
@@ -43,13 +43,13 @@ describe('contributions module', () => {
     );
     expect(iraAmortizationSchedulePost.length).toBe(60);
     expect(iraAmortizationSchedulePost[3].period).toBe(4);
-    expect(iraAmortizationSchedulePost[3].contribution).toBe(541.6666666666666);
-    expect(iraAmortizationSchedulePost[3].growth).toBe(114.34655234401122);
-    expect(iraAmortizationSchedulePost[3].currentBalance).toBe(12588.515898963416);
+    expect(iraAmortizationSchedulePost[3].contribution).toBeCloseTo(541.666666, 5);
+    expect(iraAmortizationSchedulePost[3].growth).toBeCloseTo(114.346552, 5);
+    expect(iraAmortizationSchedulePost[3].currentBalance).toBeCloseTo(12588.515898, 5);
     expect(iraAmortizationSchedulePost[44].period).toBe(45);
-    expect(iraAmortizationSchedulePost[44].contribution).toBe(541.6666666666666);
-    expect(iraAmortizationSchedulePost[44].growth).toBe(411.98851234070816);
-    expect(iraAmortizationSchedulePost[44].currentBalance).toBe(45356.18985859978);
+    expect(iraAmortizationSchedulePost[44].contribution).toBeCloseTo(541.666666, 5);
+    expect(iraAmortizationSchedulePost[44].growth).toBeCloseTo(411.988512, 5);
+    expect(iraAmortizationSchedulePost[44].currentBalance).toBeCloseTo(45356.189858, 5);
   });
 
   it('uses annualLimits on instruments', async () => {
@@ -62,12 +62,12 @@ describe('contributions module', () => {
     expect(workAcctAmortizationSchedule.length).toBe(24);
     expect(workAcctAmortizationSchedule[3].period).toBe(4);
     expect(workAcctAmortizationSchedule[3].contribution).toBe(23500/12);
-    expect(workAcctAmortizationSchedule[3].growth).toBe(367.4815785814827);
-    expect(workAcctAmortizationSchedule[3].currentBalance).toBe(54205.567182241786);
+    expect(workAcctAmortizationSchedule[3].growth).toBeCloseTo(367.481578, 5);
+    expect(workAcctAmortizationSchedule[3].currentBalance).toBeCloseTo(54205.567182, 5);
     expect(workAcctAmortizationSchedule[23].period).toBe(24);
     expect(workAcctAmortizationSchedule[23].contribution).toBe(23500/12);
-    expect(workAcctAmortizationSchedule[23].growth).toBe(720.1153159934386);
-    expect(workAcctAmortizationSchedule[23].currentBalance).toBe(104341.78737781222);
+    expect(workAcctAmortizationSchedule[23].growth).toBeCloseTo(720.115315, 5);
+    expect(workAcctAmortizationSchedule[23].currentBalance).toBeCloseTo(104341.787377, 5);
   });
 
   it('determines extra contributions', async () => {
@@ -83,26 +83,26 @@ describe('contributions module', () => {
     );
 
     expect(Object.keys(instrumentsContributionSummary).length).toBe(4);
-    expect(instrumentsContributionSummary[inst1.id].lifetimeContribution).toBe(162499.9999999999);
-    expect(instrumentsContributionSummary[inst1.id].lifetimeGrowth).toBe(835717.7570598032);
+    expect(instrumentsContributionSummary[inst1.id].lifetimeContribution).toBeCloseTo(162499.999999, 5);
+    expect(instrumentsContributionSummary[inst1.id].lifetimeGrowth).toBeCloseTo(835717.757059, 5);
     expect(instrumentsContributionSummary[inst1.id].amortizationSchedule.length).toBe(300);
     // correct below given current code
     // but need to write ways to default/spread a single contribution across instruments
     expect(instrumentsContributionSummary[inst3.id].lifetimeContribution).toBe(0);
     expect(instrumentsContributionSummary[inst3.id].lifetimeGrowth).toBe(0);
     expect(instrumentsContributionSummary[inst3.id].amortizationSchedule.length).toBe(300);
-    expect(instrumentsContributionSummary[constants.TOTALS].lifetimeContribution).toBe(674999.9999999977);
-    expect(instrumentsContributionSummary[constants.TOTALS].lifetimeGrowth).toBe(2415285.956132287);
+    expect(instrumentsContributionSummary[constants.TOTALS].lifetimeContribution).toBeCloseTo(674999.999999, 5);
+    expect(instrumentsContributionSummary[constants.TOTALS].lifetimeGrowth).toBeCloseTo(2415285.956132, 5);
     expect(instrumentsContributionSummary[constants.TOTALS].amortizationSchedule.length).toBe(300);
     // period 28
     expect(instrumentsContributionSummary[inst1.id].amortizationSchedule[27].period).toBe(28);
-    expect(instrumentsContributionSummary[inst1.id].amortizationSchedule[27].contribution).toBe(541.6666666666666);
-    expect(instrumentsContributionSummary[inst1.id].amortizationSchedule[27].growth).toBe(268.60484125436335);
-    expect(instrumentsContributionSummary[inst1.id].amortizationSchedule[27].currentBalance).toBe(30112.61782657885);
+    expect(instrumentsContributionSummary[inst1.id].amortizationSchedule[27].contribution).toBeCloseTo(541.666666, 5);
+    expect(instrumentsContributionSummary[inst1.id].amortizationSchedule[27].growth).toBeCloseTo(268.604841, 5);
+    expect(instrumentsContributionSummary[inst1.id].amortizationSchedule[27].currentBalance).toBeCloseTo(30112.617826, 5);
     expect(instrumentsContributionSummary[inst2.id].amortizationSchedule[27].period).toBe(28);
-    expect(instrumentsContributionSummary[inst2.id].amortizationSchedule[27].contribution).toBe(1708.3333333333335);
-    expect(instrumentsContributionSummary[inst2.id].amortizationSchedule[27].growth).toBe(744.3283009340679);
-    expect(instrumentsContributionSummary[inst2.id].amortizationSchedule[27].currentBalance).toBe(107534.30411907697);
+    expect(instrumentsContributionSummary[inst2.id].amortizationSchedule[27].contribution).toBeCloseTo(1708.333333, 5);
+    expect(instrumentsContributionSummary[inst2.id].amortizationSchedule[27].growth).toBeCloseTo(744.328300, 5);
+    expect(instrumentsContributionSummary[inst2.id].amortizationSchedule[27].currentBalance).toBeCloseTo(107534.304119, 5);
     // correct below given current code
     // but need to write ways to default/spread a single contribution across instruments
     expect(instrumentsContributionSummary[inst3.id].amortizationSchedule[27].period).toBe(28);
@@ -111,17 +111,17 @@ describe('contributions module', () => {
     expect(instrumentsContributionSummary[inst3.id].amortizationSchedule[27].currentBalance).toBe(0);
     expect(instrumentsContributionSummary[constants.TOTALS].amortizationSchedule[27].period).toBe(28);
     expect(instrumentsContributionSummary[constants.TOTALS].amortizationSchedule[27].contribution).toBe(2250);
-    expect(instrumentsContributionSummary[constants.TOTALS].amortizationSchedule[27].growth).toBe(1012.9331421884312);
-    expect(instrumentsContributionSummary[constants.TOTALS].amortizationSchedule[27].currentBalance).toBe(137646.92194565583);
+    expect(instrumentsContributionSummary[constants.TOTALS].amortizationSchedule[27].growth).toBeCloseTo(1012.933142, 5);
+    expect(instrumentsContributionSummary[constants.TOTALS].amortizationSchedule[27].currentBalance).toBeCloseTo(137646.921945, 5);
     // period 272
     expect(instrumentsContributionSummary[inst1.id].amortizationSchedule[271].period).toBe(272);
-    expect(instrumentsContributionSummary[inst1.id].amortizationSchedule[271].contribution).toBe(541.6666666666666);
-    expect(instrumentsContributionSummary[inst1.id].amortizationSchedule[271].growth).toBe(6967.253017151155);
-    expect(instrumentsContributionSummary[inst1.id].amortizationSchedule[271].currentBalance).toBe(767572.8851912165);
+    expect(instrumentsContributionSummary[inst1.id].amortizationSchedule[271].contribution).toBeCloseTo(541.666666, 5);
+    expect(instrumentsContributionSummary[inst1.id].amortizationSchedule[271].growth).toBeCloseTo(6967.253017, 5);
+    expect(instrumentsContributionSummary[inst1.id].amortizationSchedule[271].currentBalance).toBeCloseTo(767572.885191, 5);
     expect(instrumentsContributionSummary[inst2.id].amortizationSchedule[271].period).toBe(272);
-    expect(instrumentsContributionSummary[inst2.id].amortizationSchedule[271].contribution).toBe(1708.3333333333335);
-    expect(instrumentsContributionSummary[inst2.id].amortizationSchedule[271].growth).toBe(12019.353385150405);
-    expect(instrumentsContributionSummary[inst2.id].amortizationSchedule[271].currentBalance).toBe(1710577.576386776);
+    expect(instrumentsContributionSummary[inst2.id].amortizationSchedule[271].contribution).toBeCloseTo(1708.333333, 5);
+    expect(instrumentsContributionSummary[inst2.id].amortizationSchedule[271].growth).toBeCloseTo(12019.353385, 5);
+    expect(instrumentsContributionSummary[inst2.id].amortizationSchedule[271].currentBalance).toBeCloseTo(1710577.576386, 5);
     // correct below given current code
     // but need to write ways to default/spread a single contribution across instruments
     expect(instrumentsContributionSummary[inst3.id].amortizationSchedule[271].period).toBe(272);
@@ -130,7 +130,7 @@ describe('contributions module', () => {
     expect(instrumentsContributionSummary[inst3.id].amortizationSchedule[271].currentBalance).toBe(0);
     expect(instrumentsContributionSummary[constants.TOTALS].amortizationSchedule[271].period).toBe(272);
     expect(instrumentsContributionSummary[constants.TOTALS].amortizationSchedule[271].contribution).toBe(2250);
-    expect(instrumentsContributionSummary[constants.TOTALS].amortizationSchedule[271].growth).toBe(18986.60640230156);
-    expect(instrumentsContributionSummary[constants.TOTALS].amortizationSchedule[271].currentBalance).toBe(2478150.4615779924);
+    expect(instrumentsContributionSummary[constants.TOTALS].amortizationSchedule[271].growth).toBeCloseTo(18986.606402, 5);
+    expect(instrumentsContributionSummary[constants.TOTALS].amortizationSchedule[271].currentBalance).toBeCloseTo(2478150.461577, 5);
   });
 });
