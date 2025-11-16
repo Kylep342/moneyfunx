@@ -5,3 +5,11 @@ export class PaymentTooLowError extends Error {
     this.name = 'PaymentTooLowError';
   }
 }
+
+export class NegativeContributionError extends Error {
+  constructor(message: string) {
+    super(message);
+    Object.setPrototypeOf(this, NegativeContributionError.prototype);
+    this.name = 'NegativeContributionError';
+  }
+}

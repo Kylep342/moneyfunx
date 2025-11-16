@@ -1,22 +1,36 @@
 // src/index
-export { TOTALS } from './lib/constants';
-export { PaymentTooLowError } from './lib/errors';
+export {
+  MAX_DURATION_YEARS,
+  TOTALS,
+} from './lib/constants';
+export { NegativeContributionError, PaymentTooLowError } from './lib/errors';
 export {
   calculateMinPayment,
   numPaymentsToZero,
   principalRemaining,
   interestPaid,
-} from './lib/helperFunctions';
-export { ILoan, Loan } from './lib/loan';
+} from './lib/debt/helperFunctions';
+export {
+  amortizeContributions,
+  contributeInstruments,
+  determineExtraContribution,
+} from './lib/investment/contributions';
+export {
+  ContributionRecord,
+  ContributionSchedule,
+  InstrumentsContributionSchedule,
+} from './lib/investment/contributionTypes';
+export { IInstrument, Instrument } from './lib/investment/instrument';
+export { ILoan, Loan } from './lib/debt/loan';
 export {
   determineExtraPayment,
   amortizePayments,
   payLoans,
-} from './lib/payments';
+} from './lib/debt/payments';
 export {
-  AmortizationRecord,
+  PaymentRecord,
   LoansPaymentSchedule,
   LoanPrincipals,
   PaymentSchedule,
-} from './lib/paymentTypes';
-export { snowball, avalanche, sortLoans } from './lib/sorting';
+} from './lib/debt/paymentTypes';
+export { HasRateAndBalance, snowball, avalanche, sortWith } from './lib/shared/sorting';

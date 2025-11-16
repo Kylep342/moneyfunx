@@ -10,13 +10,14 @@
  *
  */
 
-import * as errors from './errors';
+import * as errors from '../errors';
 import * as helpers from './helperFunctions';
+import { HasRateAndBalance } from '../shared/sorting';
 
 /**
  * Represents a financial loan
  */
-export interface ILoan {
+export interface ILoan extends HasRateAndBalance {
   id: string;
   name: string;
   principal: number;
@@ -47,11 +48,12 @@ export class Loan implements ILoan {
    * @constructor
    * @param {number} principal The amount borrowed
    * @param {number} annualRate The yearly rate the loan accrues interest at
-   * @param {number} periodsPerYear The number of times the interest is accrued in a year
+   * @param {number} periodsPerYear The number of times the interest accrues in a year
    * @param {number} termInYears The number of years the loan is repaid over
    * @param {number} name The name for the loan
    * @param {number} currentBalance (Optional) The current balance of the loan, if different from the principal
    * @param {number} fees (Optional) The fees on the loan
+   * @returns {Loan}
    */
   constructor(
     principal: number,
@@ -80,6 +82,7 @@ export class Loan implements ILoan {
    * Throws a PaymentTooLowError if the payment amount is less than the loan's minimum payment
    *
    * @param {number} payment The amount to pay the loan with
+   * @throws {errors.PaymentTooLowError} Throws an error when the payment to a Loan is less than the Loan's minimum payment
    * @returns {number} The validated payment amount
    */
   validatePayment(payment: number = this.minPayment): number {
@@ -120,7 +123,7 @@ export class Loan implements ILoan {
    */
   numPaymentsToZero(
     payment: number = this.minPayment,
-    principal: number = this.currentBalance
+    principal: number = this.currentBalance,
   ): number {
     this.validatePayment(payment);
     return helpers.numPaymentsToZero(principal, payment, this.periodicRate);
