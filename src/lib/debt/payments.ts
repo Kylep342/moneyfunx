@@ -149,9 +149,10 @@ export function payLoans(
 
   while (paidLoans < loans.length) {
     const firstLoan = loans.slice(paidLoans)[0];
-    const firstLoanPayment =
+    const firstLoanPayment = (
       firstLoan.minPayment +
-      determineExtraPayment(loans.slice(paidLoans), monthlyPayment);
+      determineExtraPayment(loans.slice(paidLoans), monthlyPayment)
+    );
     const firstLoanPrincipalRemaining = loanPrincipalsRemaining[firstLoan.id];
     const periodsToPay = firstLoan.numPaymentsToZero(
       firstLoanPayment,

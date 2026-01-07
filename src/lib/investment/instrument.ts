@@ -1,4 +1,4 @@
-import * as errors from "../errors";
+import * as errors from '../errors';
 import { HasRateAndBalance } from '../shared/sorting';
 
 export interface IInstrument extends HasRateAndBalance {
@@ -24,7 +24,7 @@ export class Instrument implements IInstrument {
    *
    * @constructor
    * @param {number} currentBalance The current balance of the instrument
-   * @param {Function} annualRate  The yearly rate the instrument accrues interest at (simplest case is a closure returning a constant)
+   * @param {number} annualRate The yearly rate the instrument accrues interest at (simplest case is a closure returning a constant)
    * @param {number} periodsPerYear The number of times the interest accrues in a year
    * @param {string} name The name for the instrument
    * @param {Function} annualLimit (Optional) The maximum amount of money contributable to the instrument in a single year (simplest case is a closure returning a constant)
@@ -42,7 +42,7 @@ export class Instrument implements IInstrument {
     this.currentBalance = currentBalance;
     this.annualRate = annualRate;
     this.periodsPerYear = periodsPerYear;
-    this.periodicRate =  this.annualRate / this.periodsPerYear;
+    this.periodicRate = this.annualRate / this.periodsPerYear;
     this.annualLimit = annualLimit;
   }
 

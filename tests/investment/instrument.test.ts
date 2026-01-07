@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest'
 
 import { Instrument } from '@/lib/investment/instrument.ts'
 
-const Instruments = () => [
+const Instruments = (): Instrument[] => [
   new Instrument(10000, 0.11, 12, 'IRA', 6500),
   new Instrument(45000, 0.085, 12, '401(K)', 23500),
   new Instrument(0, 0.042666667, 12, 'ABC'),

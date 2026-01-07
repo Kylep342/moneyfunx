@@ -21,7 +21,7 @@ export function avalanche<T extends HasRateAndBalance>(obj1: T, obj2: T): number
 /**
  * Sorts ascending by principal
  * @param {T extends HasRateAndBalance} obj1
- * @param {T extends HasRateAndBalanceILoan} obj2
+ * @param {T extends HasRateAndBalance} obj2
  * @returns {number} the order in which to sort the objects in ascending currentBalance
  */
 export function snowball<T extends HasRateAndBalance>(obj1: T, obj2: T): number {

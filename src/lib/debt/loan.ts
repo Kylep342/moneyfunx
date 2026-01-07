@@ -11,7 +11,7 @@
  */
 
 import * as errors from '../errors';
-import * as helpers from './helperFunctions';
+import * as helpers from './primitives';
 import { HasRateAndBalance } from '../shared/sorting';
 
 /**

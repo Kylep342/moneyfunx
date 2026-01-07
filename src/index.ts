@@ -9,7 +9,7 @@ export {
   numPaymentsToZero,
   principalRemaining,
   interestPaid,
-} from './lib/debt/helperFunctions';
+} from './lib/debt/primitives';
 export {
   amortizeContributions,
   contributeInstruments,

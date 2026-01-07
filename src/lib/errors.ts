@@ -13,3 +13,11 @@ export class NegativeContributionError extends Error {
     this.name = 'NegativeContributionError';
   }
 }
+
+export class NegativeWithdrawalError extends Error {
+  constructor(message: string) {
+    super(message);
+    Object.setPrototypeOf(this, NegativeWithdrawalError.prototype);
+    this.name = 'NegativeWithdrawalError';
+  }
+}

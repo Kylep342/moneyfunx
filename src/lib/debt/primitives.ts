@@ -31,7 +31,7 @@ export function calculateMinPayment(
  * @param {number} payment The amount paid at each period
  * @param {number} periodicRate The rate the princpal accrues interest at per period
  * @param {number [int]} periods The number of periods paid to compute the desired principal remaining
- * @returns  {number} The remaining principal
+ * @returns {number} The remaining principal
  */
 export function principalRemaining(
   principal: number,
@@ -53,7 +53,7 @@ export function principalRemaining(
  * @param {number} payment The amount paid at each period
  * @param {number} periodicRate The rate the princpal accrues interest at per period
  * @param {number [int]} periods The number of periods paid to compute the desired principal remaining
- * @returns  {number} The total interest paid
+ * @returns {number} The total interest paid
  */
 export function interestPaid(
   principal: number,
@@ -73,7 +73,7 @@ export function interestPaid(
  * @param {number} principal The amount borrowed
  * @param {number} payment The amount paid at each period
  * @param {number} periodicRate The rate the princpal accrues interest at per period
- * @returns The number of payments needed to pay off the principal
+ * @returns {number} The number of payments needed to pay off the principal
  */
 export function numPaymentsToZero(
   principal: number,

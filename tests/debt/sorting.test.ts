@@ -3,7 +3,7 @@ import { describe, expect, it } from 'vitest';
 import { Loan } from '@/lib/debt/loan.ts';
 import * as sorting from '@/lib/shared/sorting.ts';
 
-const Loans = () => [
+const Loans = (): Loan[] => [
   new Loan(7500, 0.068, 12, 10),
   new Loan(4500, 0.0429, 12, 10),
   new Loan(7500, 0.0368, 12, 10),

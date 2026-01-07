@@ -3,9 +3,10 @@ import { describe, expect, it } from 'vitest';
 import * as constants from '@/lib/constants.ts';
 import { Loan } from '@/lib/debt/loan.ts';
 import * as payments from '@/lib/debt/payments.ts';
+import { PaymentRecord } from '@/lib/debt/paymentTypes.ts';
 import * as sorting from '@/lib/shared/sorting.ts';
 
-const Loans = () => [
+const Loans = (): Loan[] => [
   new Loan(314159.26, 0.0535, 12, 15, 'pi-house'),
   new Loan(27182.81, 0.0828, 12, 4, 'e-car', 23456.78),
   new Loan(10000, 0.0628 , 12, 3, 'tau', null, 300),
@@ -15,7 +16,7 @@ describe('payments module', () => {
   const [homeLoan, carLoan, otherLoan] = Loans();
 
   const loansAV = sorting.sortWith([otherLoan, homeLoan, carLoan], sorting.avalanche);
-  const loansMinPayment = loansAV.reduce((currentValue, loan) => currentValue += loan.minPayment, 0);
+  const loansMinPayment = loansAV.reduce((currentValue: number, loan: Loan) => currentValue += loan.minPayment, 0);
 
   it('amortizes a single loan', async () => {
     const homeLoanAmortizationSchedule = payments.amortizePayments(
@@ -73,7 +74,7 @@ describe('payments module', () => {
     for (const loanAV of loansAV) {
       expect(loansPaymentSummary[loanAV.id].lifetimeInterest.toFixed(5)).toBe(
         loansPaymentSummary[loanAV.id].amortizationSchedule
-          .reduce((acc, cv) => acc + cv.interest, 0)
+          .reduce((acc: number, cv: PaymentRecord) => acc + cv.interest, 0)
           .toFixed(5)
       );
     }
@@ -99,7 +100,7 @@ describe('payments module', () => {
     for (const loanAV of loansAV) {
       expect(loansPaymentSummary[loanAV.id].lifetimeInterest.toFixed(5)).toBe(
         loansPaymentSummary[loanAV.id].amortizationSchedule
-          .reduce((acc, cv) => acc + cv.interest, 0)
+          .reduce((acc: number, cv: PaymentRecord) => acc + cv.interest, 0)
           .toFixed(5)
       );
     }

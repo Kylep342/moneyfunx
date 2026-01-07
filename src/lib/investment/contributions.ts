@@ -27,7 +27,7 @@ export function determineExtraContribution(
     0
   );
   return Math.max(contribution - totalMaxPayment, 0);
-}
+};
 
 /**
  *
@@ -62,7 +62,7 @@ export function amortizeContribution(
     growth: interestThisPeriod,
     currentBalance,
   };
-}
+};
 
 /**
  *
@@ -122,6 +122,7 @@ export function contributeInstruments(
   accrueBeforeContribution: boolean = true,
 ): InstrumentsContributionSchedule {
 
+  // state setup
   const contributionSchedules: InstrumentsContributionSchedule = {};
   const instrumentBalances: InstrumentBalances = {};
   const instrumentYTDs: InstrumentYTDs = {};
@@ -141,12 +142,12 @@ export function contributeInstruments(
     instrumentYTDs[instrument.id] = 0;
   });
 
-  // algorithm
+  // algorithm to build contributionSchedules
   for (let period = 0; period < numContributions; period++) {
     let periodicContribution = contribution;
 
     for (const instrument of instruments) {
-      if (period % 12 == 1) {
+      if (period % instrument.periodsPerYear == 1) {
         instrumentYTDs[instrument.id] = 0
       }
       const validContribution = instrument.validateContribution(
@@ -212,4 +213,4 @@ export function contributeInstruments(
   };
 
   return contributionSchedules;
-}
+};
