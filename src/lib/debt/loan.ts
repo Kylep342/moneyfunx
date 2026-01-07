@@ -10,9 +10,9 @@
  *
  */
 
-import * as errors from '../errors';
-import * as helpers from './primitives';
-import { HasRateAndBalance } from '../shared/sorting';
+import * as errors from '@/lib/errors';
+import * as helpers from '@/lib/debt/primitives';
+import { HasRateAndBalance } from '@/lib/shared/sorting';
 
 /**
  * Represents a financial loan

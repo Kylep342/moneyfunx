@@ -1,4 +1,4 @@
-import * as errors from '../errors';
+import * as errors from '@/lib//errors';
 import {
 
-} from './portfolioTypes';
+} from '@/lib/investment/portfolioTypes';

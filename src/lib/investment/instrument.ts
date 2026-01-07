@@ -1,5 +1,5 @@
-import * as errors from '../errors';
-import { HasRateAndBalance } from '../shared/sorting';
+import * as errors from '@/lib/errors';
+import { HasRateAndBalance } from '@/lib/shared/sorting';
 
 export interface IInstrument extends HasRateAndBalance {
   id: string;

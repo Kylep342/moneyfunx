@@ -4,13 +4,13 @@
  *
  */
 
-import type { Instrument } from './instrument';
+import type { Instrument } from '@/lib/investment/instrument';
 import {
   ContributionRecord,
   InstrumentsContributionSchedule,
   InstrumentBalances,
   InstrumentYTDs,
-} from './contributionTypes';
+} from '@/lib/investment/contributionTypes';
 
 /**
  *

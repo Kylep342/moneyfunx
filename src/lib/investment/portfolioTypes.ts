@@ -1,4 +1,4 @@
-import { IInstrument } from './instrument';
+import { IInstrument } from '@/lib/investment/instrument';
 
 export interface IPortfolio {
     id: string;

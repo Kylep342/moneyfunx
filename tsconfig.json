@@ -8,6 +8,12 @@
     "target": "es2015",
     "types": [],
     "esModuleInterop": true,
+
+    "baseUrl": "./src",
+    "paths": {
+      // Maps '@/' alias from vite.config.js to relative path in baseUrl
+      "@/*": ["*"]
+    }
   },
-  "include": ["./src"],
+  "include": ["./src", "./test"],
 }
