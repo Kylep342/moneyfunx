@@ -17,6 +17,6 @@ export default defineConfig({
       provider: 'v8',
       include: ['src'],
     },
-    exclue: ['build', 'node_modules'],
+    exclude: ['build', 'node_modules'],
   },
 });
