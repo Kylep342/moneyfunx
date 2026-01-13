@@ -2,13 +2,13 @@
   "compilerOptions": {
     "allowJs": true,
     "declaration": true,
+    "declarationMap": true,
     "module": "es6",
+    "moduleResolution": "bundler",
     "outDir": "./build",
     "strict": true,
     "target": "es2015",
     "types": [],
-    "esModuleInterop": true,
-
     "baseUrl": ".",
     "paths": {
       // Maps '@/' alias from vite.config.js to relative path in baseUrl
