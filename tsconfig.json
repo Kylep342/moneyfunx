@@ -9,11 +9,12 @@
     "types": [],
     "esModuleInterop": true,
 
-    "baseUrl": "./src",
+    "baseUrl": ".",
     "paths": {
       // Maps '@/' alias from vite.config.js to relative path in baseUrl
-      "@/*": ["*"]
+      "@/*": ["src/*"]
     }
   },
   "include": ["./src", "./tests"],
+  "exclude": ["node_modules", "build"]
 }
