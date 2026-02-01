@@ -25,10 +25,11 @@ describe('instrument module', () => {
   });
 
   it('validates contributions', async () => {
+    const negativeContribution = -177;
     expect(inst2.validateContribution(2000, 22400)).toBe(1100);
     expect(inst3.validateContribution(2000, 22400)).toBe(2000);
     expect(inst2.validateContribution(2000, 24400)).toBe(0);
-    expect(() => inst1.validateContribution(-177)).toThrow('contribution of -177 must be greater than/equal to zero');
+    expect(() => inst1.validateContribution(negativeContribution, 2000)).toThrow(`contribution of ${negativeContribution} must be greater than/equal to zero`);
   });
 
   it('accrues interest', async () => {

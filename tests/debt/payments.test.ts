@@ -9,7 +9,7 @@ import * as sorting from '@/lib/shared/sorting';
 const Loans = (): Loan[] => [
   new Loan(314159.26, 0.0535, 12, 15, 'pi-house'),
   new Loan(27182.81, 0.0828, 12, 4, 'e-car', 23456.78),
-  new Loan(10000, 0.0628, 12, 3, 'tau', null, 300),
+  new Loan(10000, 0.0628, 12, 3, 'tau', undefined, 300),
 ];
 
 describe('payments module', () => {
@@ -48,9 +48,10 @@ describe('payments module', () => {
   });
 
   it('throws a paymentTooLowError when the total payment for loans is below their shared minimum', async () => {
+    const tooLowPayment = 28;
     expect(() => {
-      payments.determineExtraPayment(loansAV, 28);
-    }).toThrow(`Payment amount of 28 must be greater than ${loansMinPayment}`);
+      payments.determineExtraPayment(loansAV, tooLowPayment);
+    }).toThrow(`Payment amount of ${tooLowPayment} must be greater than ${loansMinPayment}`);
   });
 
   it('determines carryover', async () => {

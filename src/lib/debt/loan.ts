@@ -1,22 +1,12 @@
 /**
- *
- * *****************
- * *** MoneyFunx ***
- * *****************
- *
- * mek it funx up
- *
- * This library contains functions used to in personal financial analysis
- *
+ * Represents a financial loan and provides methods for amortization and
+ * interest calculations.
  */
 
-import * as errors from '@/lib/errors';
-import * as helpers from '@/lib/debt/primitives';
+import * as errorClasses from '@/lib/errors';
+import * as primitives from '@/lib/shared/primitives';
 import { HasRateAndBalance } from '@/lib/shared/sorting';
 
-/**
- * Represents a financial loan
- */
 export interface ILoan extends HasRateAndBalance {
   id: string;
   name: string;
@@ -46,14 +36,13 @@ export class Loan implements ILoan {
 
   /**
    * @constructor
-   * @param {number} principal The amount borrowed
-   * @param {number} annualRate The yearly rate the loan accrues interest at
-   * @param {number} periodsPerYear The number of times the interest accrues in a year
-   * @param {number} termInYears The number of years the loan is repaid over
-   * @param {number} name The name for the loan
-   * @param {number} currentBalance (Optional) The current balance of the loan, if different from the principal
-   * @param {number} fees (Optional) The fees on the loan
-   * @returns {Loan}
+   * @param {number} principal - The initial amount borrowed.
+   * @param {number} annualRate - The yearly interest rate (decimal).
+   * @param {number} periodsPerYear - Frequency of interest accrual per year.
+   * @param {number} termInYears - Total lifespan of the loan in years.
+   * @param {string} name - Identifying name for the loan.
+   * @param {number} [currentBalance] - The current outstanding balance.
+   * @param {number} [fees] - Any applicable loan fees.
    */
   constructor(
     principal: number,
@@ -73,33 +62,34 @@ export class Loan implements ILoan {
     this.periodicRate = this.annualRate / this.periodsPerYear;
     this.periods = this.periodsPerYear * this.termInYears;
     this.minPayment = this.calculateMinPayment();
-    this.currentBalance = currentBalance || principal;
+    this.currentBalance = currentBalance !== undefined ? currentBalance : principal;
     this.fees = fees || 0;
   }
 
   /**
-   * Verifies a payment amount is valid
-   * Throws a PaymentTooLowError if the payment amount is less than the loan's minimum payment
-   *
-   * @param {number} payment The amount to pay the loan with
-   * @throws {errors.PaymentTooLowError} Throws an error when the payment to a Loan is less than the Loan's minimum payment
-   * @returns {number} The validated payment amount
+   * Validates that a payment amount meets the minimum requirement.
+   * * @param {number} paymentAmount - The amount intended to be paid.
+   * @throws {errorClasses.PaymentTooLowError} If the payment is less than the minimum.
+   * @returns {number} The validated payment amount.
    */
-  validatePayment(payment: number = this.minPayment): number {
-    if (parseInt((100 * this.minPayment).toFixed()) > parseInt((100 * payment).toFixed())) {
-      throw new errors.PaymentTooLowError(
-        `payment of ${payment} cannot be less than ${this.minPayment}`
+  validatePayment(paymentAmount: number = this.minPayment): number {
+    const normalizedMinimum: number = parseInt((100 * this.minPayment).toFixed());
+    const normalizedPayment: number = parseInt((100 * paymentAmount).toFixed());
+
+    if (normalizedMinimum > normalizedPayment) {
+      throw new errorClasses.PaymentTooLowError(
+        `payment of ${paymentAmount} cannot be less than ${this.minPayment}`
       );
     }
-    return payment;
+    return paymentAmount;
   }
 
   /**
-   * Calculates the minimum payment to pay off the loan in the required number of periods
-   * @returns {number} The minimum amount to pay off the loan in the required number of periods
+   * Calculates the minimum payment required to amortize the loan over its term.
+   * * @returns {number} The minimum periodic payment.
    */
   calculateMinPayment(): number {
-    return helpers.calculateMinPayment(
+    return primitives.calculatePeriodicAmount(
       this.principal,
       this.periodicRate,
       this.periods
@@ -107,75 +97,91 @@ export class Loan implements ILoan {
   }
 
   /**
-   * Calculates the amount of interest accrued in a period on a provided principal
-   * @param {number} principal The amunt of money owed on a loan
-   * @returns {number} The amount of interest accrued in one period
+   * Calculates interest accrued on a specific balance for one period.
+   * * @param {number} [targetBalance=this.currentBalance] - The balance to accrue interest on.
+   * @returns {number} The interest accrued.
    */
-  accrueInterest(principal: number = this.currentBalance): number {
-    return principal * this.periodicRate;
+  accrueInterest(targetBalance: number = this.currentBalance): number {
+    return targetBalance * this.periodicRate;
   }
 
   /**
-   * Calculates the number of payments needed to pay off a principal at a provided payemnt amount
-   * @param {number} payment The amount to pay the loan with
-   * @param {number} principal The amout of money owed on a loan
-   * @returns {number} The number of payments needed to pay the loan off
+   * Determines the number of periods remaining until the loan reaches a zero balance.
+   * * @param {number} [paymentAmount=this.minPayment] - Periodic payment amount.
+   * @param {number} [targetBalance=this.currentBalance] - Balance to calculate against.
+   * @returns {number} Number of periods to zero.
    */
   numPaymentsToZero(
-    payment: number = this.minPayment,
-    principal: number = this.currentBalance,
+    paymentAmount: number = this.minPayment,
+    targetBalance: number = this.currentBalance,
   ): number {
-    this.validatePayment(payment);
-    return helpers.numPaymentsToZero(principal, payment, this.periodicRate);
+    this.validatePayment(paymentAmount);
+    return primitives.calculatePeriodsToZero(
+      targetBalance,
+      paymentAmount,
+      this.periodicRate
+    );
   }
 
   /**
-   * Calculates the amout of pricipal remaining after paying a starting principal with a payment for a number of periods
-   * @param {number} periods The number of payemnts to make
-   * @param {number} payment The amount to pay the loan with
-   * @param {number} principal The amount of money owed on a loan
-   * @returns {number} The share of the amount borrowed left to pay
+   * Calculates the balance remaining after a set number of periods.
+   * * @param {number} periodsElapsed - Number of periods that have passed.
+   * @param {number} [paymentAmount=this.minPayment] - Periodic payment amount.
+   * @param {number} [targetBalance=this.currentBalance] - Starting balance.
+   * @returns {number} The remaining principal balance.
    */
   principalRemaining(
-    periods: number,
-    payment: number = this.minPayment,
-    principal: number = this.currentBalance
+    periodsElapsed: number,
+    paymentAmount: number = this.minPayment,
+    targetBalance: number = this.currentBalance
   ): number {
-    this.validatePayment(payment);
-    return periods < this.numPaymentsToZero(payment, principal)
-      ? helpers.principalRemaining(
-        principal,
-        payment,
-        this.periodicRate,
-        periods
-      )
+    this.validatePayment(paymentAmount);
+    const periodsToZero: number = this.numPaymentsToZero(paymentAmount, targetBalance);
+
+    return periodsElapsed < periodsToZero
+      ? primitives.calculateBalanceRemaining(
+          targetBalance,
+          paymentAmount,
+          this.periodicRate,
+          periodsElapsed
+        )
       : 0;
   }
 
   /**
-   * Calculates the amount of interest paid after paying a starting principal with a payment for a number of periods
-   * @param {number} periods The number of payments to make
-   * @param {number} payment The amount to pay the loan with
-   * @param {number} principal The amount of money owed on a loan
-   * @returns The total amount of interest paid
+   * Calculates the total interest paid over a specified number of periods.
+   * * @param {number} periodsElapsed - Number of periods paid.
+   * @param {number} [paymentAmount=this.minPayment] - Periodic payment amount.
+   * @param {number} [targetBalance=this.currentBalance] - Starting balance.
+   * @returns {number} Total interest paid.
    */
   interestPaid(
-    periods: number,
-    payment: number = this.minPayment,
-    principal: number = this.currentBalance
+    periodsElapsed: number,
+    paymentAmount: number = this.minPayment,
+    targetBalance: number = this.currentBalance
   ): number {
-    this.validatePayment(payment);
-    const paymentsToZero = this.numPaymentsToZero(payment, principal);
-    return periods < paymentsToZero
-      ? helpers.interestPaid(principal, payment, this.periodicRate, periods)
-      : helpers.interestPaid(
-        principal,
-        payment,
+    this.validatePayment(paymentAmount);
+    const totalPeriodsToZero: number = this.numPaymentsToZero(paymentAmount, targetBalance);
+
+    if (periodsElapsed < totalPeriodsToZero) {
+      return primitives.calculateInterestOverPeriods(
+        targetBalance,
+        paymentAmount,
         this.periodicRate,
-        paymentsToZero - 1
-      ) +
-      this.accrueInterest(
-        this.principalRemaining(paymentsToZero - 1, payment, principal)
+        periodsElapsed
       );
+    }
+
+    const lastFullPeriod: number = totalPeriodsToZero - 1;
+    const finalInterestAccrual: number = this.accrueInterest(
+      this.principalRemaining(lastFullPeriod, paymentAmount, targetBalance)
+    );
+
+    return primitives.calculateInterestOverPeriods(
+      targetBalance,
+      paymentAmount,
+      this.periodicRate,
+      lastFullPeriod
+    ) + finalInterestAccrual;
   }
 }
