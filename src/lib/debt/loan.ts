@@ -3,7 +3,7 @@
  * interest calculations.
  */
 
-import * as errorClasses from '@/lib/errors';
+import * as errors from '@/lib/errors';
 import * as primitives from '@/lib/shared/primitives';
 import { HasRateAndBalance } from '@/lib/shared/sorting';
 
@@ -68,8 +68,9 @@ export class Loan implements ILoan {
 
   /**
    * Validates that a payment amount meets the minimum requirement.
-   * * @param {number} paymentAmount - The amount intended to be paid.
-   * @throws {errorClasses.PaymentTooLowError} If the payment is less than the minimum.
+   *
+   * @param {number} paymentAmount - The amount intended to be paid.
+   * @throws {errors.PaymentTooLowError} If the payment is less than the minimum.
    * @returns {number} The validated payment amount.
    */
   validatePayment(paymentAmount: number = this.minPayment): number {
@@ -77,7 +78,7 @@ export class Loan implements ILoan {
     const normalizedPayment: number = parseInt((100 * paymentAmount).toFixed());
 
     if (normalizedMinimum > normalizedPayment) {
-      throw new errorClasses.PaymentTooLowError(
+      throw new errors.PaymentTooLowError(
         `payment of ${paymentAmount} cannot be less than ${this.minPayment}`
       );
     }
@@ -98,7 +99,8 @@ export class Loan implements ILoan {
 
   /**
    * Calculates interest accrued on a specific balance for one period.
-   * * @param {number} [targetBalance=this.currentBalance] - The balance to accrue interest on.
+   *
+   * @param {number} [targetBalance=this.currentBalance] - The balance to accrue interest on.
    * @returns {number} The interest accrued.
    */
   accrueInterest(targetBalance: number = this.currentBalance): number {
@@ -107,7 +109,8 @@ export class Loan implements ILoan {
 
   /**
    * Determines the number of periods remaining until the loan reaches a zero balance.
-   * * @param {number} [paymentAmount=this.minPayment] - Periodic payment amount.
+   *
+   * @param {number} [paymentAmount=this.minPayment] - Periodic payment amount.
    * @param {number} [targetBalance=this.currentBalance] - Balance to calculate against.
    * @returns {number} Number of periods to zero.
    */
@@ -125,7 +128,8 @@ export class Loan implements ILoan {
 
   /**
    * Calculates the balance remaining after a set number of periods.
-   * * @param {number} periodsElapsed - Number of periods that have passed.
+   *
+   * @param {number} periodsElapsed - Number of periods that have passed.
    * @param {number} [paymentAmount=this.minPayment] - Periodic payment amount.
    * @param {number} [targetBalance=this.currentBalance] - Starting balance.
    * @returns {number} The remaining principal balance.
@@ -150,7 +154,8 @@ export class Loan implements ILoan {
 
   /**
    * Calculates the total interest paid over a specified number of periods.
-   * * @param {number} periodsElapsed - Number of periods paid.
+   *
+   * @param {number} periodsElapsed - Number of periods paid.
    * @param {number} [paymentAmount=this.minPayment] - Periodic payment amount.
    * @param {number} [targetBalance=this.currentBalance] - Starting balance.
    * @returns {number} Total interest paid.

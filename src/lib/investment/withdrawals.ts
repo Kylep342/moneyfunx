@@ -13,7 +13,8 @@ import { TOTALS } from '@/lib/constants';
 
 /**
  * Calculates a single period's withdrawal record.
- * * @param {Instrument} financialInstrument - The instrument to withdraw from.
+ *
+ * @param {Instrument} financialInstrument - The instrument to withdraw from.
  * @param {number} currentInstrumentBalance - The balance at the start of the period.
  * @param {number} periodicWithdrawalAmount - The gross amount to take out.
  * @param {number} periodsElapsedOffset - Initial offset for period numbering.
@@ -63,7 +64,8 @@ export function calculateAmortizedWithdrawal(
 
 /**
  * Orchestrates drawing down a set of instruments to meet a target net income.
- * * @param {Instrument[]} financialInstruments - Ordered list of accounts to draw from.
+ *
+ * @param {Instrument[]} financialInstruments - Ordered list of accounts to draw from.
  * @param {number} targetNetPeriodicIncome - The take-home cash required.
  * @param {number} totalPeriodsToSimulate - How many periods to run the analysis.
  * @param {number} [defaultTaxRate=0] - Simplified tax rate for the distribution.

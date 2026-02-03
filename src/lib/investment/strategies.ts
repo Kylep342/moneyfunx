@@ -15,7 +15,8 @@ import { TOTALS } from '@/lib/constants';
  * Funds are pulled from instruments in the order they appear in the array.
  * The next instrument is only touched if the previous one cannot fulfill the
  * remaining target net income.
- * * @param {Instrument[]} financialInstruments - Ordered list of accounts (e.g., Taxable -> Tax-Deferred).
+ *
+ * @param {Instrument[]} financialInstruments - Ordered list of accounts (e.g., Taxable -> Tax-Deferred).
  * @param {number} targetNetPeriodicIncome - The take-home cash required for the period.
  * @param {number} totalPeriodsToSimulate - Duration of the simulation.
  * @param {number} [defaultTaxRate=0] - The tax rate used to gross up withdrawals.

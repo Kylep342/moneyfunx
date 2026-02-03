@@ -2,7 +2,7 @@
  * Represents a financial instrument for investments and drawdowns.
  */
 
-import * as errorClasses from '@/lib/errors';
+import * as errors from '@/lib/errors';
 import { HasRateAndBalance } from '@/lib/shared/sorting';
 import * as primitives from '@/lib/shared/primitives';
 
@@ -51,15 +51,16 @@ export class Instrument implements IInstrument {
 
   /**
    * Validates a contribution against limits and negative values.
-   * * @param {number} contributionAmount - Amount to contribute.
+   *
+   * @param {number} contribution - Amount to contribute.
    * @param {number} yearToDateContribution - Current contributions for the calendar year.
-   * @throws {errorClasses.NegativeContributionError} If contribution is less than zero.
+   * @throws {errors.NegativeContributionError} If contribution is less than zero.
    * @returns {number} The allowed contribution amount.
    */
-  validateContribution(contributionAmount: number, yearToDateContribution: number): number {
-    if (contributionAmount < 0) {
-      throw new errorClasses.NegativeContributionError(
-        `contribution of ${contributionAmount} must be greater than/equal to zero`
+  validateContribution(contribution: number, yearToDateContribution: number): number {
+    if (contribution < 0) {
+      throw new errors.NegativeContributionError(
+        `contribution of ${contribution} must be greater than/equal to zero`
       );
     }
 
@@ -67,17 +68,18 @@ export class Instrument implements IInstrument {
       const remainingAnnualCapacity: number = Math.max(this.annualLimit - yearToDateContribution, 0);
       return Math.min(
         remainingAnnualCapacity,
-        contributionAmount,
+        contribution,
         this.periodicContribution()
       );
     }
 
-    return contributionAmount;
+    return contribution;
   }
 
   /**
    * Determines the number of periods remaining until the balance reaches zero during drawdown.
-   * * @param {number} periodicWithdrawalAmount - The amount withdrawn each period.
+   *
+   * @param {number} periodicWithdrawalAmount - The amount withdrawn each period.
    * @param {number} [targetBalance=this.currentBalance] - The balance to draw from.
    * @returns {number} Number of periods to depletion.
    */
@@ -94,7 +96,8 @@ export class Instrument implements IInstrument {
 
   /**
    * Calculates the maximum sustainable periodic withdrawal for a set duration.
-   * * @param {number} totalDurationInPeriods - The number of periods the balance must last.
+   *
+   * @param {number} totalDurationInPeriods - The number of periods the balance must last.
    * @param {number} [targetBalance=this.currentBalance] - The starting balance.
    * @returns {number} The calculated periodic withdrawal amount.
    */
@@ -111,7 +114,8 @@ export class Instrument implements IInstrument {
 
   /**
    * Helper to calculate the maximum periodic contribution allowed by the annual limit.
-   * * @returns {number} The amortized periodic limit.
+   *
+   * @returns {number} The amortized periodic limit.
    */
   periodicContribution(): number {
     return this.annualLimit > 0 ? this.annualLimit / this.periodsPerYear : 0;
@@ -119,7 +123,8 @@ export class Instrument implements IInstrument {
 
   /**
    * Calculates the growth/interest accrued in one period.
-   * * @param {number} [targetBalance=this.currentBalance] - The balance to calculate growth on.
+   *
+   * @param {number} [targetBalance=this.currentBalance] - The balance to calculate growth on.
    * @returns {number} The growth amount.
    */
   accrueInterest(targetBalance: number = this.currentBalance): number {

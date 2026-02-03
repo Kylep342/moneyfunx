@@ -5,7 +5,8 @@
 /**
  * Calculates the periodic amount (e.g., payment, contribution, or withdrawal)
  * required to reach zero over a set number of periods.
- * * @param {number} startingBalance - The initial amount of money.
+ *
+ * @param {number} startingBalance - The initial amount of money.
  * @param {number} periodicInterestRate - The interest rate applied per period.
  * @param {number} totalNumberOfPeriods - The duration of the calculation in periods.
  * @returns {number} The calculated periodic amount.
@@ -24,7 +25,8 @@ export function calculatePeriodicAmount(
 
 /**
  * Calculates the balance remaining after a specific number of periods have elapsed.
- * * @param {number} initialBalance - The starting amount of money.
+ *
+ * @param {number} initialBalance - The starting amount of money.
  * @param {number} periodicAmountApplied - The amount paid/withdrawn each period.
  * @param {number} periodicInterestRate - The interest rate applied per period.
  * @param {number} periodsElapsed - The number of periods to calculate for.
@@ -50,7 +52,8 @@ export function calculateBalanceRemaining(
 
 /**
  * Calculates the number of periods required to bring a balance to zero.
- * * @param {number} currentBalance - The balance to be paid down or drawn down.
+ *
+ * @param {number} currentBalance - The balance to be paid down or drawn down.
  * @param {number} periodicAmountApplied - The amount paid/withdrawn each period.
  * @param {number} periodicInterestRate - The interest rate applied per period.
  * @returns {number} The number of periods (rounded up) to reach zero.
@@ -68,7 +71,8 @@ export function calculatePeriodsToZero(
 
 /**
  * Calculates the total interest accrued or paid over a specific number of periods.
- * * @param {number} initialBalance - The starting amount of money.
+ *
+ * @param {number} initialBalance - The starting amount of money.
  * @param {number} periodicAmountApplied - The amount paid/withdrawn each period.
  * @param {number} periodicInterestRate - The interest rate applied per period.
  * @param {number} periodsElapsed - The number of periods to calculate for.
