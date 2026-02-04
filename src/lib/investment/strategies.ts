@@ -19,14 +19,14 @@ import { TOTALS } from '@/lib/constants';
  * @param {Instrument[]} financialInstruments - Ordered list of accounts (e.g., Taxable -> Tax-Deferred).
  * @param {number} targetNetPeriodicIncome - The take-home cash required for the period.
  * @param {number} totalPeriodsToSimulate - Duration of the simulation.
- * @param {number} [defaultTaxRate=0] - The tax rate used to gross up withdrawals.
+ * @param {number} [effectiveTaxRate=0] - The tax rate used to gross up withdrawals.
  * @returns {InstrumentsWithdrawalSchedule} The full simulation results.
  */
 export function performWaterfallDrawdown(
   financialInstruments: Instrument[],
   targetNetPeriodicIncome: number,
   totalPeriodsToSimulate: number,
-  defaultTaxRate: number = 0
+  effectiveTaxRate: number = 0
 ): InstrumentsWithdrawalSchedule {
   const withdrawalSchedules: any = {};
   const instrumentBalances: Record<string, number> = {};
@@ -54,14 +54,14 @@ export function performWaterfallDrawdown(
 
     for (const instrument of financialInstruments) {
       // Calculate how much gross we need to meet the remaining net
-      const grossNeededForNet: number = remainingNetRequiredThisPeriod / (1 - defaultTaxRate);
+      const grossNeededForNet: number = remainingNetRequiredThisPeriod / (1 - effectiveTaxRate);
 
       const record: WithdrawalRecord = calculateAmortizedWithdrawal(
         instrument,
         instrumentBalances[instrument.id],
         grossNeededForNet,
         period,
-        defaultTaxRate
+        effectiveTaxRate
       );
 
       withdrawalSchedules[instrument.id].amortizationSchedule.push(record);
