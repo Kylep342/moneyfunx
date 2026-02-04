@@ -38,4 +38,19 @@ describe('instrument module', () => {
     expect(inst3.accrueInterest()).toBe(0);
     expect(inst3.accrueInterest(200)).toBeCloseTo(0.711111, 5);
   });
+  describe('instrument module - drawdown methods', () => {
+    const testInstrument = new Instrument(10000, 0.06, 12, 'Test Acc');
+
+    it('calculates periods to zero (numWithdrawalsToZero)', () => {
+      // Covers instrument.ts lines 87-95
+      const periods = testInstrument.numWithdrawalsToZero(500);
+      expect(periods).toBe(22);
+    });
+
+    it('calculates maximum sustainable withdrawal (calculateMaxWithdrawal)', () => {
+      // Covers instrument.ts lines 105-113
+      const maxWithdrawal = testInstrument.calculateMaxWithdrawal(12);
+      expect(maxWithdrawal).toBeCloseTo(860.66, 2);
+    });
+  });
 });
