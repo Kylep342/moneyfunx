@@ -1,10 +1,10 @@
 import { describe, expect, it } from 'vitest';
 
-import * as constants from '@/lib/constants.ts';
-import { Instrument } from '@/lib/investment/instrument.ts';
-import * as contributions from '@/lib/investment/contributions.ts'
+import * as constants from '@/lib/constants';
+import { Instrument } from '@/lib/investment/instrument';
+import * as contributions from '@/lib/investment/contributions';
 
-const Instruments = () => [
+const Instruments = (): Instrument[] => [
   new Instrument(10000, 0.11, 12, 'IRA', 6500),
   new Instrument(45000, 0.085, 12, '401(K)', 23500),
   new Instrument(0, 0.042666667, 12, 'ABC'),

@@ -10,13 +10,13 @@ export default defineConfig({
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url)),
     },
-    extensions: ['.js', '.ts', '.json'], // Ensure file extensions are resolved
+    extensions: ['.js', '.ts', '.json'],
   },
   test: {
     coverage: {
       provider: 'v8',
       include: ['src'],
     },
-    exclue: ['build', 'node_modules'],
+    exclude: ['build', 'node_modules'],
   },
 });

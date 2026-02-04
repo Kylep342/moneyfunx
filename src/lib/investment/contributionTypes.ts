@@ -23,15 +23,15 @@ export type ContributionRecord = {
   contribution: number;
   growth: number;
   currentBalance: number;
-}
+};
 
 export type ContributionSchedule = {
   lifetimeGrowth: number;
   lifetimeContribution: number;
   amortizationSchedule: ContributionRecord[];
-}
+};
 
-export type InstrumentsContributionSchedule = Record<string, ContributionSchedule>
+export type InstrumentsContributionSchedule = Record<string, ContributionSchedule>;
 
 export type InstrumentBalances = Record<string, number>;
 

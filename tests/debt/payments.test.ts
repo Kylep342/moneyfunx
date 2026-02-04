@@ -1,21 +1,22 @@
 import { describe, expect, it } from 'vitest';
 
-import * as constants from '@/lib/constants.ts';
-import { Loan } from '@/lib/debt/loan.ts';
-import * as payments from '@/lib/debt/payments.ts';
-import * as sorting from '@/lib/shared/sorting.ts';
+import * as constants from '@/lib/constants';
+import { Loan } from '@/lib/debt/loan';
+import * as payments from '@/lib/debt/payments';
+import { PaymentRecord } from '@/lib/debt/paymentTypes';
+import * as sorting from '@/lib/shared/sorting';
 
-const Loans = () => [
+const Loans = (): Loan[] => [
   new Loan(314159.26, 0.0535, 12, 15, 'pi-house'),
   new Loan(27182.81, 0.0828, 12, 4, 'e-car', 23456.78),
-  new Loan(10000, 0.0628 , 12, 3, 'tau', null, 300),
+  new Loan(10000, 0.0628, 12, 3, 'tau', undefined, 300),
 ];
 
 describe('payments module', () => {
   const [homeLoan, carLoan, otherLoan] = Loans();
 
   const loansAV = sorting.sortWith([otherLoan, homeLoan, carLoan], sorting.avalanche);
-  const loansMinPayment = loansAV.reduce((currentValue, loan) => currentValue += loan.minPayment, 0);
+  const loansMinPayment = loansAV.reduce((currentValue: number, loan: Loan) => currentValue += loan.minPayment, 0);
 
   it('amortizes a single loan', async () => {
     const homeLoanAmortizationSchedule = payments.amortizePayments(
@@ -47,9 +48,10 @@ describe('payments module', () => {
   });
 
   it('throws a paymentTooLowError when the total payment for loans is below their shared minimum', async () => {
+    const tooLowPayment = 28;
     expect(() => {
-      payments.determineExtraPayment(loansAV, 28);
-    }).toThrow(`Payment amount of 28 must be greater than ${loansMinPayment}`);
+      payments.determineExtraPayment(loansAV, tooLowPayment);
+    }).toThrow(`Payment amount of ${tooLowPayment} must be greater than ${loansMinPayment}`);
   });
 
   it('determines carryover', async () => {
@@ -73,7 +75,7 @@ describe('payments module', () => {
     for (const loanAV of loansAV) {
       expect(loansPaymentSummary[loanAV.id].lifetimeInterest.toFixed(5)).toBe(
         loansPaymentSummary[loanAV.id].amortizationSchedule
-          .reduce((acc, cv) => acc + cv.interest, 0)
+          .reduce((acc: number, cv: PaymentRecord) => acc + cv.interest, 0)
           .toFixed(5)
       );
     }
@@ -99,7 +101,7 @@ describe('payments module', () => {
     for (const loanAV of loansAV) {
       expect(loansPaymentSummary[loanAV.id].lifetimeInterest.toFixed(5)).toBe(
         loansPaymentSummary[loanAV.id].amortizationSchedule
-          .reduce((acc, cv) => acc + cv.interest, 0)
+          .reduce((acc: number, cv: PaymentRecord) => acc + cv.interest, 0)
           .toFixed(5)
       );
     }
@@ -110,9 +112,9 @@ describe('payments module', () => {
     expect(loansPaymentSummary[otherLoan.id].lifetimeInterest).toBeCloseTo(
       902.921493, 5
     );
+
     expect(loansPaymentSummary[constants.TOTALS].lifetimeInterest).toBeCloseTo(121791.803675, 5);
     expect(loansPaymentSummary[constants.TOTALS].amortizationSchedule.length).toBe(148);
-
     expect(loansPaymentSummary[constants.TOTALS].amortizationSchedule[110].principal).toBeCloseTo(
       2562.376664, 5
     );
@@ -122,7 +124,6 @@ describe('payments module', () => {
     expect(
       loansPaymentSummary[constants.TOTALS].amortizationSchedule[110].principalRemaining
     ).toBeCloseTo(101723.977006, 5);
-
     expect(loansPaymentSummary[constants.TOTALS].amortizationSchedule[147].principal).toBeCloseTo(
       1458.892110, 5
     );

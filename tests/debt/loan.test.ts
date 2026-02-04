@@ -1,8 +1,8 @@
 import { describe, expect, it } from 'vitest';
 
-import { Loan } from '@/lib/debt/loan.ts';
+import { Loan } from '@/lib/debt/loan';
 
-const Loans = () => [
+const Loans = (): Loan[] => [
   new Loan(7500, 0.068, 12, 10, 'Student Loan'),
   new Loan(150000, 0.0622, 12, 15, 'Mortgage', 75000, 1000),
   new Loan(18300, 0, 12, 4, 'Car'),
