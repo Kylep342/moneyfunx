@@ -41,7 +41,7 @@ describe('moneyfunx module', () => {
       'WithdrawalRecord',
       'WithdrawalSchedule',
       'InstrumentsWithdrawalSchedule',
-      // 'performWaterfallDrawdown',
+      'performWaterfallDrawdown',
 
       // Shared Math Primitives
       'calculatePeriodicAmount',

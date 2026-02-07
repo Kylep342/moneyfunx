@@ -3,14 +3,14 @@
  * down investment instruments during retirement distribution.
  */
 
-import { TOTALS } from '@/lib/constants';
-import * as errors from '@/lib/errors';
-import { Instrument } from '@/lib/investment/instrument';
+import { TOTALS } from '../constants';
+import * as errors from '../errors';
+import { Instrument } from '../investment/instrument';
 import {
   WithdrawalRecord,
   InstrumentsWithdrawalSchedule,
   InstrumentBalances
-} from '@/lib/investment/withdrawalTypes';
+} from '../investment/withdrawalTypes';
 
 /**
  * Calculates a single period's withdrawal record.

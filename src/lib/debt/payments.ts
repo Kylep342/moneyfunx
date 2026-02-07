@@ -4,13 +4,13 @@
  *
  */
 
-import * as errors from '@/lib/errors';
-import type { ILoan, Loan } from '@/lib/debt/loan';
+import * as errors from '../errors';
+import type { ILoan, Loan } from '../debt/loan';
 import type {
   PaymentRecord,
   LoanPrincipals,
   LoansPaymentSchedule,
-} from '@/lib/debt/paymentTypes';
+} from '../debt/paymentTypes';
 
 /**
  *

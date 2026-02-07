@@ -2,13 +2,13 @@
  * This file contains high-level drawdown strategies for investment portfolios.
  */
 
-import { Instrument } from '@/lib/investment/instrument';
-import { calculateAmortizedWithdrawal } from '@/lib/investment/withdrawals';
+import { Instrument } from '../investment/instrument';
+import { calculateAmortizedWithdrawal } from '../investment/withdrawals';
 import {
   InstrumentsWithdrawalSchedule,
   WithdrawalRecord
-} from '@/lib/investment/withdrawalTypes';
-import { TOTALS } from '@/lib/constants';
+} from '../investment/withdrawalTypes';
+import { TOTALS } from '../constants';
 
 /**
  * Executes a 'Waterfall' drawdown strategy.
