@@ -3,15 +3,14 @@
     "allowJs": true,
     "declaration": true,
     "declarationMap": true,
-    "module": "es6",
-    "moduleResolution": "bundler",
+    "module": "nodenext",
     "outDir": "./build",
+    "rootDir": "src",
     "strict": true,
     "target": "es2015",
     "types": [],
     "baseUrl": ".",
     "paths": {
-      // Maps '@/' alias from vite.config.js to relative path in baseUrl
       "@/*": ["src/*"]
     }
   },

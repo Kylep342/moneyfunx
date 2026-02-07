@@ -1,10 +1,7 @@
 import { fileURLToPath, URL } from 'node:url';
-
 import { defineConfig } from 'vite';
 
-// https://vitejs.dev/config/
 export default defineConfig({
-  base: '/moneyfunx/',
   plugins: [],
   resolve: {
     alias: {
@@ -13,10 +10,13 @@ export default defineConfig({
     extensions: ['.js', '.ts', '.json'],
   },
   test: {
+    environment: 'node',
+    globals: true,
     coverage: {
       provider: 'v8',
-      include: ['src'],
+      include: ['src/**/*.ts'],
+      exclude: ['src/index.ts', 'src/**/*.test.ts'],
     },
-    exclude: ['build', 'node_modules'],
+    exclude: ['build/**', 'node_modules/**', 'dist/**'],
   },
 });
