@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { Loan } from '@/lib/debt/loan';
+import { Loan } from '../../src/lib/debt/loan';
 
 const Loans = (): Loan[] => [
   new Loan(7500, 0.068, 12, 10, 'Student Loan'),

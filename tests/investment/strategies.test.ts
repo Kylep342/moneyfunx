@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
-import { Instrument } from '@/lib/investment/instrument';
-import { performWaterfallDrawdown } from '@/lib/investment/strategies';
-import * as constants from '@/lib/constants';
+import { Instrument } from '../../src/lib/investment/instrument';
+import { performWaterfallDrawdown } from '../../src/lib/investment/strategies';
+import * as constants from '../../src/lib/constants';
 
 describe('strategies module', () => {
   it('executes a waterfall drawdown and handles depletion', () => {

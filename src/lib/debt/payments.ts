@@ -4,13 +4,13 @@
  *
  */
 
-import * as errors from '../errors';
-import type { ILoan, Loan } from '../debt/loan';
+import * as errors from '../errors.js';
+import type { ILoan, Loan } from '../debt/loan.js';
 import type {
   PaymentRecord,
   LoanPrincipals,
   LoansPaymentSchedule,
-} from '../debt/paymentTypes';
+} from '../debt/paymentTypes.js';
 
 /**
  *

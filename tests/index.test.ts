@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import * as moneyfunx from '@/index';
+import * as moneyfunx from '../src/index';
 
 /**
  * Ensures all intended public members are exported from the library.

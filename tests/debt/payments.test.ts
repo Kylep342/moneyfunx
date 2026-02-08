@@ -1,10 +1,10 @@
 import { describe, expect, it } from 'vitest';
 
-import * as constants from '@/lib/constants';
-import { Loan } from '@/lib/debt/loan';
-import * as payments from '@/lib/debt/payments';
-import { PaymentRecord } from '@/lib/debt/paymentTypes';
-import * as sorting from '@/lib/shared/sorting';
+import * as constants from '../../src/lib/constants';
+import { Loan } from '../../src/lib/debt/loan';
+import * as payments from '../../src/lib/debt/payments';
+import { PaymentRecord } from '../../src/lib/debt/paymentTypes';
+import * as sorting from '../../src/lib/shared/sorting';
 
 const Loans = (): Loan[] => [
   new Loan(314159.26, 0.0535, 12, 15, 'pi-house'),

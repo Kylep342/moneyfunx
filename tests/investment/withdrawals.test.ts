@@ -1,9 +1,9 @@
 import { describe, expect, it } from 'vitest';
 
-import * as constants from '@/lib/constants';
-import { Instrument } from '@/lib/investment/instrument';
-import { calculateAmortizedWithdrawal, drawdownInstruments } from '@/lib/investment/withdrawals';
-import { WithdrawalRecord } from '@/lib/investment/withdrawalTypes';
+import * as constants from '../../src/lib/constants';
+import { Instrument } from '../../src/lib/investment/instrument';
+import { calculateAmortizedWithdrawal, drawdownInstruments } from '../../src/lib/investment/withdrawals';
+import { WithdrawalRecord } from '../../src/lib/investment/withdrawalTypes';
 
 const Instruments = (): Instrument[] => [
   new Instrument(50000, 0.06, 12, 'Taxable Account'),

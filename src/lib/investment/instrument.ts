@@ -2,9 +2,9 @@
  * Represents a financial instrument for investments and drawdowns.
  */
 
-import * as errors from '../errors';
-import { HasRateAndBalance } from '../shared/sorting';
-import * as primitives from '../shared/primitives';
+import * as errors from '../errors.js';
+import { HasRateAndBalance } from '../shared/sorting.js';
+import * as primitives from '../shared/primitives.js';
 
 export interface IInstrument extends HasRateAndBalance {
   id: string;

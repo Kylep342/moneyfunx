@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 
-import { Loan } from '@/lib/debt/loan';
-import * as sorting from '@/lib/shared/sorting';
+import { Loan } from '../../src/lib/debt/loan';
+import * as sorting from '../../src/lib/shared/sorting';
 
 const Loans = (): Loan[] => [
   new Loan(7500, 0.068, 12, 10, 'uno'),

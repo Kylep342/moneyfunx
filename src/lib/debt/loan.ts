@@ -3,9 +3,9 @@
  * interest calculations.
  */
 
-import * as errors from '../errors';
-import * as primitives from '../shared/primitives';
-import { HasRateAndBalance } from '../shared/sorting';
+import * as errors from '../errors.js';
+import * as primitives from '../shared/primitives.js';
+import { HasRateAndBalance } from '../shared/sorting.js';
 
 export interface ILoan extends HasRateAndBalance {
   id: string;

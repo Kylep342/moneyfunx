@@ -1,8 +1,8 @@
 import { describe, expect, it } from 'vitest';
 
-import * as constants from '@/lib/constants';
-import { Instrument } from '@/lib/investment/instrument';
-import * as contributions from '@/lib/investment/contributions';
+import * as constants from '../../src/lib/constants';
+import { Instrument } from '../../src/lib/investment/instrument';
+import * as contributions from '../../src/lib/investment/contributions';
 
 const Instruments = (): Instrument[] => [
   new Instrument(10000, 0.11, 12, 'IRA', 6500),
