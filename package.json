@@ -1,15 +1,13 @@
 {
   "name": "moneyfunx",
-  "version": "3.0.7",
+  "version": "3.0.8",
   "type": "module",
   "exports": {
     ".": {
       "types": "./build/index.d.ts",
-      "import": "./build/index.js",
-      "require": "./build/index.cjs"
+      "import": "./build/index.js"
     }
   },
-  "main": "./build/index.cjs",
   "module": "./build/index.js",
   "types": "./build/index.d.ts",
   "files": [

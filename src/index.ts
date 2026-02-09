@@ -1,64 +1,59 @@
 /**
- * MoneyFunx
- * * mek it funx up
+ * Moneyfunx
+ * A library for financial calculations regarding debt and investments.
  */
 
+import * as constants from './lib/constants.js';
+import * as loan from './lib/debt/loan.js';
+import * as payments from './lib/debt/payments.js';
+import * as paymentTypes from './lib/debt/paymentTypes.js';
+import * as errors from './lib/errors.js';
+import * as contributions from './lib/investment/contributions.js';
+import * as contributionTypes from './lib/investment/contributionTypes.js';
+import * as instrument from './lib/investment/instrument.js';
+import * as withdrawals from './lib/investment/withdrawals.js';
+import * as withdrawalTypes from './lib/investment/withdrawalTypes.js';
+import * as strategies from './lib/investment/strategies.js';
+import * as primitives from './lib/shared/primitives.js';
+import * as sorting from './lib/shared/sorting.js';
+
+// Named exports for granular access
 export {
-  MAX_DURATION_YEARS,
-  TOTALS,
-} from './lib/constants.js';
+  constants,
+  loan,
+  payments,
+  paymentTypes,
+  errors,
+  contributions,
+  contributionTypes,
+  instrument,
+  withdrawals,
+  withdrawalTypes,
+  strategies,
+  primitives,
+  sorting,
+};
 
-export { ILoan, Loan } from './lib/debt/loan.js';
+/**
+ * Consolidated namespace for unambiguous access.
+ * @example
+ * import moneyfunx from 'moneyfunx';
+ * moneyfunx.loan.calculateMonthlyPayment(...);
+ */
+const moneyfunx = {
+  ...constants,
+  ...loan,
+  ...payments,
+  ...paymentTypes,
+  ...errors,
+  ...contributions,
+  ...contributionTypes,
+  ...instrument,
+  ...withdrawals,
+  ...withdrawalTypes,
+  ...strategies,
+  ...primitives,
+  ...sorting,
+};
 
-export {
-  determineExtraPayment,
-  amortizePayments,
-  payLoans,
-} from './lib/debt/payments.js';
-
-export {
-  PaymentRecord,
-  LoansPaymentSchedule,
-  LoanPrincipals,
-  PaymentSchedule,
-} from './lib/debt/paymentTypes.js';
-
-export { NegativeContributionError, PaymentTooLowError, NegativeWithdrawalError } from './lib/errors.js';
-
-export {
-  amortizeContributions,
-  contributeInstruments,
-  determineExtraContribution,
-} from './lib/investment/contributions.js';
-
-export {
-  ContributionRecord,
-  ContributionSchedule,
-  InstrumentsContributionSchedule,
-} from './lib/investment/contributionTypes.js';
-
-export { IInstrument, Instrument } from './lib/investment/instrument.js';
-
-export {
-  calculateAmortizedWithdrawal,
-  drawdownInstruments,
-} from './lib/investment/withdrawals.js';
-
-export {
-  WithdrawalRecord,
-  WithdrawalSchedule,
-  InstrumentsWithdrawalSchedule,
-} from './lib/investment/withdrawalTypes.js';
-
-export {
-  performWaterfallDrawdown,
-} from './lib/investment/strategies.js';
-
-export {
-  calculatePeriodicAmount,
-  calculateBalanceRemaining,
-  calculatePeriodsToZero,
-  calculateInterestOverPeriods,
-} from './lib/shared/primitives.js';
-
-export { HasRateAndBalance, snowball, avalanche, sortWith } from './lib/shared/sorting.js';
+export default moneyfunx;
