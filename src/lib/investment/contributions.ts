@@ -5,6 +5,7 @@
  */
 
 import { TOTALS } from '../constants.js';
+import * as errors from '../errors.js';
 import type { Instrument } from '../investment/instrument.js';
 import type {
   ContributionRecord,
@@ -102,8 +103,7 @@ export function amortizeContributions(
       accrueBeforeContribution
     );
     currentBalance = record.currentBalance
-    // Reset YTD every 12 periods, assuming monthly periodicity matching periodsPerYear
-    // NOTE: This logic assumes period 0 is the start of a year. 
+    // Reset YTD every 12 periods
     period % 12 === 0 ? ytd = 0 : ytd += periodicContribution;
     contributionSchedule.push(record);
   }
@@ -193,24 +193,34 @@ export function contributeInstruments(
     totalLifetimeContribution += instrumentLifetimeContribution;
     totalLifetimeGrowth += instrumentLifetimeGrowth;
 
-    // Merge totals safely
-    totalAmortizationSchedule = totalAmortizationSchedule.length
-      ? (totalAmortizationSchedule.map((element) => {
-        const matchedInnerElement = instrumentSchedule.find(
-          (innerElement) => innerElement.period === element.period
-        );
-        return (matchedInnerElement != null)
-          ? {
-            period: element.period,
-            contribution: element.contribution + matchedInnerElement.contribution,
-            growth: element.growth + matchedInnerElement.growth,
-            currentBalance:
-              element.currentBalance +
-              matchedInnerElement.currentBalance
-          }
-          : element
-      }))
-      : instrumentSchedule;
+    // Merge totals safely handling varying lengths
+    if (totalAmortizationSchedule.length === 0) {
+      // Initialize with the first instrument's schedule
+      totalAmortizationSchedule = [...instrumentSchedule];
+    } else {
+      // We need to merge. If schedules are different lengths, we map over the longer one.
+      const maxLen = Math.max(totalAmortizationSchedule.length, instrumentSchedule.length);
+      const newTotal: ContributionRecord[] = [];
+      
+      for(let i=0; i<maxLen; i++) {
+        const totalRecord = totalAmortizationSchedule[i];
+        const instrumentRecord = instrumentSchedule[i];
+        
+        if (totalRecord && instrumentRecord) {
+           newTotal.push({
+            period: totalRecord.period,
+            contribution: totalRecord.contribution + instrumentRecord.contribution,
+            growth: totalRecord.growth + instrumentRecord.growth,
+            currentBalance: totalRecord.currentBalance + instrumentRecord.currentBalance
+           });
+        } else if (totalRecord) {
+           newTotal.push(totalRecord);
+        } else if (instrumentRecord) {
+           newTotal.push(instrumentRecord);
+        }
+      }
+      totalAmortizationSchedule = newTotal;
+    }
   }
 
   contributionSchedules[TOTALS] = {

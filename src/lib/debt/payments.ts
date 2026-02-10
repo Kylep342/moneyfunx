@@ -129,7 +129,7 @@ export function payLoans(
   let monthlyPayment = payment;
   const paymentSchedule: LoansPaymentSchedule = {};
   const loanPrincipalsRemaining: LoanPrincipals = {};
-  
+
   loans.forEach((loan) => {
     paymentSchedule[loan.id] = {
       lifetimeInterest: 0,
@@ -146,25 +146,24 @@ export function payLoans(
   let totalAmortizationSchedule: PaymentRecord[] = [];
 
   while (paidLoans < loans.length) {
-    const firstLoan = loans.slice(paidLoans)[0];
+    const activeLoans = loans.slice(paidLoans);
+    const firstLoan = activeLoans[0];
+    
+    // 1. Determine the "Driver" parameters (the loan being paid off in this chunk)
     const firstLoanPayment = (
       firstLoan.minPayment +
-      determineExtraPayment(loans.slice(paidLoans), monthlyPayment)
+      determineExtraPayment(activeLoans, monthlyPayment)
     );
     const firstLoanPrincipalRemaining = loanPrincipalsRemaining[firstLoan.id];
+    
+    // How long does this chunk last?
     const periodsToPay = firstLoan.numPaymentsToZero(
       firstLoanPayment,
       firstLoanPrincipalRemaining,
     );
-    const firstLoanAmortizedPayments = amortizePayments(
-      firstLoan,
-      firstLoanPrincipalRemaining,
-      firstLoanPayment,
-      periodsToPay,
-      periodsElapsed
-    );
-    
-    // Calculate final payment logic
+
+    // 2. Calculate the Final Payment specifics for the driver loan
+    //    (Needed for carryover calculation)
     const finalPrincipal = firstLoan.principalRemaining(
       periodsToPay - 1,
       firstLoanPayment,
@@ -172,77 +171,81 @@ export function payLoans(
     );
     const firstLoanFinalPayment = finalPrincipal + firstLoan.accrueInterest(finalPrincipal);
 
-    paymentSchedule[firstLoan.id].amortizationSchedule = [
-      ...paymentSchedule[firstLoan.id].amortizationSchedule,
-      ...firstLoanAmortizedPayments
-    ];
-    
-    // Merge into totals
-    totalAmortizationSchedule = [
-      ...totalAmortizationSchedule,
-      ...firstLoanAmortizedPayments
-    ];
-    
-    paidLoans += 1;
-    if (reduceMinimum) {
-      monthlyPayment -= firstLoan.minPayment;
-    };
-
-    // handle calculating information for the rest of the loans
-    loans.slice(paidLoans).forEach((loan, index) => {
+    // 3. Process ALL active loans for this chunk of time
+    activeLoans.forEach((loan, index) => {
+      const isDriverLoan = index === 0;
       const loanPrincipalRemaining = loanPrincipalsRemaining[loan.id];
+      
+      // Determine payment amount: Driver gets extra, others get minimum
+      const paymentAmount = isDriverLoan ? firstLoanPayment : loan.minPayment;
+      
+      // Determine duration: Others are capped by the Driver's time-to-zero
+      const duration = isDriverLoan 
+        ? periodsToPay 
+        : Math.min(periodsToPay, loan.numPaymentsToZero(loan.minPayment, loanPrincipalRemaining));
+
+      // Determine carryover: Only applies to the SECOND loan (index 1), derived from Driver
+      const carryoverAmount = (index === 1) 
+        ? determineCarryover(firstLoan, firstLoanPayment, firstLoanFinalPayment, reduceMinimum) 
+        : 0;
+
       const loanAmortizedPayments = amortizePayments(
         loan,
         loanPrincipalRemaining,
-        loan.minPayment,
-        Math.min(
-          periodsToPay,
-          loan.numPaymentsToZero(
-            loan.minPayment,
-            loanPrincipalRemaining,
-          ),
-        ),
+        paymentAmount,
+        duration,
         periodsElapsed,
-        (index === 0 ? determineCarryover(
-          firstLoan,
-          firstLoanPayment,
-          firstLoanFinalPayment,
-          reduceMinimum,
-        ) : 0)
+        carryoverAmount
       );
 
+      // A. Append to individual loan schedule
       paymentSchedule[loan.id].amortizationSchedule = [
         ...paymentSchedule[loan.id].amortizationSchedule,
         ...loanAmortizedPayments,
       ];
 
-      // Safe map for totals
-      totalAmortizationSchedule = totalAmortizationSchedule.map((element) => {
-        const matchedInnerElement = loanAmortizedPayments.find(
-          (innerElement) => innerElement.period === element.period
-        );
-        return (matchedInnerElement != null)
-          ? {
-            period: element.period,
-            principal: element.principal + matchedInnerElement.principal,
-            interest: element.interest + matchedInnerElement.interest,
-            principalRemaining:
-              element.principalRemaining +
-              matchedInnerElement.principalRemaining
-          }
-          : element;
-      });
+      // B. Merge into Total Schedule
+      if (isDriverLoan) {
+        // The Driver extends the timeline. We append its records to initialize the new period slots in Totals.
+        totalAmortizationSchedule = [
+          ...totalAmortizationSchedule,
+          ...loanAmortizedPayments
+        ];
+      } else {
+        // Followers merge into the existing slots created by the Driver.
+        // We only map over the NEW segment of the total schedule to avoid re-scanning history (optional optimization),
+        // but for safety/simplicity we map the whole structure and match by period.
+        totalAmortizationSchedule = totalAmortizationSchedule.map((element) => {
+          const matchedInnerElement = loanAmortizedPayments.find(
+            (innerElement) => innerElement.period === element.period
+          );
+          return (matchedInnerElement != null)
+            ? {
+              period: element.period,
+              principal: element.principal + matchedInnerElement.principal,
+              interest: element.interest + matchedInnerElement.interest,
+              principalRemaining: element.principalRemaining + matchedInnerElement.principalRemaining
+            }
+            : element;
+        });
+      }
 
-      // Update remaining principals for next iteration
-      const currentLoanSchedule = paymentSchedule[loan.id].amortizationSchedule;
-      if (currentLoanSchedule.length > 0) {
-          loanPrincipalsRemaining[loan.id] = currentLoanSchedule[currentLoanSchedule.length - 1].principalRemaining;
+      // Update tracking state for next iteration
+      if (paymentSchedule[loan.id].amortizationSchedule.length > 0) {
+        const fullSchedule = paymentSchedule[loan.id].amortizationSchedule;
+        loanPrincipalsRemaining[loan.id] = fullSchedule[fullSchedule.length - 1].principalRemaining;
       }
     });
 
+    paidLoans += 1;
     periodsElapsed += periodsToPay;
+    
+    if (reduceMinimum) {
+      monthlyPayment -= firstLoan.minPayment;
+    };
   }
 
+  // Final Totals Calculation
   for (const loan of loans) {
     const loanLifetimeInterest = (
       paymentSchedule[loan.id].amortizationSchedule.reduce(
