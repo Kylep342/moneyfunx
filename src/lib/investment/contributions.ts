@@ -4,8 +4,9 @@
  *
  */
 
+import { TOTALS } from '../constants.js';
 import type { Instrument } from '../investment/instrument.js';
-import {
+import type {
   ContributionRecord,
   InstrumentsContributionSchedule,
   InstrumentBalances,
@@ -36,8 +37,8 @@ export function determineExtraContribution(
  * @param {number} contribution The amount to contribute to the instrument's balance
  * @param {number[int]} startPeriod The initial offset for period values
  * @param {boolean} accrueBeforeContribution A flag for ordering operations of accrual (A) and contribution (C)
- *         true: A -> C
- *         false: C -> A
+ * true: A -> C
+ * false: C -> A
  * @returns {ContributionRecord} The amortized contribution
  */
 export function amortizeContribution(
@@ -47,20 +48,22 @@ export function amortizeContribution(
   startPeriod: number = 0,
   accrueBeforeContribution: boolean = true,
 ): ContributionRecord {
-  let interestThisPeriod
+  let interestThisPeriod: number;
+  let newBalance = currentBalance;
+
   if (accrueBeforeContribution) {
-    interestThisPeriod = instrument.accrueInterest(currentBalance);
-    currentBalance += contribution + interestThisPeriod;
+    interestThisPeriod = instrument.accrueInterest(newBalance);
+    newBalance += contribution + interestThisPeriod;
   } else {
-    currentBalance += contribution;
-    interestThisPeriod = instrument.accrueInterest(currentBalance);
-    currentBalance += interestThisPeriod;
+    newBalance += contribution;
+    interestThisPeriod = instrument.accrueInterest(newBalance);
+    newBalance += interestThisPeriod;
   }
   return {
     period: startPeriod + 1,
     contribution: contribution,
     growth: interestThisPeriod,
-    currentBalance,
+    currentBalance: newBalance,
   };
 };
 
@@ -74,8 +77,8 @@ export function amortizeContribution(
  * @param {number} numContributions The number of periods to make contributions to the instrument
  * @param {number[int]} startPeriod The inital offset for period values
  * @param {boolean} accrueBeforeContribution A flag for ordering operations of accrual (A) and contribution (C)
- *         true: A -> C
- *         false: C -> A
+ * true: A -> C
+ * false: C -> A
  * @returns {ContributionRecord[]} The amortized contributions
  */
 export function amortizeContributions(
@@ -99,6 +102,8 @@ export function amortizeContributions(
       accrueBeforeContribution
     );
     currentBalance = record.currentBalance
+    // Reset YTD every 12 periods, assuming monthly periodicity matching periodsPerYear
+    // NOTE: This logic assumes period 0 is the start of a year. 
     period % 12 === 0 ? ytd = 0 : ytd += periodicContribution;
     contributionSchedule.push(record);
   }
@@ -111,8 +116,8 @@ export function amortizeContributions(
  * @param {number} contribution The total amount to contirbute each period
  * @param {number[int]} numContributions The number of periods to contribute
  * @param {boolean} accrueBeforeContribution A flag for ordering operations of accrual (A) and contribution (C)
- *         true: A -> C
- *         false: C -> A
+ * true: A -> C
+ * false: C -> A
  * @returns {InstrumentsContributionSchedule} The amortized contributions for all instruments
  */
 export function contributeInstruments(
@@ -187,6 +192,8 @@ export function contributeInstruments(
     contributionSchedules[instrument.id].lifetimeGrowth = instrumentLifetimeGrowth;
     totalLifetimeContribution += instrumentLifetimeContribution;
     totalLifetimeGrowth += instrumentLifetimeGrowth;
+
+    // Merge totals safely
     totalAmortizationSchedule = totalAmortizationSchedule.length
       ? (totalAmortizationSchedule.map((element) => {
         const matchedInnerElement = instrumentSchedule.find(
@@ -203,10 +210,10 @@ export function contributeInstruments(
           }
           : element
       }))
-    : instrumentSchedule;
+      : instrumentSchedule;
   }
 
-  contributionSchedules.totals = {
+  contributionSchedules[TOTALS] = {
     lifetimeContribution: totalLifetimeContribution,
     lifetimeGrowth: totalLifetimeGrowth,
     amortizationSchedule: totalAmortizationSchedule,
