@@ -50,8 +50,8 @@ export class Loan implements ILoan {
     periodsPerYear: number,
     termInYears: number,
     name: string,
-    currentBalance?: number,
-    fees?: number,
+    currentBalance: number = principal,
+    fees: number = 0,
   ) {
     this.id = String(Math.floor(Math.random() * Date.now()));
     this.name = name;
@@ -62,8 +62,8 @@ export class Loan implements ILoan {
     this.periodicRate = this.annualRate / this.periodsPerYear;
     this.periods = this.periodsPerYear * this.termInYears;
     this.minPayment = this.calculateMinPayment();
-    this.currentBalance = currentBalance !== undefined ? currentBalance : principal;
-    this.fees = fees || 0;
+    this.currentBalance = currentBalance;
+    this.fees = fees;
   }
 
   /**
