@@ -5,7 +5,6 @@
  */
 
 import { TOTALS } from '../constants.js';
-import * as errors from '../errors.js';
 import type { Instrument } from '../investment/instrument.js';
 import type {
   ContributionRecord,
