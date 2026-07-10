@@ -7,6 +7,7 @@
 import * as errors from '../errors.js';
 import { TOTALS } from '../constants.js';
 import type { ILoan, Loan } from '../debt/loan.js';
+import * as primitives from '../shared/primitives.js';
 import type {
   PaymentRecord,
   LoanPrincipals,
@@ -26,17 +27,15 @@ export function determineExtraPayment(
   loans: ILoan[],
   payment: number
 ): number {
-  const totalMinPayment = loans.reduce(
-    (accumulator, loan) => accumulator + loan.minPayment,
-    0
+  const totalMinPayment = primitives.roundTo(
+    loans.reduce((accumulator, loan) => accumulator + loan.minPayment, 0)
   );
-  // hack to get around floating precision adjustments
-  if (parseInt((100 * totalMinPayment).toFixed()) > parseInt((100 * payment).toFixed())) {
+  if (totalMinPayment > primitives.roundTo(payment)) {
     throw new errors.PaymentTooLowError(
       `Payment amount of ${payment} must be greater than ${totalMinPayment}`
     );
   }
-  return payment - totalMinPayment;
+  return primitives.roundTo(payment - totalMinPayment);
 }
 
 /**
@@ -57,9 +56,9 @@ export function determineCarryover(
 ): number {
   switch (true) {
     case reduceMinimum:
-      return Math.max(loanPayment - loanFinalPayment - loan.minPayment, 0);
+      return primitives.roundTo(Math.max(loanPayment - loanFinalPayment - loan.minPayment, 0));
     default:
-      return Math.max(loanPayment - loanFinalPayment, 0);
+      return primitives.roundTo(Math.max(loanPayment - loanFinalPayment, 0));
   }
 }
 
@@ -86,21 +85,30 @@ export function amortizePayments(
   // Strict null check handling
   let actualPayment: number = (payment !== null) ? payment : loan.minPayment;
   actualPayment = loan.validatePayment(actualPayment);
+  actualPayment = primitives.roundTo(actualPayment);
 
   let actualNumPayments: number = (numPayments !== null) ? numPayments : loan.numPaymentsToZero(actualPayment);
 
   const amortizationSchedule: PaymentRecord[] = [];
-  let principalRemaining = principal;
+  let principalRemaining = primitives.roundTo(principal);
 
   for (let period = 0; period < actualNumPayments; period++) {
-    const interestThisPeriod = loan.accrueInterest(principalRemaining);
-    const principalThisPeriod = Math.min(
-      (period === actualNumPayments - 1
-        ? actualPayment + carryover
-        : actualPayment) - interestThisPeriod,
-      principalRemaining
+    const interestThisPeriod = primitives.roundTo(loan.accrueInterest(principalRemaining));
+    const paymentThisPeriod = period === actualNumPayments - 1
+      ? actualPayment + carryover
+      : actualPayment;
+
+    const isFinalPayment = principalRemaining <= (paymentThisPeriod - interestThisPeriod + 1.00);
+
+    const principalThisPeriod = primitives.roundTo(
+      isFinalPayment
+        ? principalRemaining
+        : Math.min(
+            paymentThisPeriod - interestThisPeriod,
+            principalRemaining
+          )
     );
-    principalRemaining -= principalThisPeriod;
+    principalRemaining = primitives.roundTo(principalRemaining - principalThisPeriod);
     amortizationSchedule.push({
       period: startPeriod + period + 1,
       principal: principalThisPeriod,
@@ -222,9 +230,9 @@ export function payLoans(
           return (matchedInnerElement != null)
             ? {
               period: element.period,
-              principal: element.principal + matchedInnerElement.principal,
-              interest: element.interest + matchedInnerElement.interest,
-              principalRemaining: element.principalRemaining + matchedInnerElement.principalRemaining
+              principal: primitives.roundTo(element.principal + matchedInnerElement.principal),
+              interest: primitives.roundTo(element.interest + matchedInnerElement.interest),
+              principalRemaining: primitives.roundTo(element.principalRemaining + matchedInnerElement.principalRemaining)
             }
             : element;
         });
@@ -247,16 +255,16 @@ export function payLoans(
 
   // Final Totals Calculation
   for (const loan of loans) {
-    const loanLifetimeInterest = (
+    const loanLifetimeInterest = primitives.roundTo(
       paymentSchedule[loan.id].amortizationSchedule.reduce(
         (lifetimeInterest: number, record: PaymentRecord) => lifetimeInterest + record.interest,
         0
       )
     );
     paymentSchedule[loan.id].lifetimeInterest = loanLifetimeInterest;
-    paymentSchedule[loan.id].lifetimePrincipal = loan.currentBalance;
-    totalLifetimeInterest += loanLifetimeInterest;
-    totalLifetimePrincipal += loan.currentBalance;
+    paymentSchedule[loan.id].lifetimePrincipal = primitives.roundTo(loan.currentBalance);
+    totalLifetimeInterest = primitives.roundTo(totalLifetimeInterest + loanLifetimeInterest);
+    totalLifetimePrincipal = primitives.roundTo(totalLifetimePrincipal + loan.currentBalance);
   }
 
   paymentSchedule[TOTALS] = {

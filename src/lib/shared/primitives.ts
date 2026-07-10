@@ -63,10 +63,12 @@ export function calculatePeriodsToZero(
   periodicAmountApplied: number,
   periodicInterestRate: number
 ): number {
-  return Math.ceil(
-    Math.log(periodicAmountApplied / (periodicAmountApplied - currentBalance * periodicInterestRate)) /
-    Math.log(periodicInterestRate + 1)
-  );
+  if (periodicInterestRate === 0) {
+    return Math.ceil(currentBalance / periodicAmountApplied);
+  }
+  const rawPeriods = Math.log(periodicAmountApplied / (periodicAmountApplied - currentBalance * periodicInterestRate)) /
+                     Math.log(periodicInterestRate + 1);
+  return Math.ceil(roundTo(rawPeriods, 5));
 }
 
 /**
@@ -95,4 +97,16 @@ export function calculateInterestOverPeriods(
   const totalAmountPaid: number = periodicAmountApplied * periodsElapsed;
 
   return totalAmountPaid - totalPrincipalReduction;
+}
+
+/**
+ * Rounds a number to a specified number of decimal places.
+ *
+ * @param {number} value - The number to round.
+ * @param {number} [decimalPlaces=2] - The number of decimal places to round to.
+ * @returns {number} The rounded number.
+ */
+export function roundTo(value: number, decimalPlaces: number = 2): number {
+  const factor = Math.pow(10, decimalPlaces);
+  return Math.round((value + Number.EPSILON) * factor) / factor;
 }
