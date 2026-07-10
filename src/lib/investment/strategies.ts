@@ -28,7 +28,7 @@ export function performWaterfallDrawdown(
   totalPeriodsToSimulate: number,
   effectiveTaxRate: number = 0
 ): InstrumentsWithdrawalSchedule {
-  const withdrawalSchedules: any = {};
+  const withdrawalSchedules = {} as InstrumentsWithdrawalSchedule;
   const instrumentBalances: Record<string, number> = {};
 
   let totalLifetimeWithdrawal: number = 0;

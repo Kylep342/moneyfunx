@@ -87,7 +87,7 @@ export function amortizePayments(
   actualPayment = loan.validatePayment(actualPayment);
   actualPayment = primitives.roundTo(actualPayment);
 
-  let actualNumPayments: number = (numPayments !== null) ? numPayments : loan.numPaymentsToZero(actualPayment);
+  const actualNumPayments: number = (numPayments !== null) ? numPayments : loan.numPaymentsToZero(actualPayment);
 
   const amortizationSchedule: PaymentRecord[] = [];
   let principalRemaining = primitives.roundTo(principal);

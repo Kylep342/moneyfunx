@@ -86,7 +86,7 @@ export function drawdownInstruments(
   effectiveTaxRate: number = 0,
   accrueBeforeWithdrawal: boolean = true
 ): InstrumentsWithdrawalSchedule {
-  const withdrawalSchedules: any = {};
+  const withdrawalSchedules = {} as InstrumentsWithdrawalSchedule;
   const currentInstrumentBalances: InstrumentBalances = {};
 
   let totalLifetimeWithdrawal: number = 0;

@@ -61,7 +61,7 @@ export function amortizeContribution(
   }
   return {
     period: startPeriod + 1,
-    contribution: contribution,
+    contribution,
     growth: interestThisPeriod,
     currentBalance: newBalance,
   };
@@ -101,9 +101,13 @@ export function amortizeContributions(
       period + startPeriod,
       accrueBeforeContribution
     );
-    currentBalance = record.currentBalance
+    currentBalance = record.currentBalance;
     // Reset YTD every 12 periods
-    period % 12 === 0 ? ytd = 0 : ytd += periodicContribution;
+    if (period % 12 === 0) {
+      ytd = 0;
+    } else {
+      ytd += periodicContribution;
+    }
     contributionSchedule.push(record);
   }
   return contributionSchedule;

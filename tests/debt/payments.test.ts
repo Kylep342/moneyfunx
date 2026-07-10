@@ -16,7 +16,6 @@ describe('payments module', () => {
   const [homeLoan, carLoan, otherLoan] = Loans();
 
   const loansAV = sorting.sortWith([otherLoan, homeLoan, carLoan], sorting.avalanche);
-  const loansMinPayment = loansAV.reduce((currentValue: number, loan: Loan) => currentValue += loan.minPayment, 0);
 
   it('amortizes a single loan', async () => {
     const homeLoanAmortizationSchedule = payments.amortizePayments(
