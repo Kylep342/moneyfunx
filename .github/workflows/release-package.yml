@@ -16,6 +16,8 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
+      - name: Install latest npm
+        run: npm install -g npm@latest
       - name: Install dependencies and build
         run: |
           npm ci
