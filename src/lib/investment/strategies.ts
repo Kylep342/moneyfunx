@@ -1,10 +1,11 @@
 /**
- * This file contains high-level drawdown strategies for investment portfolios.
+ * This file contains high-level drawdown strategies for investment portfolios using pure BigInt math.
  */
 
 import { Instrument } from '../investment/instrument.js';
 import { calculateAmortizedWithdrawal } from '../investment/withdrawals.js';
-import {
+import * as primitives from '../shared/primitives.js';
+import type {
   InstrumentsWithdrawalSchedule,
   WithdrawalRecord
 } from '../investment/withdrawalTypes.js';
@@ -17,44 +18,48 @@ import { TOTALS } from '../constants.js';
  * remaining target net income.
  *
  * @param {Instrument[]} financialInstruments - Ordered list of accounts (e.g., Taxable -> Tax-Deferred).
- * @param {number} targetNetPeriodicIncome - The take-home cash required for the period.
+ * @param {primitives.PaymentScheduleInput} targetNetPeriodicIncome - The take-home cash required for the period or generator (in cents).
  * @param {number} totalPeriodsToSimulate - Duration of the simulation.
- * @param {number} [effectiveTaxRate=0] - The tax rate used to gross up withdrawals.
+ * @param {number} [effectiveTaxRate=0] - The tax rate used to gross up withdrawals (as float).
  * @returns {InstrumentsWithdrawalSchedule} The full simulation results.
  */
 export function performWaterfallDrawdown(
   financialInstruments: Instrument[],
-  targetNetPeriodicIncome: number,
+  targetNetPeriodicIncome: primitives.PaymentScheduleInput,
   totalPeriodsToSimulate: number,
   effectiveTaxRate: number = 0
 ): InstrumentsWithdrawalSchedule {
   const withdrawalSchedules = {} as InstrumentsWithdrawalSchedule;
-  const instrumentBalances: Record<string, number> = {};
+  const instrumentBalances: Record<string, bigint> = {};
+  const incomeStream = primitives.getPaymentStream(targetNetPeriodicIncome, 0n)();
 
-  let totalLifetimeWithdrawal: number = 0;
-  let totalLifetimeGrowth: number = 0;
+  let totalLifetimeWithdrawal = 0n;
+  let totalLifetimeGrowth = 0n;
   const totalAmortizationSchedule: WithdrawalRecord[] = [];
 
   // Setup initial state
   financialInstruments.forEach((instrument) => {
     withdrawalSchedules[instrument.id] = {
-      lifetimeGrowth: 0,
-      lifetimeWithdrawal: 0,
+      lifetimeGrowth: 0n,
+      lifetimeWithdrawal: 0n,
       amortizationSchedule: [],
     };
     instrumentBalances[instrument.id] = instrument.currentBalance;
   });
 
-  for (let period: number = 0; period < totalPeriodsToSimulate; period++) {
-    let remainingNetRequiredThisPeriod: number = targetNetPeriodicIncome;
-    let periodTotalWithdrawal: number = 0;
-    let periodTotalNet: number = 0;
-    let periodTotalGrowth: number = 0;
-    let periodTotalBalance: number = 0;
+  for (let period = 0; period < totalPeriodsToSimulate; period++) {
+    const currentPeriod = period + 1;
+    const nextIncome = incomeStream.next({ period: currentPeriod, balance: 0n });
+    let remainingNetRequiredThisPeriod = nextIncome.done ? 0n : nextIncome.value;
+    let periodTotalWithdrawal = 0n;
+    let periodTotalNet = 0n;
+    let periodTotalGrowth = 0n;
+    let periodTotalBalance = 0n;
 
     for (const instrument of financialInstruments) {
-      // Calculate how much gross we need to meet the remaining net
-      const grossNeededForNet: number = remainingNetRequiredThisPeriod / (1 - effectiveTaxRate);
+      const grossNeededForNet = BigInt(
+        Math.round(Number(remainingNetRequiredThisPeriod) / (1 - effectiveTaxRate))
+      );
 
       const record: WithdrawalRecord = calculateAmortizedWithdrawal(
         instrument,
@@ -70,8 +75,8 @@ export function performWaterfallDrawdown(
 
       instrumentBalances[instrument.id] = record.currentBalance;
       remainingNetRequiredThisPeriod -= record.netAmount;
+      if (remainingNetRequiredThisPeriod < 0n) remainingNetRequiredThisPeriod = 0n;
 
-      // Period aggregates
       periodTotalWithdrawal += record.withdrawal;
       periodTotalNet += record.netAmount;
       periodTotalGrowth += record.growth;
@@ -79,7 +84,7 @@ export function performWaterfallDrawdown(
     }
 
     totalAmortizationSchedule.push({
-      period: period + 1,
+      period: currentPeriod,
       withdrawal: periodTotalWithdrawal,
       netAmount: periodTotalNet,
       growth: periodTotalGrowth,

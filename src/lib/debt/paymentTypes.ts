@@ -1,16 +1,16 @@
 export type PaymentRecord = {
   period: number;
-  principal: number;
-  interest: number;
-  principalRemaining: number;
+  principal: bigint;
+  interest: bigint;
+  principalRemaining: bigint;
 }
 
 export type PaymentSchedule = {
-  lifetimeInterest: number;
-  lifetimePrincipal: number;
+  lifetimeInterest: bigint;
+  lifetimePrincipal: bigint;
   amortizationSchedule: PaymentRecord[];
 }
 
 export type LoansPaymentSchedule = Record<string, PaymentSchedule>;
 
-export type LoanPrincipals = Record<string, number>;
+export type LoanPrincipals = Record<string, bigint>;

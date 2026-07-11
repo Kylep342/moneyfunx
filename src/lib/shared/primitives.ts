@@ -1,112 +1,45 @@
 /**
- * Shared primitives for financial calculations including Loans, Investments, and Drawdowns.
+ * This file contains core types and mathematical primitives for pure BigInt calculations.
  */
 
+export type RateSchedule = (period: number, balanceCents: bigint) => bigint;
+
+export type PaymentScheduleInput = bigint | (() => Generator<bigint, void, { period: number; balance: bigint }>);
+
 /**
- * Calculates the periodic amount (e.g., payment, contribution, or withdrawal)
- * required to reach zero over a set number of periods.
- *
- * @param {number} startingBalance - The initial amount of money.
- * @param {number} periodicInterestRate - The interest rate applied per period.
- * @param {number} totalNumberOfPeriods - The duration of the calculation in periods.
- * @returns {number} The calculated periodic amount.
+ * Performs integer division with half-up rounding (traditional financial rounding).
+ * 
+ * @param {bigint} numerator
+ * @param {bigint} denominator
+ * @returns {bigint} The rounded quotient
  */
-export function calculatePeriodicAmount(
-  startingBalance: number,
-  periodicInterestRate: number,
-  totalNumberOfPeriods: number
-): number {
-  return periodicInterestRate > 0
-    ? startingBalance *
-        ((periodicInterestRate * (1 + periodicInterestRate) ** totalNumberOfPeriods) /
-          ((1 + periodicInterestRate) ** totalNumberOfPeriods - 1))
-    : startingBalance / totalNumberOfPeriods;
+export function divideRound(numerator: bigint, denominator: bigint): bigint {
+  const roundingOffset = denominator / 2n;
+  return (numerator + roundingOffset) / denominator;
 }
 
 /**
- * Calculates the balance remaining after a specific number of periods have elapsed.
- *
- * @param {number} initialBalance - The starting amount of money.
- * @param {number} periodicAmountApplied - The amount paid/withdrawn each period.
- * @param {number} periodicInterestRate - The interest rate applied per period.
- * @param {number} periodsElapsed - The number of periods to calculate for.
- * @returns {number} The remaining balance at the end of the elapsed periods.
+ * Generator function that yields a constant payment/contribution amount.
  */
-export function calculateBalanceRemaining(
-  initialBalance: number,
-  periodicAmountApplied: number,
-  periodicInterestRate: number,
-  periodsElapsed: number
-): number {
-  if (periodicInterestRate === 0) {
-    return Math.max(initialBalance - (periodicAmountApplied * periodsElapsed), 0);
+export function* regularPayment(amount: bigint): Generator<bigint, void, { period: number; balance: bigint }> {
+  while (true) {
+    yield amount;
   }
-
-  // This matches your original principalRemaining logic
-  return Math.max(
-    (initialBalance * (1 + periodicInterestRate) ** periodsElapsed) -
-    (periodicAmountApplied * ((1 + periodicInterestRate) ** periodsElapsed - 1) / periodicInterestRate),
-    0
-  );
 }
 
 /**
- * Calculates the number of periods required to bring a balance to zero.
- *
- * @param {number} currentBalance - The balance to be paid down or drawn down.
- * @param {number} periodicAmountApplied - The amount paid/withdrawn each period.
- * @param {number} periodicInterestRate - The interest rate applied per period.
- * @returns {number} The number of periods (rounded up) to reach zero.
+ * Resolves a PaymentScheduleInput into a generator creator function.
+ * Ensures that calling the returned function yields a fresh, unexhausted stream.
  */
-export function calculatePeriodsToZero(
-  currentBalance: number,
-  periodicAmountApplied: number,
-  periodicInterestRate: number
-): number {
-  if (periodicInterestRate === 0) {
-    return Math.ceil(currentBalance / periodicAmountApplied);
+export function getPaymentStream(
+  input: PaymentScheduleInput | null,
+  defaultAmount: bigint
+): () => Generator<bigint, void, { period: number; balance: bigint }> {
+  if (input === null) {
+    return () => regularPayment(defaultAmount);
   }
-  const rawPeriods = Math.log(periodicAmountApplied / (periodicAmountApplied - currentBalance * periodicInterestRate)) /
-                     Math.log(periodicInterestRate + 1);
-  return Math.ceil(roundTo(rawPeriods, 5));
-}
-
-/**
- * Calculates the total interest accrued or paid over a specific number of periods.
- *
- * @param {number} initialBalance - The starting amount of money.
- * @param {number} periodicAmountApplied - The amount paid/withdrawn each period.
- * @param {number} periodicInterestRate - The interest rate applied per period.
- * @param {number} periodsElapsed - The number of periods to calculate for.
- * @returns {number} The total interest amount.
- */
-export function calculateInterestOverPeriods(
-  initialBalance: number,
-  periodicAmountApplied: number,
-  periodicInterestRate: number,
-  periodsElapsed: number
-): number {
-  const finalBalanceRemaining: number = calculateBalanceRemaining(
-    initialBalance,
-    periodicAmountApplied,
-    periodicInterestRate,
-    periodsElapsed
-  );
-
-  const totalPrincipalReduction: number = initialBalance - finalBalanceRemaining;
-  const totalAmountPaid: number = periodicAmountApplied * periodsElapsed;
-
-  return totalAmountPaid - totalPrincipalReduction;
-}
-
-/**
- * Rounds a number to a specified number of decimal places.
- *
- * @param {number} value - The number to round.
- * @param {number} [decimalPlaces=2] - The number of decimal places to round to.
- * @returns {number} The rounded number.
- */
-export function roundTo(value: number, decimalPlaces: number = 2): number {
-  const factor = Math.pow(10, decimalPlaces);
-  return Math.round((value + Number.EPSILON) * factor) / factor;
+  if (typeof input === 'bigint') {
+    return () => regularPayment(input);
+  }
+  return input;
 }
