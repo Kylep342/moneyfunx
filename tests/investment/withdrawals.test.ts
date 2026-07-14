@@ -6,8 +6,8 @@ import { calculateAmortizedWithdrawal, drawdownInstruments } from '../../src/lib
 import { WithdrawalRecord } from '../../src/lib/investment/withdrawalTypes';
 
 const Instruments = (): Instrument[] => [
-  new Instrument(50000, 0.06, 12, 'Taxable Account'),
-  new Instrument(100000, 0.08, 12, 'IRA Account'),
+  new Instrument(5000000n, 60000n, 12, 'Taxable Account'),
+  new Instrument(10000000n, 80000n, 12, 'IRA Account'),
 ];
 
 describe('withdrawals module', () => {
@@ -16,8 +16,8 @@ describe('withdrawals module', () => {
   it('calculates a single period amortized withdrawal (Accrue Before)', async () => {
     const record = calculateAmortizedWithdrawal(
       taxableAccount,
-      50000,
-      2000,
+      5000000n,
+      200000n,
       0,
       0.15,
       true
@@ -25,17 +25,16 @@ describe('withdrawals module', () => {
 
     // 50,000 * (0.06/12) = 250 growth
     // 50,250 - 2000 withdrawal = 48,250
-    expect(record.growth).toBe(250);
-    expect(record.currentBalance).toBe(48250);
-    expect(record.netAmount).toBe(2000 * 0.85);
+    expect(record.growth).toBe(25000n);
+    expect(record.currentBalance).toBe(4825000n);
+    expect(record.netAmount).toBe(170000n); // 2000 * 0.85
   });
 
   it('calculates a single period amortized withdrawal (Withdraw Before)', async () => {
-    // This covers withdrawals.ts lines 51-63
     const record = calculateAmortizedWithdrawal(
       taxableAccount,
-      50000,
-      2000,
+      5000000n,
+      200000n,
       0,
       0.15,
       false
@@ -44,13 +43,13 @@ describe('withdrawals module', () => {
     // 50,000 - 2000 = 48,000
     // 48,000 * (0.06/12) = 240 growth
     // 48,000 + 240 = 48,240
-    expect(record.growth).toBe(240);
-    expect(record.currentBalance).toBe(48240);
-    expect(record.netAmount).toBe(1700);
+    expect(record.growth).toBe(24000n);
+    expect(record.currentBalance).toBe(4824000n);
+    expect(record.netAmount).toBe(170000n);
   });
 
   it('draws down multiple instruments and validates comprehensive schedules', async () => {
-    const targetNetIncome = 3000;
+    const targetNetIncome = 300000n;
     const simulationDuration = 36;
     const taxRate = 0.10;
 
@@ -61,29 +60,26 @@ describe('withdrawals module', () => {
       taxRate
     );
 
-    // Verify lifetime totals match the sum of individual schedules (style of payments.test.ts)
     for (const instrument of [taxableAccount, iraAccount]) {
       const computedLifetimeGrowth = summary[instrument.id].amortizationSchedule
-        .reduce((sum: number, record: WithdrawalRecord) => sum + record.growth, 0);
+        .reduce((sum: bigint, record: WithdrawalRecord) => sum + record.growth, 0n);
 
-      expect(summary[instrument.id].lifetimeGrowth).toBeCloseTo(computedLifetimeGrowth, 5);
+      expect(summary[instrument.id].lifetimeGrowth).toBe(computedLifetimeGrowth);
     }
 
-    // Verify global totals structure
     expect(Object.keys(summary).length).toBe(3); // 2 instruments + TOTALS
     expect(summary[constants.TOTALS].amortizationSchedule.length).toBe(36);
 
-    // Check final period balance
     const lastRecord = summary[constants.TOTALS].amortizationSchedule[35];
     expect(lastRecord.period).toBe(36);
-    expect(lastRecord.currentBalance).toBeLessThan(150000);
+    expect(lastRecord.currentBalance).toBeLessThan(15000000n);
   });
 
   describe('withdrawals module - validation', () => {
-    const testAccount = new Instrument(10000, 0.05, 12, 'Test Account');
+    const testAccount = new Instrument(1000000n, 50000n, 12, 'Test Account');
 
     it('throws a NegativeWithdrawalError when the withdrawal amount is less than zero', () => {
-      const negativeWithdrawalAmount: number = -500;
+      const negativeWithdrawalAmount = -50000n;
 
       expect(() => {
         calculateAmortizedWithdrawal(

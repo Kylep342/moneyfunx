@@ -1,14 +1,14 @@
 export type WithdrawalRecord = {
   period: number;
-  withdrawal: number;
-  netAmount: number;
-  growth: number;
-  currentBalance: number;
+  withdrawal: bigint;
+  netAmount: bigint;
+  growth: bigint;
+  currentBalance: bigint;
 };
 
 export type WithdrawalSchedule = {
-  lifetimeGrowth: number;
-  lifetimeWithdrawal: number;
+  lifetimeGrowth: bigint;
+  lifetimeWithdrawal: bigint;
   amortizationSchedule: WithdrawalRecord[];
 };
 
@@ -16,4 +16,4 @@ export type InstrumentsWithdrawalSchedule = Record<string, WithdrawalSchedule> &
   totals: WithdrawalSchedule;
 };
 
-export type InstrumentBalances = Record<string, number>;
+export type InstrumentBalances = Record<string, bigint>;

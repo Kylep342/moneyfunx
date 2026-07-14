@@ -7,9 +7,9 @@ import { PaymentRecord } from '../../src/lib/debt/paymentTypes';
 import * as sorting from '../../src/lib/shared/sorting';
 
 const Loans = (): Loan[] => [
-  new Loan(314159.26, 0.0535, 12, 15, 'pi-house'),
-  new Loan(27182.81, 0.0828, 12, 4, 'e-car', 23456.78),
-  new Loan(10000, 0.0628, 12, 3, 'tau', undefined, 300),
+  new Loan(314159_26n, 53500n, 12, 15, 'pi-house'),
+  new Loan(27182_81n, 82800n, 12, 4, 'e-car', 23456_78n),
+  new Loan(10000_00n, 62800n, 12, 3, 'tau', undefined, 300_00n),
 ];
 
 describe('payments module', () => {
@@ -27,96 +27,94 @@ describe('payments module', () => {
 
     expect(homeLoanAmortizationSchedule.length).toBe(180);
     expect(homeLoanAmortizationSchedule[3].period).toBe(4);
-    expect(homeLoanAmortizationSchedule[3].principal).toBe(1156.72);
-    expect(homeLoanAmortizationSchedule[3].interest).toBe(1385.29);
-    expect(homeLoanAmortizationSchedule[3].principalRemaining).toBe(309563.11);
+    expect(homeLoanAmortizationSchedule[3].principal).toBe(1156_72n);
+    expect(homeLoanAmortizationSchedule[3].interest).toBe(1385_29n);
+    expect(homeLoanAmortizationSchedule[3].principalRemaining).toBe(309563_11n);
     expect(homeLoanAmortizationSchedule[119].period).toBe(120);
-    expect(homeLoanAmortizationSchedule[119].principal).toBe(1937.9);
-    expect(homeLoanAmortizationSchedule[119].interest).toBe(604.11);
-    expect(homeLoanAmortizationSchedule[119].principalRemaining).toBe(133564.13);
+    expect(homeLoanAmortizationSchedule[119].principal).toBe(1937_90n);
+    expect(homeLoanAmortizationSchedule[119].interest).toBe(604_11n);
+    expect(homeLoanAmortizationSchedule[119].principalRemaining).toBe(133564_13n);
     expect(homeLoanAmortizationSchedule[179].period).toBe(180);
-    expect(homeLoanAmortizationSchedule[179].principal).toBe(2529.59);
-    expect(homeLoanAmortizationSchedule[179].interest).toBe(11.28);
-    expect(homeLoanAmortizationSchedule[179].principalRemaining).toBe(0);
+    expect(homeLoanAmortizationSchedule[179].principal).toBe(2529_59n);
+    expect(homeLoanAmortizationSchedule[179].interest).toBe(11_28n);
+    expect(homeLoanAmortizationSchedule[179].principalRemaining).toBe(0n);
   });
 
   it('determines extra payment for multiple loans', async () => {
-    expect(payments.determineExtraPayment(loansAV, 3700)).toBe(185.31);
+    expect(payments.determineExtraPayment(loansAV, 3700_00n)).toBe(176_13n); // $176.13
   });
 
   it('throws a paymentTooLowError when the total payment for loans is below their shared minimum', async () => {
-    const tooLowPayment = 28;
+    const tooLowPayment = 2800_00n;
     expect(() => {
       payments.determineExtraPayment(loansAV, tooLowPayment);
-    }).toThrow(`Payment amount of ${tooLowPayment} must be greater than 3514.69`);
+    }).toThrow(`Payment amount of ${tooLowPayment} must be greater than 352387`);
   });
 
   it('determines carryover', async () => {
     expect(payments.determineCarryover(
         carLoan,
-        1867.19,
-        348.33,
+        1867_19n,
+        348_33n,
         false
-      )).toBe(1518.86);
+      )).toBe(1518_86n);
     expect(payments.determineCarryover(
         carLoan,
-        1867.19,
-        348.33,
+        1867_19n,
+        348_33n,
         true
-      )).toBe(851.67);
+      )).toBe(851_66n);
   });
 
   it('amortizes payments for mutliple loans', async () => {
-    const loansPaymentSummary = payments.payLoans(loansAV, 4000);
+    const loansPaymentSummary = payments.payLoans(loansAV, 4000_00n);
 
     for (const loanAV of loansAV) {
-      expect(loansPaymentSummary[loanAV.id].lifetimeInterest.toFixed(5)).toBe(
+      expect(loansPaymentSummary[loanAV.id].lifetimeInterest).toBe(
         loansPaymentSummary[loanAV.id].amortizationSchedule
-          .reduce((acc: number, cv: PaymentRecord) => acc + cv.interest, 0)
-          .toFixed(5)
+          .reduce((acc: bigint, cv: PaymentRecord) => acc + cv.interest, 0n)
       );
     }
 
     // 2 keys more than the 3 loans for totalInterest and totalPayments
     expect(Object.keys(loansPaymentSummary).length).toBe(4);
-    expect(loansPaymentSummary[carLoan.id].lifetimeInterest).toBe(1906.74);
-    expect(loansPaymentSummary[homeLoan.id].lifetimeInterest).toBe(91585.01);
-    expect(loansPaymentSummary[otherLoan.id].lifetimeInterest).toBe(876.43);
+    expect(loansPaymentSummary[carLoan.id].lifetimeInterest).toBe(1923_51n);
+    expect(loansPaymentSummary[homeLoan.id].lifetimeInterest).toBe(91586_90n);
+    expect(loansPaymentSummary[otherLoan.id].lifetimeInterest).toBe(863_88n);
 
-    expect(loansPaymentSummary[constants.TOTALS].lifetimeInterest).toBe(94368.18);
+    expect(loansPaymentSummary[constants.TOTALS].lifetimeInterest).toBe(94374_29n);
     expect(loansPaymentSummary[constants.TOTALS].amortizationSchedule.length).toBe(111);
-    expect(loansPaymentSummary[constants.TOTALS].amortizationSchedule[110].principal).toBe(1975.39);
-    expect(loansPaymentSummary[constants.TOTALS].amortizationSchedule[110].interest).toBe(8.81);
-    expect(loansPaymentSummary[constants.TOTALS].amortizationSchedule[110].principalRemaining).toBe(0);
+    expect(loansPaymentSummary[constants.TOTALS].amortizationSchedule[110].principal).toBe(1981_50n);
+    expect(loansPaymentSummary[constants.TOTALS].amortizationSchedule[110].interest).toBe(8_83n);
+    expect(loansPaymentSummary[constants.TOTALS].amortizationSchedule[110].principalRemaining).toBe(0n);
   });
 
   it('reduces minimum payments correctly and amortizes payments for multiple loans', async () => {
-    const loansPaymentSummary = payments.payLoans(loansAV, 4000, true);
+    const loansPaymentSummary = payments.payLoans(loansAV, 4000_00n, true);
 
     for (const loanAV of loansAV) {
-      expect(loansPaymentSummary[loanAV.id].lifetimeInterest.toFixed(5)).toBe(
+      expect(loansPaymentSummary[loanAV.id].lifetimeInterest).toBe(
         loansPaymentSummary[loanAV.id].amortizationSchedule
-          .reduce((acc: number, cv: PaymentRecord) => acc + cv.interest, 0)
-          .toFixed(5)
+          .reduce((acc: bigint, cv: PaymentRecord) => acc + cv.interest, 0n)
       );
     }
 
     expect(Object.keys(loansPaymentSummary).length).toBe(4);
-    expect(loansPaymentSummary[carLoan.id].lifetimeInterest).toBe(1906.74);
-    expect(loansPaymentSummary[homeLoan.id].lifetimeInterest).toBe(118982.19);
-    expect(loansPaymentSummary[otherLoan.id].lifetimeInterest).toBe(902.93);
+    expect(loansPaymentSummary[carLoan.id].lifetimeInterest).toBe(1923_51n);
+    expect(loansPaymentSummary[homeLoan.id].lifetimeInterest).toBe(119342_69n);
+    expect(loansPaymentSummary[otherLoan.id].lifetimeInterest).toBe(890_44n);
 
-    expect(loansPaymentSummary[constants.TOTALS].lifetimeInterest).toBe(121791.86);
+    expect(loansPaymentSummary[constants.TOTALS].lifetimeInterest).toBe(122156_64n);
     expect(loansPaymentSummary[constants.TOTALS].amortizationSchedule.length).toBe(148);
-    expect(loansPaymentSummary[constants.TOTALS].amortizationSchedule[110].principal).toBe(2562.38);
-    expect(loansPaymentSummary[constants.TOTALS].amortizationSchedule[110].interest).toBe(464.94);
+    expect(loansPaymentSummary[constants.TOTALS].amortizationSchedule[110].principal).toBe(2549_07n);
+    expect(loansPaymentSummary[constants.TOTALS].amortizationSchedule[110].interest).toBe(469_07n);
     expect(
       loansPaymentSummary[constants.TOTALS].amortizationSchedule[110].principalRemaining
-    ).toBe(101724.03);
-    expect(loansPaymentSummary[constants.TOTALS].amortizationSchedule[147].principal).toBe(1458.93);
-    expect(loansPaymentSummary[constants.TOTALS].amortizationSchedule[147].interest).toBe(6.5);
+    ).toBe(102663_20n);
+    expect(loansPaymentSummary[constants.TOTALS].amortizationSchedule[147].principal).toBe(2918_87n);
+    expect(loansPaymentSummary[constants.TOTALS].amortizationSchedule[147].interest).toBe(13_01n);
     expect(
       loansPaymentSummary[constants.TOTALS].amortizationSchedule[147].principalRemaining
-    ).toBe(0);
+    ).toBe(0n);
   });
 });
