@@ -154,13 +154,13 @@ export function payLoans(
   while (paidLoans < loans.length) {
     const activeLoans = loans.slice(paidLoans);
     const firstLoan = activeLoans[0];
-    
+
     const firstLoanPayment = (
       firstLoan.minPayment +
       determineExtraPayment(activeLoans, monthlyPayment)
     );
     const firstLoanPrincipalRemaining = loanPrincipalsRemaining[firstLoan.id];
-    
+
     const periodsToPay = firstLoan.numPaymentsToZero(
       firstLoanPayment,
       firstLoanPrincipalRemaining,
@@ -178,15 +178,15 @@ export function payLoans(
     activeLoans.forEach((loan, index) => {
       const isDriverLoan = index === 0;
       const loanPrincipalRemaining = loanPrincipalsRemaining[loan.id];
-      
+
       const paymentAmount = isDriverLoan ? firstLoanPayment : loan.minPayment;
-      
-      const duration = isDriverLoan 
-        ? periodsToPay 
+
+      const duration = isDriverLoan
+        ? periodsToPay
         : Math.min(periodsToPay, loan.numPaymentsToZero(loan.minPayment, loanPrincipalRemaining, periodsElapsed));
 
-      const carryoverAmount = (index === 1) 
-        ? determineCarryover(firstLoan, firstLoanPayment, firstLoanFinalPayment, reduceMinimum) 
+      const carryoverAmount = (index === 1)
+        ? determineCarryover(firstLoan, firstLoanPayment, firstLoanFinalPayment, reduceMinimum)
         : 0n;
 
       const loanAmortizedPayments = amortizePayments(
@@ -232,7 +232,7 @@ export function payLoans(
 
     paidLoans += 1;
     periodsElapsed += periodsToPay;
-    
+
     if (reduceMinimum) {
       monthlyPayment -= firstLoan.minPayment;
     }

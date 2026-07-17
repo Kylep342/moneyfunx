@@ -107,7 +107,7 @@ export function amortizeContributions(
       accrueBeforeContribution
     );
     currentBalance = record.currentBalance;
-    
+
     if (period % 12 === 0) {
       ytd = 0n;
     } else {
@@ -205,11 +205,11 @@ export function contributeInstruments(
     } else {
       const maxLen = Math.max(totalAmortizationSchedule.length, instrumentSchedule.length);
       const newTotal: ContributionRecord[] = [];
-      
+
       for (let i = 0; i < maxLen; i++) {
         const totalRecord = totalAmortizationSchedule[i];
         const instrumentRecord = instrumentSchedule[i];
-        
+
         if (totalRecord && instrumentRecord) {
            newTotal.push({
              period: totalRecord.period,

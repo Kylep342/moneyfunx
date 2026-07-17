@@ -8,7 +8,7 @@ export type PaymentScheduleInput = bigint | (() => Generator<bigint, void, { per
 
 /**
  * Performs integer division with half-up rounding (traditional financial rounding).
- * 
+ *
  * @param {bigint} numerator
  * @param {bigint} denominator
  * @returns {bigint} The rounded quotient

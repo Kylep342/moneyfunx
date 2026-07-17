@@ -102,7 +102,7 @@ export class Loan implements ILoan {
 
   /**
    * Calculates the minimum payment required to amortize the loan over its term using binary search.
-   * 
+   *
    * @returns {bigint} The minimum periodic payment.
    */
   calculateMinPayment(): bigint {
