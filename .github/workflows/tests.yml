@@ -2,7 +2,9 @@ name: Tests
 
 on:
   push:
-    branches: ['*']
+    branches: ['**']
+  pull_request:
+    branches: ['**']
 
   workflow_dispatch:
 
@@ -10,7 +12,7 @@ permissions:
   contents: read
 
 concurrency:
-  group: 'tests'
+  group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:

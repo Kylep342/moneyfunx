@@ -1,6 +1,6 @@
 {
   "name": "moneyfunx",
-  "version": "4.0.0",
+  "version": "4.1.0",
   "type": "module",
   "exports": {
     ".": {
@@ -15,9 +15,15 @@
   ],
   "scripts": {
     "build": "tsc --listEmittedFiles",
+    "build:watch": "tsc --watch --preserveWatchOutput",
     "coverage": "vitest run --coverage",
-    "lint": "eslint",
-    "test": "vitest"
+    "dev": "./dev.sh",
+    "lint": "eslint --fix && tsc --noEmit",
+    "lint:check": "eslint && tsc --noEmit",
+    "test": "vitest",
+    "test:run": "vitest run",
+    "type-check": "tsc --noEmit",
+    "prepare": "husky"
   },
   "author": "Kyle Pekosh",
   "repository": {
@@ -30,6 +36,7 @@
     "@types/node": "^25.2.1",
     "@vitest/coverage-v8": "^3.0.4",
     "eslint": "^9.18.0",
+    "husky": "^9.1.7",
     "prettier": "^3.0.3",
     "typescript": "^5.2.2",
     "typescript-eslint": "^8.63.0",

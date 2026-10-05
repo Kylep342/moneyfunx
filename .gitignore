@@ -1,9 +1,35 @@
-build
-coverage
-node_modules
-scratch.js
-scratch
-.npmrc
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
 
-*.sh
+build
+node_modules
+.DS_Store
+coverage
+*.local
+
+# Editor directories and files
+.vscode
+.idea
+
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Gemini files
+.gemini/
+
+# Local scratch work
+scratch
+scratch.js
+
+# Project & packaging files
+.npmrc
 .tokeignore
