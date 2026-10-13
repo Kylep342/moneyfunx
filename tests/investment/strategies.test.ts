@@ -15,4 +15,14 @@ describe('strategies module', () => {
     expect(results[largeAccount.id].amortizationSchedule[0].withdrawal).toBeGreaterThan(0n);
     expect(results[constants.TOTALS].lifetimeWithdrawal).toBe(500000n);
   });
+
+  it('handles exhausted income stream generator in waterfall drawdown', () => {
+    const account = new Instrument(1000000n, 50000n, 12, 'Account');
+    function* finiteIncome() {
+      yield 100000n;
+    }
+    const results = performWaterfallDrawdown([account], finiteIncome, 3, 0);
+    expect(results[constants.TOTALS].amortizationSchedule.length).toBe(3);
+    expect(results[constants.TOTALS].amortizationSchedule[1].withdrawal).toBe(0n);
+  });
 });

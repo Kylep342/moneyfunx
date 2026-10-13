@@ -106,7 +106,7 @@ export function amortizePayments(
 
     const principalThisPeriod = isFinalPayment
       ? principalRemaining
-      : (paymentThisPeriod - interestThisPeriod < principalRemaining ? paymentThisPeriod - interestThisPeriod : principalRemaining);
+      : paymentThisPeriod - interestThisPeriod;
 
     principalRemaining = principalRemaining - principalThisPeriod;
     amortizationSchedule.push({

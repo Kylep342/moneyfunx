@@ -91,5 +91,27 @@ describe('withdrawals module', () => {
         );
       }).toThrow(`withdrawal of ${negativeWithdrawalAmount} must be greater than/equal to zero`);
     });
+
+    it('caps withdrawal at current balance when accrueBeforeWithdrawal is false', () => {
+      const record = calculateAmortizedWithdrawal(
+        testAccount,
+        1000n,
+        5000n,
+        0,
+        0,
+        false
+      );
+      expect(record.withdrawal).toBe(1000n);
+      expect(record.currentBalance).toBe(0n);
+    });
+
+    it('handles exhausted income stream generator in drawdownInstruments', () => {
+      function* finiteIncome() {
+        yield 50000n;
+      }
+      const summary = drawdownInstruments([testAccount], finiteIncome, 3, 0);
+      expect(summary[constants.TOTALS].amortizationSchedule.length).toBe(3);
+      expect(summary[constants.TOTALS].amortizationSchedule[1].withdrawal).toBe(0n);
+    });
   });
 });

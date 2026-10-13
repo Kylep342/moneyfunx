@@ -19,6 +19,14 @@ describe('sorting module', () => {
     expect(sorting.avalanche(loan2, loan1)).toBe(1);
     // rate of loan3 ('tres', 3.68%) vs loan1 ('uno', 6.8%) -> diff = 68000 - 36800 > 0 -> returns 1
     expect(sorting.avalanche(loan3, loan1)).toBe(1);
+    // equal rates return 0
+    expect(sorting.avalanche(loan1, loan1)).toBe(0);
+
+    // handles function annualRate
+    const fnRateObj1 = { annualRate: () => 50000n, currentBalance: 1000n };
+    const fnRateObj2 = { annualRate: () => 60000n, currentBalance: 1000n };
+    expect(sorting.avalanche(fnRateObj1, fnRateObj2)).toBe(1);
+    expect(sorting.avalanche(fnRateObj2, fnRateObj1)).toBe(-1);
   });
 
   it('snowball compares loans correctly', async () => {
@@ -27,6 +35,8 @@ describe('sorting module', () => {
     expect(sorting.snowball(loan2, loan3)).toBe(-1);
     // balance of loan2 (4500_00n) vs loan1 (7500_00n) -> diff = 4500 - 7500 < 0 -> returns -1
     expect(sorting.snowball(loan2, loan1)).toBe(-1);
+    // balance of loan1 (7500_00n) vs loan2 (4500_00n) -> diff = 7500 - 4500 > 0 -> returns 1
+    expect(sorting.snowball(loan1, loan2)).toBe(1);
   });
 
   it('orders loans correctly using avalanche sorting', async () => {

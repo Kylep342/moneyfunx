@@ -75,7 +75,6 @@ export function performWaterfallDrawdown(
 
       instrumentBalances[instrument.id] = record.currentBalance;
       remainingNetRequiredThisPeriod -= record.netAmount;
-      if (remainingNetRequiredThisPeriod < 0n) remainingNetRequiredThisPeriod = 0n;
 
       periodTotalWithdrawal += record.withdrawal;
       periodTotalNet += record.netAmount;

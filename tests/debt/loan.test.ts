@@ -88,4 +88,13 @@ describe('loan module', () => {
   it('calculates min payment for zero-interest loan correctly', async () => {
     expect(zeroRateLoan.minPayment).toBe(381_25n); // $381.25
   });
+
+  it('handles exhausted payment stream generator in loan calculations', async () => {
+    function* finitePayments() {
+      yield 100_00n;
+    }
+    expect(loan1.numPaymentsToZero(finitePayments)).toBe(1200);
+    expect(loan1.principalRemaining(3, finitePayments)).toBeGreaterThan(0n);
+    expect(loan1.interestPaid(3, finitePayments)).toBeGreaterThan(0n);
+  });
 });

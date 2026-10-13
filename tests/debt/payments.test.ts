@@ -64,6 +64,27 @@ describe('payments module', () => {
         348_33n,
         true
       )).toBe(851_66n);
+    expect(payments.determineCarryover(
+        carLoan,
+        300_00n,
+        348_33n,
+        false
+      )).toBe(0n);
+    expect(payments.determineCarryover(
+        carLoan,
+        348_33n,
+        348_33n,
+        true
+      )).toBe(0n);
+  });
+
+  it('handles exhausted payment stream in amortizePayments', async () => {
+    function* finitePayments() {
+      yield 500_00n;
+    }
+    const schedule = payments.amortizePayments(carLoan, carLoan.principal, finitePayments, 3);
+    expect(schedule.length).toBe(3);
+    expect(schedule[1].principal).toBeLessThan(0n);
   });
 
   it('amortizes payments for mutliple loans', async () => {

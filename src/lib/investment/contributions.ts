@@ -203,27 +203,15 @@ export function contributeInstruments(
     if (totalAmortizationSchedule.length === 0) {
       totalAmortizationSchedule = [...instrumentSchedule];
     } else {
-      const maxLen = Math.max(totalAmortizationSchedule.length, instrumentSchedule.length);
-      const newTotal: ContributionRecord[] = [];
-
-      for (let i = 0; i < maxLen; i++) {
-        const totalRecord = totalAmortizationSchedule[i];
+      totalAmortizationSchedule = totalAmortizationSchedule.map((totalRecord, i) => {
         const instrumentRecord = instrumentSchedule[i];
-
-        if (totalRecord && instrumentRecord) {
-           newTotal.push({
-             period: totalRecord.period,
-             contribution: totalRecord.contribution + instrumentRecord.contribution,
-             growth: totalRecord.growth + instrumentRecord.growth,
-             currentBalance: totalRecord.currentBalance + instrumentRecord.currentBalance
-           });
-        } else if (totalRecord) {
-           newTotal.push(totalRecord);
-        } else if (instrumentRecord) {
-           newTotal.push(instrumentRecord);
-        }
-      }
-      totalAmortizationSchedule = newTotal;
+        return {
+          period: totalRecord.period,
+          contribution: totalRecord.contribution + instrumentRecord.contribution,
+          growth: totalRecord.growth + instrumentRecord.growth,
+          currentBalance: totalRecord.currentBalance + instrumentRecord.currentBalance,
+        };
+      });
     }
   }
 

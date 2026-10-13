@@ -93,4 +93,17 @@ describe('contributions module', () => {
     expect(instrumentsContributionSummary[constants.TOTALS].lifetimeGrowth).toBe(2415286_50n);
     expect(instrumentsContributionSummary[constants.TOTALS].amortizationSchedule.length).toBe(300);
   });
+
+  it('handles exhausted contribution stream in amortizeContributions and contributeInstruments', async () => {
+    function* finiteContributions() {
+      yield 100_00n;
+    }
+    const singleSched = contributions.amortizeContributions(inst1, inst1.currentBalance, finiteContributions, 3);
+    expect(singleSched.length).toBe(3);
+    expect(singleSched[1].contribution).toBe(0n);
+
+    const multiSummary = contributions.contributeInstruments(instruments, finiteContributions, 3);
+    expect(multiSummary[constants.TOTALS].amortizationSchedule.length).toBe(3);
+    expect(multiSummary[constants.TOTALS].amortizationSchedule[1].contribution).toBe(0n);
+  });
 });
